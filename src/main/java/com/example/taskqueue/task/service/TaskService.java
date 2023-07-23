@@ -23,7 +23,7 @@ public class TaskService {
      * @return 태스크
      */
     public Task findById(Long id) {
-        return null;
+        return taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
     }
 
     /**
