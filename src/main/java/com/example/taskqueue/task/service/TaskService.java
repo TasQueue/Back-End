@@ -27,9 +27,9 @@ public class TaskService {
     }
 
     /**
-     *
+     * 태스크를 생성한다.
      * @param task 저장할 태크스
-     * @return
+     * @return 저장한 태스크의 아이디 값
      */
     public Long saveTask(Task task) {
         return taskRepository.save(task).getId();
