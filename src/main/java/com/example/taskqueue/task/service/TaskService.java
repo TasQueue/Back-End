@@ -6,6 +6,7 @@ import com.example.taskqueue.task.entity.state.CalenderState;
 import com.example.taskqueue.task.entity.state.CompleteState;
 import com.example.taskqueue.task.entity.state.RepeatState;
 import com.example.taskqueue.task.repository.TaskRepository;
+import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class TaskService {
 
@@ -94,8 +95,5 @@ public class TaskService {
         task.updateCalendarState(CalenderState.NO);
     }
 
-    //TODO 태스크 우선순위 수정
-
-    //TODO 태스크 시작시간 및 종료시간 수정
 
 }
