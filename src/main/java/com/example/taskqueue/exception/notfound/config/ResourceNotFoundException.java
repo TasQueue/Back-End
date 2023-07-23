@@ -1,4 +1,4 @@
-package com.example.taskqueue.exception.notfound;
+package com.example.taskqueue.exception.notfound.config;
 
 import com.example.taskqueue.exception.base.BaseErrorCode;
 import com.example.taskqueue.exception.base.BaseException;
