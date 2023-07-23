@@ -22,14 +22,17 @@ public class User extends BaseEntity {
     @Column(name = "user_id")
     private Long id;
 
-
     @Column()
     private String intro;
-
 
     @Column()
     @ColumnDefault("0")
     private Long totalTask;
+
+    @Column()
+    private String themeColor;
+
+
 
 
     //태스크 수 증가

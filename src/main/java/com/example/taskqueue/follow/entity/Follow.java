@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter(AccessLevel.PROTECTED)
-@Table(name = "follows")
+@Table(name = "follow")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Follow {

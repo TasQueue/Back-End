@@ -1,6 +1,12 @@
 package com.example.taskqueue.task.entity;
 
+import com.example.taskqueue.category.entity.Category;
 import com.example.taskqueue.common.BaseEntity;
+import com.example.taskqueue.task.entity.state.AllDayState;
+import com.example.taskqueue.task.entity.state.CalenderState;
+import com.example.taskqueue.task.entity.state.CompleteState;
+import com.example.taskqueue.task.entity.state.RepeatState;
+import com.example.taskqueue.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -9,7 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter(AccessLevel.PROTECTED)
-@Table(name = "tasks")
+@Table(name = "task")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Task extends BaseEntity {
@@ -21,14 +27,75 @@ public class Task extends BaseEntity {
     private Long id;
 
 
-    @Column()
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+
+
+    @Column()//태스크 이름
     private String name;
 
-
-    @Column()
+    @Column()//태스크 시작시간
     private LocalDateTime startTime;
 
-    @Column()
+    @Column()//태스크 종료시간
     private LocalDateTime endTime;
+
+    @Column()//태스크 우선순위
+    private int priority;
+
+
+
+    @Enumerated(EnumType.STRING)//태스크 하루종일 여부
+    private AllDayState allDayState;
+
+    @Enumerated(EnumType.STRING)//태스크 달력 표시 여부
+    private CalenderState calenderState;
+
+    @Enumerated(EnumType.STRING)//태스크 수행 여부
+    private CompleteState completeState;
+
+    @Enumerated(EnumType.STRING)//루프 태스크 여부
+    private RepeatState repeatState;
+
+
+    //Task 내부 메서드
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updatePriority(int priority) {
+        this.priority = priority;
+    }
+
+    public void updateStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void updateEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public void updateAllDayState(AllDayState allDayState) {
+        this.allDayState = allDayState;
+    }
+
+    public void updateCalendarState(CalenderState calenderState) {
+        this.calenderState = calenderState;
+    }
+
+    public void updateCompleteState(CompleteState completeState) {
+        this.completeState = completeState;
+    }
+
+    public void updateRepeatState(RepeatState repeatState) {
+        this.repeatState = repeatState;
+    }
 
 }
