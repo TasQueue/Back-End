@@ -1,0 +1,22 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            clientId: bbd5a321139ff1ccbba722fab1b40b0f
+            clientSecret: lW6ehwxNnLjI76duqN4eD8otcvt0C4xW
+            redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+            # http://localhost:8080/error
+            authorizationGrantType: authorization_code
+            scope:
+              - profile_nickname
+              - account_email
+            clientAuthenticationMethod: POST
+            clientName: Kakao
+        provider:
+          kakao:
+            authorizationUri: https://kauth.kakao.com/oauth/authorize?prompt=login
+            tokenUri: https://kauth.kakao.com/oauth/token
+            userInfoUri: https://kapi.kakao.com/v2/user/me
+            userNameAttribute: id

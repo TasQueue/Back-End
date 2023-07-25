@@ -5,10 +5,12 @@ import com.example.taskqueue.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+@Service
 @Entity
 @Getter
 @Table(name = "refresh_token")

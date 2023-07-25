@@ -2,10 +2,7 @@ package com.example.taskqueue.user.entity;
 
 
 import com.example.taskqueue.common.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -14,7 +11,8 @@ import javax.persistence.*;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @Table(name = "users")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@NoArgsConstructor() // TODO 임의로 생성자 주입함(기민) access = AccessLevel.PROTECTED
 public class User extends BaseEntity {
 
     @Id
@@ -22,8 +20,15 @@ public class User extends BaseEntity {
     @Column(name = "user_id")
     private Long id;
 
+    @Column
+    private String name;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    @Column
+    private String email;
     @Column()
     private String intro;
+
 
     @Column()
     @ColumnDefault("0")
@@ -34,6 +39,19 @@ public class User extends BaseEntity {
 
 
 
+    @Builder
+    public User(String name,String email, Role role) {
+        this.name = name;
+        this.email = email;
+        this.role=role;
+        this.intro = "";
+        this.totalTask =0L;
+        this.themeColor = "";
+    }
+    public User update(String name){
+        this.name = name;
+        return this;
+    }
 
     //태스크 수 증가
     public void addTask() {
@@ -51,5 +69,7 @@ public class User extends BaseEntity {
     }
 
 
-
+    public String getRoleKey() {
+        return role.getKey();
+    }
 }
