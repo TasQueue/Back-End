@@ -12,3 +12,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+
+domain:
+  name: http://www.localhost:8080
