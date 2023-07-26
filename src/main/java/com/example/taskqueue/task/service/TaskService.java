@@ -118,7 +118,7 @@ public class TaskService {
     }
 
     /**
-     * 매일 자정 예정일이 이틀이상 지난 만료 태스크를 삭제한다.
+     * 매일 자정 예정일이 이틀이상 지난 만료 태스크를 자동 삭제한다.
      */
     @Scheduled(cron = "0 0 0 * * *")
     public void deleteExpiredTask() {
