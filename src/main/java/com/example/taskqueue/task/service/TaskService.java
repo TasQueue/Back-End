@@ -12,6 +12,7 @@ import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -117,12 +118,13 @@ public class TaskService {
     }
 
     /**
-     * 특정 날짜를 받아 [태스크 종료시간] 이 이틀이상 지난 태스크를 삭제한다.
-     * @param userId
-     * @param localDate
+     * 매일 자정 예정일이 이틀이상 지난 만료 태스크를 삭제한다.
      */
-    public void deleteExpiredTask(Long userId, LocalDate localDate) {
-
+    @Scheduled(cron = "0 0 0 * * *")
+    public void deleteExpiredTask() {
+        LocalDate presentDate = LocalDate.now();
+        LocalDate expiryDate = presentDate.minusDays(2);
+        taskRepository.deleteExpiredTask(expiryDate);
     }
 
 }
