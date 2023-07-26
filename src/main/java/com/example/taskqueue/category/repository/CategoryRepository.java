@@ -13,7 +13,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 //    List<Category> getFollowList(@Param("userId") Long userId);
 
     /**
-     * Category 전체 리스트 조회 쿼리
+     * Category 전체 리스트 조회 쿼 -> user 와 조인?
      */
     @Query("select c.name from Category c")
     List<String> getCategoryList();
