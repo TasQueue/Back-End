@@ -6,7 +6,6 @@ import com.example.taskqueue.task.entity.Task;
 import com.example.taskqueue.task.entity.state.CalenderState;
 import com.example.taskqueue.task.entity.state.CompleteState;
 import com.example.taskqueue.task.entity.state.RepeatState;
-import com.example.taskqueue.task.entity.state.RepeatType;
 import com.example.taskqueue.task.repository.TaskRepository;
 import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.repository.UserRepository;
@@ -53,12 +52,10 @@ public class TaskService {
 
 
     /**
-     * 입력받은 태스크를 루프 태스크로 전환하고, 루프 타입을 설정한다.
+     * 입력받은 태스크를 루프 태스크로 전환한다.
      * @param task 태스크 정보
-     * @param repeatType 루프 타입 정보
      */
-    public void taskRepeatON(Task task, RepeatType repeatType) {
-        task.updateRepeatType(repeatType);
+    public void taskRepeatON(Task task) {
         task.updateRepeatState(RepeatState.YES);
     }
 
@@ -68,7 +65,6 @@ public class TaskService {
      */
     public void taskRepeatOFF(Task task) {
         task.updateRepeatState(RepeatState.NO);
-        task.updateRepeatType(RepeatType.NOT);
     }
 
     /**
