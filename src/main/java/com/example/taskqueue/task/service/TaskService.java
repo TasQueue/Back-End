@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Service
 @Slf4j
 @Transactional
@@ -112,6 +114,15 @@ public class TaskService {
         else if(percentage < 75 && percentage >= 50) return 2;
         else if(percentage < 50 && percentage >= 25) return 3;
         else return 4;
+    }
+
+    /**
+     * 특정 날짜를 받아 [태스크 종료시간] 이 이틀이상 지난 태스크를 삭제한다.
+     * @param userId
+     * @param localDate
+     */
+    public void deleteExpiredTask(Long userId, LocalDate localDate) {
+
     }
 
 }
