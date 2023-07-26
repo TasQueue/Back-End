@@ -45,8 +45,7 @@ public class FollowService {
         Follow follow = Follow.createFollow(user, followUserId);
         followRepository.save(follow);
         return follow.getId();
-    }성
-
+    }
 
     /**
      * 팔로우를 거절 또는 삭제한다.
@@ -57,20 +56,20 @@ public class FollowService {
     }
 
     /**
-     * 유저가 팔로워 하는 유저들 반환한다.
+     * 유저가 팔로워 하는 유저들 아이디를 반환한다.
      * @param userId 팔로워 하는 유저아이디
      * @return user 가 팔로우 하는 유저 리스트
      */
-    public List<Follow> findFollowing(Long userId) {
+    public List<Long> findFollowing(Long userId) {
         return followRepository.findFollowingById(userId);
     }
 
     /**
-     * 유저를 팔로워 하는 유저들 반환한다.
+     * 유저를 팔로워 하는 유저들 아이디를 반환한다.
      * @param userId 팔로워 받는 유저아이디
      * @return user 를 팔로우 하는 유저 리스트
      */
-    public List<Follow> findFollower(Long userId) {
+    public List<Long> findFollower(Long userId) {
         return followRepository.findFollowerById(userId);
     }
 
