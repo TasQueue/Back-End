@@ -1,11 +1,13 @@
 package com.example.taskqueue.task.controller.dto.request;
 
+import com.example.taskqueue.category.entity.Category;
 import com.example.taskqueue.task.entity.state.AllDayState;
 import com.example.taskqueue.task.entity.state.CalenderState;
 import com.example.taskqueue.task.entity.state.RepeatState;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
@@ -16,11 +18,16 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class CreateTaskDto {
 
     @Schema(description = "태스크 이름", example = "수학 과제")
     @NotBlank(message = "태스크 이름은 필수 값입니다.")
     private String name;
+
+    @Schema(description = "태스크 카테고리 아이디 값", example = "1")
+    @NotNull(message = "카테고리 아이디는 필수 값입니다.")
+    private Long categoryId;
 
     @Schema(description = "태스크 시작 시간 - yyyy-MM-dd HH:mm", example = "2023-03-03 11:11")
     @NotNull(message = "태스크 시작 시간은 필수 값입니다.")

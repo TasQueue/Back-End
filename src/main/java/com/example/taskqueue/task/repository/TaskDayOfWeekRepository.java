@@ -1,14 +1,19 @@
 package com.example.taskqueue.task.repository;
 
-import com.example.taskqueue.task.entity.Task;
 import com.example.taskqueue.task.entity.TaskDayOfWeek;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface TaskDayOfWeekRepository extends JpaRepository<TaskDayOfWeek, Long> {
+
     /**
-     * 입력받은 태스크로 요일 매핑 정보를 반환한다.
-     * @param task 태스크 정보
-     * @return 중간 매핑 정보
+     * 태스크 아이디 값을 받아 해당 요일 리스트를 반환한다.
+     * @param taskId 태스크 아이디 값
+     * @return 요일 리스트 정보 ex) [MON, TUE, WED, FRI]
      */
-    TaskDayOfWeek findTaskDayOfWeekByTask(Task task);
+    @Query("select tdw.dayOfWeek.name from TaskDayOfWeek tdw where tdw.task.id = :taskId")
+    List<String> findDayOfWeekByTask(@Param("taskId") Long taskId);
 }

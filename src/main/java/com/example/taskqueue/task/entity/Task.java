@@ -17,12 +17,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Task extends BaseEntity {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id")
     private Long id;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -31,9 +29,6 @@ public class Task extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-
-
-
 
     @Column()//태스크 이름
     private String name;
@@ -47,7 +42,6 @@ public class Task extends BaseEntity {
     @Column()//태스크 우선순위
     private int priority;
 
-
     @Enumerated(EnumType.STRING)//태스크 하루종일 여부
     private AllDayState allDayState;
 
@@ -59,6 +53,30 @@ public class Task extends BaseEntity {
 
     @Enumerated(EnumType.STRING)//루프 태스크 여부
     private RepeatState repeatState;
+
+    @Builder
+    public Task(User user,
+                Category category,
+                String name,
+                LocalDateTime startTime,
+                LocalDateTime endTime,
+                int priority,
+                AllDayState allDayState,
+                CalenderState calenderState,
+                CompleteState completeState,
+                RepeatState repeatState
+    ) {
+        this.user = user;
+        this.category = category;
+        this.name = name;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.priority = priority;
+        this.allDayState = allDayState;
+        this.calenderState = calenderState;
+        this.completeState = completeState;
+        this.repeatState = repeatState;
+    }
 
 
     //Task 내부 메서드
