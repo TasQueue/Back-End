@@ -22,19 +22,22 @@ public class User extends BaseEntity {
     private Long id;
 
     @Column
+    private String email;
+
+    @Column
     private String name;
 
-    @Column()
+    @Column
     private String intro;
 
-    @Column()
+    @Column
     @ColumnDefault("0")
-    private Long totalTask;
+    private int totalTask;
 
-    @Column()
+    @Column
     private String themeColor;
 
-    @Column()
+    @Column
     private CatState catState;
 
 

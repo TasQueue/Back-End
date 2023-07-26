@@ -1,17 +1,25 @@
 package com.example.taskqueue.task.service;
 
 import com.example.taskqueue.exception.notfound.TaskNotFoundException;
+import com.example.taskqueue.exception.notfound.UserNotFoundException;
+import com.example.taskqueue.task.entity.DayOfWeek;
 import com.example.taskqueue.task.entity.Task;
+import com.example.taskqueue.task.entity.TaskDayOfWeek;
 import com.example.taskqueue.task.entity.state.CalenderState;
 import com.example.taskqueue.task.entity.state.CompleteState;
 import com.example.taskqueue.task.entity.state.RepeatState;
+import com.example.taskqueue.task.repository.TaskDayOfWeekRepository;
 import com.example.taskqueue.task.repository.TaskRepository;
 import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -21,6 +29,8 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final DayOfWeekService dayOfWeekService;
+    private final TaskDayOfWeekRepository taskDayOfWeekRepository;
 
     /**
      * 입력된 아이디 값으로 태스크를 찾아 반환한다.
@@ -34,9 +44,14 @@ public class TaskService {
     /**
      * 태스크를 생성한다.
      * @param task 저장할 태크스 정보
+     * @param dayOfWeekList 저장할 태스크의 요일 정보
      * @return 저장한 태스크의 아이디 값
      */
-    public Long saveTask(Task task) {
+    public Long saveTask(Task task, List<DayOfWeek> dayOfWeekList) {
+        for (DayOfWeek day : dayOfWeekList) {
+            TaskDayOfWeek taskDayOfWeek = new TaskDayOfWeek(task, day);
+            taskDayOfWeekRepository.save(taskDayOfWeek);
+        }
         return taskRepository.save(task).getId();
     }
 
@@ -48,8 +63,8 @@ public class TaskService {
 
 
     /**
-     * 태스크를 루프 태스크로 전환한다.
-     * @param task 전환할 태스크 정보
+     * 입력받은 태스크를 루프 태스크로 전환한다.
+     * @param task 태스크 정보
      */
     public void taskRepeatON(Task task) {
         task.updateRepeatState(RepeatState.YES);
@@ -95,5 +110,28 @@ public class TaskService {
         task.updateCalendarState(CalenderState.NO);
     }
 
+    /**
+     * YES 상태의 완료여부를 가진 태스크의 비율에 따른 고양이의 상태를 측정하여 반환한다.
+     * @param userId 유저 아이디
+     */
+    public int getStateOfCat(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        int percentage = 100 * taskRepository.countOfCompleteTask(userId, CompleteState.YES) / user.getTotalTask();
+
+        if(percentage <= 100 && percentage >= 75) return 1;
+        else if(percentage < 75 && percentage >= 50) return 2;
+        else if(percentage < 50 && percentage >= 25) return 3;
+        else return 4;
+    }
+
+    /**
+     * 매일 자정 : 예정일이 이틀이상 지난 만료 태스크를 자동 삭제한다.
+     */
+    @Scheduled(cron = "0 0 0 * * *")
+    public void deleteExpiredTask() {
+        LocalDate presentDate = LocalDate.now();
+        LocalDate expiryDate = presentDate.minusDays(2);
+        taskRepository.deleteExpiredTask(expiryDate);
+    }
 
 }

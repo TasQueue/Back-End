@@ -1,4 +1,4 @@
-package com.example.taskqueue.user.controller.dto;
+package com.example.taskqueue.user.controller.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
