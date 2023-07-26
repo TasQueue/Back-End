@@ -33,7 +33,7 @@ class FollowRepositoryTest {
         User user1 = new User(10L,"user1", "hi~", 10L, "yellow", CatState.ONE);
         User user2 = new User(11L, "user2", "hi~", 10L, "yellow", CatState.ONE);
         User user3 = new User(12L, "user3", "hi~", 10L, "yellow", CatState.ONE);
-        User user4 = new User(13L, "user3", "hi~", 10L, "yellow", CatState.ONE);
+        User user4 = new User(13L, "user4", "hi~", 10L, "yellow", CatState.ONE);
         userRepository.save(user1);
         userRepository.save(user2);
         userRepository.save(user3);
@@ -52,15 +52,15 @@ class FollowRepositoryTest {
         followService.saveFollow(follow3);
         followService.saveFollow(follow4);
 
-        List<Long> following = followService.findFollowing(all.get(0).getId());
-        List<Long> follower = followService.findFollower(all.get(0).getId());
+        List<Follow> following = followService.findFollowing(all.get(0).getId());
+        List<Follow> follower = followService.findFollower(all.get(0).getId());
 
         //then
-        for (Long aLong : following) {
-            System.out.println("following = " + aLong);
+        for (Follow aLong : following) {
+            System.out.println("following = " + userRepository.findById(aLong.getFollowUserId()).get().getName());
         }
-        for (Long aLong : follower) {
-            System.out.println("follower = " + aLong);
+        for (Follow aLong : follower) {
+            System.out.println("follower = " + aLong.getUser().getName());
         }
     }
 }
