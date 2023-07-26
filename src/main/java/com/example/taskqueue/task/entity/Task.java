@@ -2,10 +2,7 @@ package com.example.taskqueue.task.entity;
 
 import com.example.taskqueue.category.entity.Category;
 import com.example.taskqueue.common.BaseEntity;
-import com.example.taskqueue.task.entity.state.AllDayState;
-import com.example.taskqueue.task.entity.state.CalenderState;
-import com.example.taskqueue.task.entity.state.CompleteState;
-import com.example.taskqueue.task.entity.state.RepeatState;
+import com.example.taskqueue.task.entity.state.*;
 import com.example.taskqueue.user.entity.User;
 import lombok.*;
 
@@ -50,18 +47,20 @@ public class Task extends BaseEntity {
     private int priority;
 
 
-
     @Enumerated(EnumType.STRING)//태스크 하루종일 여부
     private AllDayState allDayState;
 
-    @Enumerated(EnumType.STRING)//태스크 달력 표시 여부
+    @Enumerated(EnumType.STRING)//태스크 달력 표시 여부 : 기본 값 = OFF
     private CalenderState calenderState;
 
-    @Enumerated(EnumType.STRING)//태스크 수행 여부
+    @Enumerated(EnumType.STRING)//태스크 수행 여부 : 기본 값 = OFF
     private CompleteState completeState;
 
     @Enumerated(EnumType.STRING)//루프 태스크 여부
     private RepeatState repeatState;
+
+    @Enumerated(EnumType.STRING)//루프 타입
+    private RepeatType repeatType;
 
 
     //Task 내부 메서드
@@ -97,5 +96,8 @@ public class Task extends BaseEntity {
     public void updateRepeatState(RepeatState repeatState) {
         this.repeatState = repeatState;
     }
+
+    public void updateRepeatType(RepeatType repeatType) { this.repeatType = repeatType; }
+
 
 }

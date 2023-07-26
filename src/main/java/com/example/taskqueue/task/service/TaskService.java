@@ -1,10 +1,12 @@
 package com.example.taskqueue.task.service;
 
 import com.example.taskqueue.exception.notfound.TaskNotFoundException;
+import com.example.taskqueue.exception.notfound.UserNotFoundException;
 import com.example.taskqueue.task.entity.Task;
 import com.example.taskqueue.task.entity.state.CalenderState;
 import com.example.taskqueue.task.entity.state.CompleteState;
 import com.example.taskqueue.task.entity.state.RepeatState;
+import com.example.taskqueue.task.entity.state.RepeatType;
 import com.example.taskqueue.task.repository.TaskRepository;
 import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.repository.UserRepository;
@@ -48,10 +50,12 @@ public class TaskService {
 
 
     /**
-     * 태스크를 루프 태스크로 전환한다.
-     * @param task 전환할 태스크 정보
+     * 입력받은 태스크를 루프 태스크로 전환하고, 루프 타입을 설정한다.
+     * @param task 태스크 정보
+     * @param repeatType 루프 타입 정보
      */
-    public void taskRepeatON(Task task) {
+    public void taskRepeatON(Task task, RepeatType repeatType) {
+        task.updateRepeatType(repeatType);
         task.updateRepeatState(RepeatState.YES);
     }
 
@@ -61,6 +65,7 @@ public class TaskService {
      */
     public void taskRepeatOFF(Task task) {
         task.updateRepeatState(RepeatState.NO);
+        task.updateRepeatType(RepeatType.NOT);
     }
 
     /**
@@ -95,5 +100,18 @@ public class TaskService {
         task.updateCalendarState(CalenderState.NO);
     }
 
+    /**
+     * YES 상태의 완료여부를 가진 태스크의 비율에 따른 고양이의 상태를 측정하여 반환한다.
+     * @param userId 유저 아이디
+     */
+    public int getStateOfCat(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        int percentage = 100 * taskRepository.countOfCompleteTask(userId, CompleteState.YES) / user.getTotalTask();
+
+        if(percentage <= 100 && percentage >= 75) return 1;
+        else if(percentage < 75 && percentage >= 50) return 2;
+        else if(percentage < 50 && percentage >= 25) return 3;
+        else return 4;
+    }
 
 }

@@ -2,7 +2,7 @@ package com.example.taskqueue.user.controller;
 
 import com.example.taskqueue.common.annotation.CurrentUser;
 import com.example.taskqueue.exceptionhandler.ErrorResponse;
-import com.example.taskqueue.user.controller.dto.UserUpdateDto;
+import com.example.taskqueue.user.controller.dto.request.UserUpdateDto;
 import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +26,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @Operation(summary = "유저 수정하기", description = "유저 정보를 수정한다.", security = {@SecurityRequirement(name = "Bearer-Key")})
+    @Operation(summary = "유저 정보 수정하기", description = "유저 정보를 수정한다.", security = {@SecurityRequirement(name = "Bearer-Key")})
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "NO CONTENT", content = @Content()),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST",
@@ -46,6 +46,16 @@ public class UserController {
         user.updateIntro(userUpdateDto.getIntro());
         return ResponseEntity.noContent().build();
     }
+
+
+    //TODO 유저 정보 조회하기 : 한줄 소개 + 이름 + 고양이 상태
+    @GetMapping("/api")
+    public ResponseEntity<Void> getUserInfo(
+
+    ) {
+        return null;
+    }
+
 
 
 
