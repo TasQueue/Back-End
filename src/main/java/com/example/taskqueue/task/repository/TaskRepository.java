@@ -21,11 +21,11 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     int countOfCompleteTask(@Param("userId") Long userId, @Param("completeState") CompleteState completeState);
 
     /**
-     * 만료일이 지난 태스크를 삭제한다.
-     * @param userId 유저 아이디의 값
+     * 모든 시스템 유저의 만료일이 지난 태스크를 삭제한다.
      * @param expiryDate 만료일 정보
      */
     @Modifying(clearAutomatically = true, flushAutomatically = true)
-    @Query("delete from Task t where t.user.id = :userId and t.endTime <= :expiryDate")
-    void deleteExpiredTask(@Param("userId") Long userId, @Param("expiryDate") LocalDate expiryDate);
+    @Query("delete from Task t where t.endTime <= :expiryDate")
+    void deleteExpiredTask(@Param("expiryDate") LocalDate expiryDate);
+
 }

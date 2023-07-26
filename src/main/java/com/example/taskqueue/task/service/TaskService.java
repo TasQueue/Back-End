@@ -2,20 +2,24 @@ package com.example.taskqueue.task.service;
 
 import com.example.taskqueue.exception.notfound.TaskNotFoundException;
 import com.example.taskqueue.exception.notfound.UserNotFoundException;
+import com.example.taskqueue.task.entity.DayOfWeek;
 import com.example.taskqueue.task.entity.Task;
+import com.example.taskqueue.task.entity.TaskDayOfWeek;
 import com.example.taskqueue.task.entity.state.CalenderState;
 import com.example.taskqueue.task.entity.state.CompleteState;
 import com.example.taskqueue.task.entity.state.RepeatState;
-import com.example.taskqueue.task.entity.state.RepeatType;
+import com.example.taskqueue.task.repository.TaskDayOfWeekRepository;
 import com.example.taskqueue.task.repository.TaskRepository;
 import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -25,6 +29,8 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final DayOfWeekService dayOfWeekService;
+    private final TaskDayOfWeekRepository taskDayOfWeekRepository;
 
     /**
      * 입력된 아이디 값으로 태스크를 찾아 반환한다.
@@ -38,9 +44,14 @@ public class TaskService {
     /**
      * 태스크를 생성한다.
      * @param task 저장할 태크스 정보
+     * @param dayOfWeekList 저장할 태스크의 요일 정보
      * @return 저장한 태스크의 아이디 값
      */
-    public Long saveTask(Task task) {
+    public Long saveTask(Task task, List<DayOfWeek> dayOfWeekList) {
+        for (DayOfWeek day : dayOfWeekList) {
+            TaskDayOfWeek taskDayOfWeek = new TaskDayOfWeek(task, day);
+            taskDayOfWeekRepository.save(taskDayOfWeek);
+        }
         return taskRepository.save(task).getId();
     }
 
@@ -52,12 +63,10 @@ public class TaskService {
 
 
     /**
-     * 입력받은 태스크를 루프 태스크로 전환하고, 루프 타입을 설정한다.
+     * 입력받은 태스크를 루프 태스크로 전환한다.
      * @param task 태스크 정보
-     * @param repeatType 루프 타입 정보
      */
-    public void taskRepeatON(Task task, RepeatType repeatType) {
-        task.updateRepeatType(repeatType);
+    public void taskRepeatON(Task task) {
         task.updateRepeatState(RepeatState.YES);
     }
 
@@ -67,7 +76,6 @@ public class TaskService {
      */
     public void taskRepeatOFF(Task task) {
         task.updateRepeatState(RepeatState.NO);
-        task.updateRepeatType(RepeatType.NOT);
     }
 
     /**
@@ -117,12 +125,13 @@ public class TaskService {
     }
 
     /**
-     * 특정 날짜를 받아 [태스크 종료시간] 이 이틀이상 지난 태스크를 삭제한다.
-     * @param userId
-     * @param localDate
+     * 매일 자정 : 예정일이 이틀이상 지난 만료 태스크를 자동 삭제한다.
      */
-    public void deleteExpiredTask(Long userId, LocalDate localDate) {
-
+    @Scheduled(cron = "0 0 0 * * *")
+    public void deleteExpiredTask() {
+        LocalDate presentDate = LocalDate.now();
+        LocalDate expiryDate = presentDate.minusDays(2);
+        taskRepository.deleteExpiredTask(expiryDate);
     }
 
 }

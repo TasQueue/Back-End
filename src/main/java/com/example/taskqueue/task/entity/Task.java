@@ -34,6 +34,7 @@ public class Task extends BaseEntity {
 
 
 
+
     @Column()//태스크 이름
     private String name;
 
@@ -58,9 +59,6 @@ public class Task extends BaseEntity {
 
     @Enumerated(EnumType.STRING)//루프 태스크 여부
     private RepeatState repeatState;
-
-    @Enumerated(EnumType.STRING)//루프 타입
-    private RepeatType repeatType;
 
 
     //Task 내부 메서드
@@ -96,8 +94,6 @@ public class Task extends BaseEntity {
     public void updateRepeatState(RepeatState repeatState) {
         this.repeatState = repeatState;
     }
-
-    public void updateRepeatType(RepeatType repeatType) { this.repeatType = repeatType; }
 
 
 }
