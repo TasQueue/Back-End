@@ -32,11 +32,11 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("Task Queue API")
                         .description("Task Queue 프로젝트 API 명세서입니다.")
-                        .version("v1"))
-                .components(new Components().addSecuritySchemes("Bearer-Key",
-                        new SecurityScheme().type(SecurityScheme.Type.HTTP)
-                                .scheme("bearer").bearerFormat("JWT"))
-                );
+                        .version("v1"));
+//                .components(new Components().addSecuritySchemes("Bearer-Key",
+//                        new SecurityScheme().type(SecurityScheme.Type.HTTP)
+//                                .scheme("bearer").bearerFormat("JWT"))
+//                );
     }
 
 }
