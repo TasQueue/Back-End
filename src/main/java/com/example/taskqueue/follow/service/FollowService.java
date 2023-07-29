@@ -25,12 +25,12 @@ public class FollowService {
 
     /**
      * 입력된 아이디 값으로 팔로우를 찾아 반환한다.
-     * @param id 아이디 정보
+     * @param followId 팔로우 아이디 정보
      * @return 팔로우
      */
-    public Follow findById(Long id) {
-        return followRepository.findById(id).orElseThrow(()->{
-            return new IllegalArgumentException("User Id를 찾을 수 없습니다.");
+    public Follow findById(Long followId) {
+        return followRepository.findById(followId).orElseThrow(()->{
+            return new IllegalArgumentException("Follow Id를 찾을 수 없습니다.");
         });
     }
 
