@@ -10,7 +10,13 @@ import com.example.taskqueue.task.repository.DayOfWeekRepository;
 import com.example.taskqueue.task.repository.TaskDayOfWeekRepository;
 import com.example.taskqueue.task.service.TaskService;
 import com.example.taskqueue.user.entity.User;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +45,15 @@ public class TaskController {
     private final TaskService taskService;
     //private final CategoryService categoryService;
 
-    // 태스크 조회 기능
+    @Operation(summary = "태스크 정보 조회하기(단건)", description = "태스크 정보를 조회한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetTaskDto.class))),
+//            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
+//                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @GetMapping("/api/tasks/{taskId}")
     public ResponseEntity<GetTaskDto> getTask(
             @Parameter(hidden = true) @CurrentUser User user,
@@ -50,7 +64,16 @@ public class TaskController {
         return ResponseEntity.ok(new GetTaskDto(task, user, dayOfWeekList, task.getCategory()));
     }
 
-    // 태스크 생성 기능
+
+    @Operation(summary = "태스크 생성하기", description = "태스크를 생성한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "CREATED",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetTaskDto.class))),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+//            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
+//                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/api/tasks")
     public ResponseEntity<Void> createTask(
             @Parameter(hidden = true) @CurrentUser User user,
@@ -83,7 +106,16 @@ public class TaskController {
         return ResponseEntity.created(uri).build();
     }
 
-    // 태스크 삭제 기능 401, 404
+
+    @Operation(summary = "태스크 삭제하기", description = "태스크를 삭제한다(복구 불가)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetTaskDto.class))),
+//            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
+//                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @DeleteMapping("/api/tasks/{taskId}")
     public ResponseEntity<Void> deleteTask(
             @Parameter(hidden = true) @CurrentUser User user,
