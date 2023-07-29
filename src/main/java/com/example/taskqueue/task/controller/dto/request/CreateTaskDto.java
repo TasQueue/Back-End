@@ -41,7 +41,7 @@ public class CreateTaskDto {
 
     @Schema(description = "태스크 요일 리스트", example = "[MON, TUE, WED]")
     @NotNull(message = "태스크 요일은 필수 값입니다.")
-    private List<String> DayOfWeek;
+    private List<String> dayOfWeek;
 
     @Schema(description = "태스크 우선순위", example = "1")
     @NotNull(message = "우선순위 정보는 필수 값입니다.")
