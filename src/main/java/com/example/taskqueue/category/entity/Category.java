@@ -30,6 +30,17 @@ public class Category {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Builder
+    public Category (
+            User user,
+            String name,
+            String color
+    ){
+        this.user = user;
+        this.name = name;
+        this.color = color;
+    }
+
     //Category 내부 메서드
     public void updateName(String name) {
         this.name = name;
