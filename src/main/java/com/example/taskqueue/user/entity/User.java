@@ -47,14 +47,8 @@ public class User extends BaseEntity {
         this.name = name;
     }
 
-    //태스크 수 증가
-    public void addTask() {
-        this.totalTask++;
-    }
-
-    //태스크 수 감소
-    public void deleteTask() {
-        this.totalTask--;
+    public void updateTotalTask(int totalTask) {
+        this.totalTask = totalTask;
     }
 
     //유저 한 줄 소개 변경

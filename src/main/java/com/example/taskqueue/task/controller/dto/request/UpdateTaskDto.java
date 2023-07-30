@@ -1,6 +1,5 @@
 package com.example.taskqueue.task.controller.dto.request;
 
-import com.example.taskqueue.category.entity.Category;
 import com.example.taskqueue.task.entity.state.AllDayState;
 import com.example.taskqueue.task.entity.state.CalenderState;
 import com.example.taskqueue.task.entity.state.RepeatState;
@@ -12,34 +11,33 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateTaskDto {
+public class UpdateTaskDto {
 
-    @Schema(description = "태스크 이름", example = "수학 과제")
+    @Schema(description = "수정할 태스크 이름", example = "태스크01")
     @NotBlank(message = "태스크 이름은 필수 값입니다.")
     private String name;
 
-    @Schema(description = "태스크 카테고리 아이디 값", example = "1")
+    @Schema(description = "수정할 카테고리 아이디 값", example = "1")
     @NotNull(message = "카테고리 아이디는 필수 값입니다.")
     private Long categoryId;
 
-    @Schema(description = "태스크 시작 시간 - yyyy-MM-dd HH:mm", example = "2023-03-03 11:11")
+    @Schema(description = "수정할 태스크 시작 시간", example = "2023-08-10 13:33")
     @NotNull(message = "태스크 시작 시간은 필수 값입니다.")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime startTime;
 
-    @Schema(description = "태스크 종료 시간 - yyyy-MM-dd HH:mm", example = "2023-03-03 11:11")
+    @Schema(description = "수정할 태스크 종료 시간", example = "2023-08-10 16:33")
     @NotNull(message = "태스크 종료 시간은 필수 값입니다.")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime endTime;
 
-    @Schema(description = "태스크 요일 리스트", example = "[MON, TUE, WED]")
+    @Schema(description = "수정할 태스크 요일 리스트", example = "[MON, TUE, WED]")
     @NotNull(message = "태스크 요일은 필수 값입니다.")
     private List<String> dayOfWeek;
 
