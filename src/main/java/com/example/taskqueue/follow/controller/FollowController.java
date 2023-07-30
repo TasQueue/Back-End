@@ -37,7 +37,7 @@ public class FollowController {
 
     @ApiResponse()
     @ResponseStatus()
-    @GetMapping("/api/follows/you")
+    @GetMapping("/follows/you")
     public ResponseEntity<FollowingListDto> getFollowingInfo(
             @Parameter(hidden = true) @CurrentUser User user) {
 
@@ -54,8 +54,8 @@ public class FollowController {
 
     @ApiResponse()
     @ResponseStatus()
-    @GetMapping("/api/follows/me")
-    public ResponseEntity<FollowerListDto> getFollwerInfo(
+    @GetMapping("/follows/me")
+    public ResponseEntity<FollowerListDto> getFollowerInfo(
             @Parameter(hidden = true) @CurrentUser User user) {
 
         List<Long> follower = followService.findFollower(user.getId());
@@ -72,7 +72,7 @@ public class FollowController {
 
     @ApiResponse()
     @ResponseStatus()
-    @GetMapping ("/api/follows/{followId}")
+    @GetMapping ("/follows/{followId}")
     public ResponseEntity<GetFollowDto> getFollow(
             @Parameter(hidden = true) @CurrentUser User user,
             @PathVariable("followId") Long followId) {
@@ -83,7 +83,7 @@ public class FollowController {
 
     @ApiResponse()
     @ResponseStatus()
-    @PostMapping("/api/follows/request/{followUserId}")
+    @PostMapping("/follows/request/{followUserId}")
     public ResponseEntity<Void> requestFollow(
             @Parameter(hidden = true) @CurrentUser User user,
             @PathVariable("followUserId") Long followUserId) {
@@ -91,7 +91,7 @@ public class FollowController {
         Long followId = followService.requestFollow(user.getId(), followUserId);
         URI uri = UriComponentsBuilder
                 .fromHttpUrl(host)
-                .path("/api/follows/{followId}")
+                .path("/follows/{followId}")
                 .build(followId);
 
         return ResponseEntity.created(uri).build();
@@ -99,7 +99,7 @@ public class FollowController {
 
     @ApiResponse()
     @ResponseStatus()
-    @PostMapping("/api/follows/{followId}/approve")
+    @PutMapping ("/follows/{followId}/approve")
     public ResponseEntity<Void> approveFollow(
             @Parameter(hidden = true) @CurrentUser User user,
             @PathVariable("followId") Long followId) {
@@ -111,7 +111,7 @@ public class FollowController {
 
     @ApiResponse()
     @ResponseStatus()
-    @DeleteMapping("/api/follows/{followId}/reject")
+    @DeleteMapping("/follows/{followId}/reject")
     public ResponseEntity<?> deleteFollow(
             @Parameter(hidden = true) @CurrentUser User user,
             @PathVariable("followId") Long followId) {
