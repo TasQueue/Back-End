@@ -2,6 +2,7 @@ package com.example.taskqueue.category.service;
 
 import com.example.taskqueue.category.entity.Category;
 import com.example.taskqueue.category.repository.CategoryRepository;
+import com.example.taskqueue.exception.notfound.CategoryNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,9 +30,9 @@ public class CategoryService {
      * @param categoryId 카테고리 아이디
      * @return category
      */
-    public Category findById(Long categoryId){ return categoryRepository.findById(categoryId).orElseThrow(()->{
-        return new IllegalArgumentException("category Id를 찾을 수 없습니다.");
-    });}
+    public Category findById(Long categoryId){
+        return categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
+    }
 
     /**
      * 카테고리를 생성한다
@@ -40,17 +41,6 @@ public class CategoryService {
      */
     public Long save(Category category){ return categoryRepository.save(category).getId(); }
 
-    /**
-     * 카테고리 수정한다
-     * @param id 수정할 카테고리 id, name 수정 내용
-     * @return 수정한 카테고리 id
-     */
-//    public Long modify(Long id, String name) {
-//        Category category = categoryRepository.findById(id).orElseThrow();
-//        category.updateName(name);
-//
-//        return id;
-//    }
 
     /**
      * 카테고리를 삭제한다

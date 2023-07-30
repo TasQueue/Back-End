@@ -8,6 +8,7 @@ import com.example.taskqueue.task.entity.state.AllDayState;
 import com.example.taskqueue.task.entity.state.CalenderState;
 import com.example.taskqueue.task.entity.state.RepeatState;
 import com.example.taskqueue.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -35,20 +36,22 @@ public class GetTaskDto {
     @JsonProperty("category")
     private SimpleCategoryDto simpleCategoryDto;
 
-    @Schema(description = "태스크 시작시간 정보")
+    @Schema(description = "태스크 시작시간 정보", example = "2023-08-08 13:30")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime startTime;
 
-    @Schema(description = "태스크 종료시간 정보")
+    @Schema(description = "태스크 종료시간 정보", example = "2023-08-08 14:00")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime endTime;
 
     @Schema(description = "종일 태스크 여부", example = "YES/NO")
-    private AllDayState allDayState;
+    private String allDayState;
 
     @Schema(description = "루프 태스크 여부", example = "YES/NO")
-    private RepeatState repeatState;
+    private String repeatState;
 
     @Schema(description = "달력 표기 여부", example = "YES/NO")
-    private CalenderState calenderState;
+    private String calenderState;
 
     public GetTaskDto(Task task, User user, List<String> dayOfWeek, Category category) {
         this.id = task.getId();
@@ -58,9 +61,25 @@ public class GetTaskDto {
         this.simpleCategoryDto = new SimpleCategoryDto(category);
         this.startTime = task.getStartTime();
         this.endTime = task.getEndTime();
-        this.allDayState = task.getAllDayState();
-        this.repeatState = task.getRepeatState();
-        this.calenderState = task.getCalenderState();
+
+        if(task.getAllDayState().equals(AllDayState.NO)) {
+            this.allDayState = "NO";
+        } else {
+            this.allDayState = "YES";
+        }
+
+        if(task.getRepeatState().equals(RepeatState.NO)) {
+            this.repeatState = "NO";
+        } else {
+            this.repeatState = "YES";
+        }
+
+        if(task.getCalenderState().equals(CalenderState.NO)) {
+            this.calenderState = "NO";
+        } else {
+            this.calenderState = "YES";
+        }
+
     }
 
 }

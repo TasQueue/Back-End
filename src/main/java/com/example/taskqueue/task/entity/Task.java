@@ -27,7 +27,7 @@ public class Task extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @Column()//태스크 이름
@@ -54,6 +54,9 @@ public class Task extends BaseEntity {
     @Enumerated(EnumType.STRING)//루프 태스크 여부
     private RepeatState repeatState;
 
+    @Enumerated(EnumType.STRING)//만료일 지남 여부
+    private ExpiredState expiredState;
+
     @Builder
     public Task(User user,
                 Category category,
@@ -64,7 +67,8 @@ public class Task extends BaseEntity {
                 AllDayState allDayState,
                 CalenderState calenderState,
                 CompleteState completeState,
-                RepeatState repeatState
+                RepeatState repeatState,
+                ExpiredState expiredState
     ) {
         this.user = user;
         this.category = category;
@@ -76,6 +80,7 @@ public class Task extends BaseEntity {
         this.calenderState = calenderState;
         this.completeState = completeState;
         this.repeatState = repeatState;
+        this.expiredState = expiredState;
     }
 
 
@@ -84,6 +89,8 @@ public class Task extends BaseEntity {
     public void updateName(String name) {
         this.name = name;
     }
+
+    public void updateCategory(Category category) {this.category = category;}
 
     public void updatePriority(int priority) {
         this.priority = priority;
@@ -112,6 +119,8 @@ public class Task extends BaseEntity {
     public void updateRepeatState(RepeatState repeatState) {
         this.repeatState = repeatState;
     }
+
+    public void updateExpiredState(ExpiredState expiredState) { this.expiredState = expiredState; }
 
 
 }
