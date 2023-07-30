@@ -1,5 +1,6 @@
 package com.example.taskqueue.task.controller;
 
+import com.example.taskqueue.category.service.CategoryService;
 import com.example.taskqueue.common.annotation.CurrentUser;
 import com.example.taskqueue.exceptionhandler.ErrorResponse;
 import com.example.taskqueue.task.controller.dto.request.CreateTaskDto;
@@ -45,7 +46,7 @@ public class TaskController {
     private final TaskDayOfWeekRepository taskDayOfWeekRepository;
     private final DayOfWeekRepository dayOfWeekRepository;
     private final TaskService taskService;
-    //private final CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @Operation(summary = "태스크 정보 조회하기(단건)", description = "태스크 정보를 조회한다.")
     @ApiResponses({
@@ -83,7 +84,7 @@ public class TaskController {
         Task task = Task.builder()
                 .name(createTaskDto.getName())
                 .user(user)
-      //          .category(categoryService.findById(createTaskDto.getCategoryId()))
+                .category(categoryService.findById(createTaskDto.getCategoryId()))
                 .startTime(createTaskDto.getStartTime())
                 .endTime(createTaskDto.getEndTime())
                 .priority(createTaskDto.getPriority())

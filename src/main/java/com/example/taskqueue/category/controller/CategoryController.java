@@ -38,9 +38,10 @@ public class CategoryController {
     // 카테고리 조회
     @ApiResponse()
     @ResponseStatus()
-    @GetMapping("/api/categories")
+    @GetMapping("/categories")
     public ResponseEntity<CategoryListDto> getCategoryList(
-            @Parameter(hidden = true) @CurrentUser User user){
+            @Parameter(hidden = true) @CurrentUser User user
+    ){
         List<Long> category = categoryService.findAllById(user.getId());
         List<SimpleCategoryDto> dtoList = new ArrayList<>();
 
@@ -54,7 +55,7 @@ public class CategoryController {
     // 카테고리 생성
     @ApiResponse()
     @ResponseStatus()
-    @PostMapping("/api/categories")
+    @PostMapping("/categories")
     public ResponseEntity<Long> saveCategory(
             @Parameter(hidden = true) @CurrentUser User user,
             @RequestBody @Valid CreateCategoryDto createCategoryDto
@@ -77,11 +78,11 @@ public class CategoryController {
     // 카테고리 수정
     @ApiResponse
     @ResponseStatus
-    @PutMapping("/api/categories/{categoryId}")
+    @PutMapping("/categories/{categoryId}")
     public ResponseEntity<Void> updateCategoryInfo(
             @Parameter(hidden = true)
             @PathVariable("categoryId") Long categoryId,
-            @ModelAttribute CategoryUpdateDto categoryUpdateDto
+            @RequestBody @Valid CategoryUpdateDto categoryUpdateDto
     ) {
         Category category = categoryService.findById(categoryId);
 
@@ -92,7 +93,7 @@ public class CategoryController {
     }
 
     // 카테고리 삭제
-    @DeleteMapping("/api/categories/{categoryId}")
+    @DeleteMapping("/categories/{categoryId}")
     public ResponseEntity<Void> deleteCategory(
             @Parameter(hidden = true) @CurrentUser User user,
             @PathVariable("categoryId") Long categoryId
