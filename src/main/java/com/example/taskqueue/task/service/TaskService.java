@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -77,54 +78,6 @@ public class TaskService {
 
 
     /**
-     * 입력받은 태스크를 루프 태스크로 전환한다.
-     * @param task 태스크 정보
-     */
-    public void taskRepeatON(Task task) {
-        task.updateRepeatState(RepeatState.YES);
-    }
-
-    /**
-     * 루프 태스크를 일반 태스크로 전환한다.
-     * @param task 전환할 태스크 정보
-     */
-    public void taskRepeatOFF(Task task) {
-        task.updateRepeatState(RepeatState.NO);
-    }
-
-    /**
-     * 태스크를 완료 상태로 전환한다.
-     * @param task 전환할 태스크 정보
-     */
-    public void taskCompleteON(Task task) {
-        task.updateCompleteState(CompleteState.YES);
-    }
-
-    /**
-     * 태스크를 미완료 상태로 전환한다.
-     * @param task 전환할 태스크 정보
-     */
-    public void taskCompleteOFF(Task task) {
-        task.updateCompleteState(CompleteState.NO);
-    }
-
-    /**
-     * 태스크를 캘린더 표기 상태로 전환한다.
-     * @param task 전환할 태스크 정보
-     */
-    public void taskCalenderON(Task task) {
-        task.updateCalendarState(CalenderState.YES);
-    }
-
-    /**
-     * 태스크를 캘린더 미표기 상태로 전환한다.
-     * @param task 전환할 태스크 정보
-     */
-    public void taskCalenderOFF(Task task) {
-        task.updateCalendarState(CalenderState.NO);
-    }
-
-    /**
      * 유저의 만료되지 않은 태스크를 우선순위 정렬하여 반환한다.
      * @param user 유저 정보
      * @return 태스크 리스트
@@ -151,12 +104,24 @@ public class TaskService {
             return 4;
         }
 
-        int percentage = 100 * taskRepository.countOfCompleteTask(userId, CompleteState.YES) / user.getTotalTask();
+        int percentage =
+                (100 * taskRepository.countOfCompleteTask(userId, CompleteState.YES, ExpiredState.NO)) / user.getTotalTask();
 
         if(percentage <= 100 && percentage >= 75) return 1;
         else if(percentage < 75 && percentage >= 50) return 2;
         else if(percentage < 50 && percentage >= 25) return 3;
         else return 4;
+    }
+
+    /**
+     * 해당 월의 태스크를 모두 반환한다.
+     * @param user 유저 정보
+     * @param month 해당 월 : 2023-08
+     * @param nextMonth 다음 월 : 2023-09
+     * @return 태스크 리스트
+     */
+    public List<Task> getTaskOfMonth(User user, LocalDateTime month, LocalDateTime nextMonth) {
+        return taskRepository.findByMonthOfTask(month, nextMonth, user, ExpiredState.NO);
     }
 
     /**
@@ -166,6 +131,8 @@ public class TaskService {
     public void deleteExpiredTask() {
         LocalDate presentDate = LocalDate.now();
         LocalDate expiryDate = presentDate.minusDays(2);
+
+        //note DB 전체 만료태스크 전환
         taskRepository.updateExpiredTask(expiryDate, ExpiredState.YES);
     }
 
