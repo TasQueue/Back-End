@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
@@ -28,6 +29,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,12 +51,12 @@ public class TaskController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetTaskDto.class))),
-//            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
-//                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "NOT FOUND",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping("/api/tasks/{taskId}")
+    @GetMapping(value = "/tasks/{taskId}")
     public ResponseEntity<GetTaskDto> getTask(
             @Parameter(hidden = true) @CurrentUser User user,
             @PathVariable("taskId") Long taskId
@@ -67,14 +69,13 @@ public class TaskController {
 
     @Operation(summary = "태스크 생성하기", description = "태스크를 생성한다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "CREATED",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetTaskDto.class))),
+            @ApiResponse(responseCode = "201", description = "CREATED", content = @Content()),
             @ApiResponse(responseCode = "400", description = "BAD REQUEST",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
-//            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
-//                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/api/tasks")
+    @PostMapping(value = "/api/tasks")
     public ResponseEntity<Void> createTask(
             @Parameter(hidden = true) @CurrentUser User user,
             @RequestBody @Valid CreateTaskDto createTaskDto
@@ -91,7 +92,8 @@ public class TaskController {
                 .repeatState(createTaskDto.getRepeatState())
                 .build();
 
-        List<DayOfWeek> listOfDay = Collections.emptyList();
+
+        List<DayOfWeek> listOfDay = new ArrayList<>();
         for (String dayName : createTaskDto.getDayOfWeek()) {
             DayOfWeek newDay = dayOfWeekRepository.findDayOfWeekByName(dayName);
             listOfDay.add(newDay);
@@ -111,12 +113,12 @@ public class TaskController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetTaskDto.class))),
-//            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
-//                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "NOT FOUND",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @DeleteMapping("/api/tasks/{taskId}")
+    @DeleteMapping(value = "/tasks/{taskId}")
     public ResponseEntity<Void> deleteTask(
             @Parameter(hidden = true) @CurrentUser User user,
             @PathVariable("taskId") Long taskId
