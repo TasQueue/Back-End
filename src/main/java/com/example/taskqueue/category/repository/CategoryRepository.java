@@ -15,6 +15,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     /**
      * Category 전체 리스트 조회 쿼 -> user 와 조인?
      */
-    @Query("select c.id from Category c where ")
-    List<String> getCategoryList();
+    @Query("select c.id from Category c where c.user.id = :userId")
+    List<Long> getCategoryList(@Param("userId") Long userId);
 }
