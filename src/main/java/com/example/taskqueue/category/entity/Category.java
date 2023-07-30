@@ -1,5 +1,6 @@
 package com.example.taskqueue.category.entity;
 
+import com.example.taskqueue.user.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,7 +26,20 @@ public class Category {
     @Column()//카테고리 색상
     private String color;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
+    @Builder
+    public Category (
+            User user,
+            String name,
+            String color
+    ){
+        this.user = user;
+        this.name = name;
+        this.color = color;
+    }
 
     //Category 내부 메서드
     public void updateName(String name) {

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -34,6 +35,12 @@ public class GetTaskDto {
     @JsonProperty("category")
     private SimpleCategoryDto simpleCategoryDto;
 
+    @Schema(description = "태스크 시작시간 정보")
+    private LocalDateTime startTime;
+
+    @Schema(description = "태스크 종료시간 정보")
+    private LocalDateTime endTime;
+
     @Schema(description = "종일 태스크 여부", example = "YES/NO")
     private AllDayState allDayState;
 
@@ -49,6 +56,8 @@ public class GetTaskDto {
         this.dayOfWeek = dayOfWeek;
         this.simpleUserDto = new SimpleUserDto(user);
         this.simpleCategoryDto = new SimpleCategoryDto(category);
+        this.startTime = task.getStartTime();
+        this.endTime = task.getEndTime();
         this.allDayState = task.getAllDayState();
         this.repeatState = task.getRepeatState();
         this.calenderState = task.getCalenderState();
