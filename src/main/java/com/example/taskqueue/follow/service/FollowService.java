@@ -58,7 +58,7 @@ public class FollowService {
     /**
      * 유저가 팔로워 하는 유저들 아이디를 반환한다.
      * @param userId 팔로워 하는 유저아이디
-     * @return user 가 팔로우 하는 유저 리스트
+     * @return user 가 팔로우 하는 유저 아이디 리스트
      */
     public List<Long> findFollowing(Long userId) {
         return followRepository.findFollowingById(userId);
@@ -67,7 +67,7 @@ public class FollowService {
     /**
      * 유저를 팔로워 하는 유저들 아이디를 반환한다.
      * @param userId 팔로워 받는 유저아이디
-     * @return user 를 팔로우 하는 유저 리스트
+     * @return user 를 팔로우 하는 유저 아이디 리스트
      */
     public List<Long> findFollower(Long userId) {
         return followRepository.findFollowerById(userId);
@@ -79,6 +79,15 @@ public class FollowService {
      */
     public void acceptFollow(Follow follow) {
         follow.updateFollowState(FollowState.ACCEPT);
+    }
+
+    /**
+     * 유저에게 팔로우 요청한 유저들 이름들을 반환한다.
+     * @param userId 팔로워 받는 유저
+     * @return user 를 팔로우 하는 유저 아이디 리스트
+     */
+    public List<Long> findRequestFollow(Long userId) {
+        return followRepository.findRequestFollowById(userId);
     }
 
 
