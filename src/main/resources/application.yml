@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    include: oauth, jwt
   datasource:
     url: jdbc:h2:tcp://localhost/~/task-queue
     username: sa
@@ -7,7 +9,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
     properties:
       hibernate:

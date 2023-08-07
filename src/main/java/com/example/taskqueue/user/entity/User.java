@@ -5,6 +5,7 @@ import com.example.taskqueue.common.BaseEntity;
 import com.example.taskqueue.user.entity.state.CatState;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 
@@ -14,6 +15,8 @@ import javax.persistence.*;
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
+@ToString
 public class User extends BaseEntity {
 
     @Id
@@ -40,6 +43,14 @@ public class User extends BaseEntity {
     @Column
     private CatState catState;
 
+    @Column
+    private String refreshToken;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Column
+    private String socialId;
 
 
     //유저 이름 변경
@@ -47,14 +58,8 @@ public class User extends BaseEntity {
         this.name = name;
     }
 
-    //태스크 수 증가
-    public void addTask() {
-        this.totalTask++;
-    }
-
-    //태스크 수 감소
-    public void deleteTask() {
-        this.totalTask--;
+    public void updateTotalTask(int totalTask) {
+        this.totalTask = totalTask;
     }
 
     //유저 한 줄 소개 변경
@@ -71,4 +76,7 @@ public class User extends BaseEntity {
     public void updateThemeColor(String themeColor) {
         this.themeColor = themeColor;
     }
+
+    public void updateRefreshToken(String updateRefreshToken){ this.refreshToken = updateRefreshToken; }
+    public void updateEmail(String updateEmail){ this.email = updateEmail; }
 }

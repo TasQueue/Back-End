@@ -43,11 +43,6 @@ public class CreateTaskDto {
     @NotNull(message = "태스크 요일은 필수 값입니다.")
     private List<String> dayOfWeek;
 
-    @Schema(description = "태스크 우선순위", example = "1")
-    @NotNull(message = "우선순위 정보는 필수 값입니다.")
-    @Positive(message = "우선순위 값은 양의 정수입니다.")
-    private int priority;
-
     @Schema(description = "종일 태스크 여부 - YES/NO", example = "YES")
     @NotBlank(message = "종일 태스크 여부는 필수 값입니다.")
     private AllDayState allDayState;

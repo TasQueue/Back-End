@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @Transactional
@@ -24,6 +26,15 @@ public class UserService {
      */
     public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+    }
+
+    /**
+     * 검색을 통해 유저 리스트를 조회한다.
+     * @param name 유저 이름
+     * @return 유저 리스트
+     */
+    public List<User> findByName(String name) {
+        return userRepository.findByName(name);
     }
 
     /**
