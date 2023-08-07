@@ -52,7 +52,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "NOT FOUND",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PutMapping(value = "/users")
+    @PutMapping(value = "/api/users")
     public ResponseEntity<Void> updateUserInfo(
             @Parameter(hidden = true) @CurrentUser User user,
             @RequestBody @Valid UserUpdateDto userUpdateDto
@@ -78,7 +78,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "NOT FOUND",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping(value = "/users/{userId}")
+    @GetMapping(value = "/api/users/{userId}")
     public ResponseEntity<GetUserDto> getUserInfo(
             @Parameter(hidden = true) @CurrentUser User user,
             @PathVariable("userId") Long userId
@@ -112,7 +112,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @DeleteMapping(value = "/users/delete")
+    @DeleteMapping(value = "/api/users/delete")
     public ResponseEntity<Void> deleteUserInfo(
             @Parameter(hidden = true) @CurrentUser User user
     ) {
@@ -134,7 +134,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "NOT FOUND",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping(value = "/users/search/{userName}")
+    @GetMapping(value = "/api/users/search/{userName}")
     public ResponseEntity<GetSearchUserListDto> getUserInfoBySearch(
             @Parameter(hidden = true) @CurrentUser User user,
             @PathVariable("userName") String userName
