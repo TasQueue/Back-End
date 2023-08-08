@@ -25,6 +25,16 @@ import springfox.documentation.annotations.ApiIgnore;
 public class OAuthController {
     private final LogoutService logoutService;
     private final CustomOAuth2UserService customOAuth2UserService;
+
+
+
+    @ApiOperation(
+            value = "소셜로그인 로그아웃",
+            notes = "로그아웃한다."
+    )
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "NO CONTENT")
+    })
     @PostMapping("/kakao-logout")
     public String logout(){
         String accessToken = customOAuth2UserService.getAccessToken();

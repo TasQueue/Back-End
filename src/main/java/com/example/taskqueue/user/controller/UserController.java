@@ -50,9 +50,12 @@ public class UserController {
             @ApiIgnore @CurrentUser User user,
             @RequestBody @Valid UserUpdateDto userUpdateDto
     ) {
-        user.updateThemeColor(userUpdateDto.getColor());
-        user.updateName(userUpdateDto.getName());
-        user.updateIntro(userUpdateDto.getIntro());
+        userService.changeUser(
+                user.getId(),
+                userUpdateDto.getName(),
+                userUpdateDto.getIntro(),
+                userUpdateDto.getColor()
+        );
         return ResponseEntity.noContent().build();
     }
 
@@ -102,7 +105,7 @@ public class UserController {
     })
     @DeleteMapping(value = "/users/delete")
     public ResponseEntity<Void> deleteUserInfo(
-            @ApiIgnore @CurrentUser User user
+            @CurrentUser User user
     ) {
         return null;
     }
