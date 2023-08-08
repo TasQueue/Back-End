@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Api(tags = "OAuth API")
 @RestController
@@ -43,7 +44,7 @@ public class OAuthController {
             @ApiResponse(code = 200, message = "OK", response = String.class),
     })
     @GetMapping("/user-info")
-    public String getUserInfo(@CurrentUser User user) {
+    public String getUserInfo(@ApiIgnore @CurrentUser User user) {
         if (user != null) {
             return "Hello, " + user.toString();
         } else {
