@@ -2,6 +2,8 @@ package com.example.taskqueue.task.service;
 
 import com.example.taskqueue.category.entity.Category;
 import com.example.taskqueue.category.repository.CategoryRepository;
+import com.example.taskqueue.exception.badinput.AllDayTaskPriorityBadInputException;
+import com.example.taskqueue.exception.badinput.LoopTaskPriorityBadInputException;
 import com.example.taskqueue.exception.notfound.CategoryNotFoundException;
 import com.example.taskqueue.exception.notfound.TaskNotFoundException;
 import com.example.taskqueue.exception.notfound.UserNotFoundException;
@@ -9,10 +11,7 @@ import com.example.taskqueue.task.controller.dto.request.UpdateTaskDto;
 import com.example.taskqueue.task.entity.DayOfWeek;
 import com.example.taskqueue.task.entity.Task;
 import com.example.taskqueue.task.entity.TaskDayOfWeek;
-import com.example.taskqueue.task.entity.state.CalenderState;
-import com.example.taskqueue.task.entity.state.CompleteState;
-import com.example.taskqueue.task.entity.state.ExpiredState;
-import com.example.taskqueue.task.entity.state.RepeatState;
+import com.example.taskqueue.task.entity.state.*;
 import com.example.taskqueue.task.repository.TaskDayOfWeekRepository;
 import com.example.taskqueue.task.repository.TaskRepository;
 import com.example.taskqueue.user.entity.User;
@@ -94,7 +93,14 @@ public class TaskService {
             LocalDateTime startOfDay,
             LocalDateTime endOfDay
     ) {
-        return taskRepository.findTaskByUserAndPriority(user, ExpiredState.NO, startOfDay, endOfDay);
+        return taskRepository.findTaskByUserAndPriority(
+                user,
+                ExpiredState.NO,
+                RepeatState.NO,
+                AllDayState.NO,
+                startOfDay,
+                endOfDay
+        );
     }
 
     /**
@@ -136,13 +142,21 @@ public class TaskService {
     }
 
     /**
-     * 두 태스크의 우선순위 값을 SWAP 한다.
-     * @param taskId_1 태스크 아이디 1
-     * @param taskId_2 태스크 아이디 2
+     *
+     * @param taskId_1
+     * @param taskId_2
      */
     public void swapTaskPriority(Long taskId_1, Long taskId_2) {
         Task taskA = taskRepository.findById(taskId_1).orElseThrow(TaskNotFoundException::new);
         Task taskB = taskRepository.findById(taskId_2).orElseThrow(TaskNotFoundException::new);
+
+        if(taskA.getRepeatState().equals(RepeatState.YES) || taskB.getRepeatState().equals(RepeatState.YES)) {
+            throw new LoopTaskPriorityBadInputException();
+        }
+
+        if(taskA.getAllDayState().equals(AllDayState.YES) || taskB.getAllDayState().equals(AllDayState.YES)) {
+            throw new AllDayTaskPriorityBadInputException();
+        }
 
         int temp = taskA.getPriority();
         taskA.updatePriority(taskB.getPriority());
@@ -162,13 +176,11 @@ public class TaskService {
         }
     }
 
-
     /**
      * 태스크 정보를 변경한다.
      * @param updateTaskDto 태스크 변경 정보
      */
     public void updateTaskBasicInfo(Task task, UpdateTaskDto updateTaskDto) {
-
         Category category = categoryRepository.findById(updateTaskDto.getCategoryId()).orElseThrow(CategoryNotFoundException::new);
         task.updateName(updateTaskDto.getName());
         task.updateCategory(category);
@@ -177,12 +189,39 @@ public class TaskService {
         task.updateAllDayState(updateTaskDto.getAllDayState());
         task.updateRepeatState(updateTaskDto.getRepeatState());
         task.updateCalendarState(updateTaskDto.getCalenderState());
-
     }
 
+    /**
+     * 유저의 루프 태스크를 찾아 모두 반환한다.
+     * @param user 유저 정보
+     * @return 루프 태스크 리스트
+     */
+    public List<Task> findRepeatTaskByUser(User user) {
+        return taskRepository.findRepeatTaskByUser(user, ExpiredState.NO, RepeatState.YES);
+    }
+
+    /**
+     * 유저의 일일 태스크를 찾아 모두 반환한다.
+     * @param user 유저 정보
+     * @return 일일 태스크 리스트
+     */
+    public List<Task> findAllDayTaskByUser(User user) {
+        return taskRepository.findAllDayTaskByUser(user, ExpiredState.NO, AllDayState.YES);
+    }
+
+    /**
+     * 루프태스크의 경우 해당 날짜의 태스크에 해당되는지 여부를 반환한다.
+     * @param task 루프 태스크
+     * @return 해당 여부
+     */
+    public boolean isTaskOfThisDay(String day, Task task) {
+        List<String> dayOfWeekByTask = taskDayOfWeekRepository.findDayOfWeekByTask(task.getId());
+        return dayOfWeekByTask.contains(day);
+    }
 
     /**
      * 매일 자정 : 예정일이 이틀이상 지난 태스크를 자동 만료처리한다.
+     * 일일 태스크와 루프 태스크는 만료되지 않는다.
      */
     @Scheduled(cron = "0 0 0 * * *")
     public void deleteExpiredTask() {
@@ -190,7 +229,7 @@ public class TaskService {
         LocalDate expiryDate = presentDate.minusDays(2);
 
         //note DB 전체 만료태스크 전환
-        taskRepository.updateExpiredTask(expiryDate, ExpiredState.YES);
+        taskRepository.updateExpiredTask(expiryDate, ExpiredState.YES, RepeatState.NO, AllDayState.NO);
     }
 
 }

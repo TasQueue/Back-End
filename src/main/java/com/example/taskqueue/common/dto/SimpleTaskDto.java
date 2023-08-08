@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 public class SimpleTaskDto {
@@ -22,13 +23,13 @@ public class SimpleTaskDto {
     @ApiModelProperty(value = "태스크 우선순위", example = "1")
     private int priority;
 
-    @ApiModelProperty(value = "태스크 시작 시간", example = "2023-08-08 13:30")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-    private LocalDateTime startTime;
+    @ApiModelProperty(value = "태스크 시작 시간", example = "13:30")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
+    private LocalTime startTime;
 
-    @ApiModelProperty(value = "태스크 종료 시간", example = "2023-08-08 14:00")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-    private LocalDateTime endTime;
+    @ApiModelProperty(value = "태스크 종료 시간", example = "14:00")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
+    private LocalTime endTime;
 
     @ApiModelProperty(value = "종일 태스크 여부", example = "YES/NO")
     private String allDayState;
@@ -43,8 +44,8 @@ public class SimpleTaskDto {
         this.id = task.getId();
         this.name = task.getName();
         this.priority = task.getPriority();
-        this.startTime = task.getStartTime();
-        this.endTime = task.getEndTime();
+        this.startTime = task.getStartTime().toLocalTime();
+        this.endTime = task.getEndTime().toLocalTime();
 
         if(task.getAllDayState().equals(AllDayState.NO)) {
             this.allDayState = "NO";

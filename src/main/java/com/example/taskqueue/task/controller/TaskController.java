@@ -5,6 +5,7 @@ import com.example.taskqueue.common.annotation.CurrentUser;
 import com.example.taskqueue.common.dto.SimpleTaskDto;
 import com.example.taskqueue.exceptionhandler.ErrorResponse;
 import com.example.taskqueue.task.controller.dto.request.CreateTaskDto;
+import com.example.taskqueue.task.controller.dto.request.RequiredTaskDayDto;
 import com.example.taskqueue.task.controller.dto.request.RequiredTaskMonthDto;
 import com.example.taskqueue.task.controller.dto.request.UpdateTaskDto;
 import com.example.taskqueue.task.controller.dto.response.GetTaskDto;
@@ -34,6 +35,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +44,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -93,11 +96,10 @@ public class TaskController {
 
 
     @ApiOperation(
-            value = "오늘의 태스크 리스트 조회하기(우선순위 순)",
+            value = "일별 태스크 리스트 조회하기(우선순위 순)",
             notes = "태스크 정보를 우선순위 순으로 조회한다. <br> <br> " +
                     "일일 태스크는 삭제하지 않는 이상 항상 조회됩니다. <br> " +
-                    "일일 태스크와 루프 태스크의 완료 여부는 고양이의 상태변화와는 무관합니다. <br> " +
-                    "고양이의 상태변화는 일반태스크의 완료 비율 한정으로 계산합니다. <br> <br>" +
+                    "헤더의 파라미터의 일자 값은 yyyy-MM-dd 값이여야 합니다." +
                     "일일 태스크 : 자동으로 생성 시 우선순위 최상이 됩니다. -> (-1) <br> " +
                     "루프 태스크 : 자동으로 생성 시 우선순위 그다음이 됩니다. -> (0) <br> "
     )
@@ -107,18 +109,39 @@ public class TaskController {
     })
     @GetMapping(value = "/tasks")
     public ResponseEntity<GetTaskListDto> getTaskList(
-            @ApiIgnore @CurrentUser User user
+            @ApiIgnore @CurrentUser User user,
+            @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate today
     ) {
-        LocalDate today = LocalDate.now();
         LocalDate tomorrow = today.plusDays(1);
-
         LocalTime midnight = LocalTime.MIDNIGHT;
 
         LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
         LocalDateTime tomorrowMidnight = LocalDateTime.of(tomorrow, midnight);
 
+        //note day : 요일 ex) MON
+        String day = today.getDayOfWeek().toString().substring(0, 3);
+        List<SimpleTaskDto> dtoList = new ArrayList<>();
+
+        //note 해당 유저의 모든 [일일 태스크 -> 우선순위 -1]
+        List<Task> findAllDayList = taskService.findAllDayTaskByUser(user);
+        for (Task allDayTask : findAllDayList) {
+            dtoList.add(new SimpleTaskDto(allDayTask));
+        }
+
+        //note 해당 유저의 모든 [루프 태스크 -> 우선순위 0]
+        List<Task> findRepeatList = taskService.findRepeatTaskByUser(user);
+        for (Task repeatTask : findRepeatList) {
+            if(taskService.isTaskOfThisDay(day, repeatTask)) {
+                dtoList.add(new SimpleTaskDto(repeatTask));
+            }
+        }
+
+        //note 해당 유저의 태스크 중 [일반 태스크]가 우선순위 순으로 정렬되어있다. 루프태스크(X) 일일 태스크(X)
         List<Task> findList = taskService.getTaskListByUserAndPriority(user, todayMidnight, tomorrowMidnight);
-        List<SimpleTaskDto> dtoList = findList.stream().map(SimpleTaskDto::new).collect(Collectors.toList());
+        for (Task task : findList) {
+            dtoList.add(new SimpleTaskDto(task));
+        }
+
         return ResponseEntity.ok(new GetTaskListDto(dtoList));
     }
 
@@ -131,7 +154,13 @@ public class TaskController {
                     "startTime 과 endTime 은 yyyy-MM-dd HH:mm 타입을 반드시 지켜주시면 됩니다. <br> " +
                     "(..)State 관련 값은 반드시 \"NO\" 혹은 \"YES\" 값으로 넣어주시면 됩니다. <br> <br>" +
                     "일일 태스크의 경우에도 startTime 과 endTime 은 공백이여서는 안됩니다. <br> " +
-                    "2023-01-01 00:00 와 같은 특정 값을 반드시 넣어주세요"
+                    "2023-01-01 00:00 와 같은 특정 값을 반드시 넣어주세요 <br> <br> " +
+                    "루프 태스크의 경우에도 startTime 과 endTime 은 공백이여서는 안됩니다. <br> " +
+                    "년,월,일 값은 무작위여도 되지만 HH:mm 값은 태스크 수행 시간으로 정확히 넣어주세요! <br> " +
+                    "예를 들어 15:00 시작 17:00 종료 태스크라면 년, 월, 일은 임의 값으로 넣어주시되 <br>" +
+                    "startTime = 2023-01-01 15:00 <br> " +
+                    "endTime = 2023-01-01 17:00 처럼 HH:mm 값만 정확하게 넣어주시면 됩니다! <br><br> " +
+                    "위와 같이 입력하는 이유는 분리된 태스크 유형을 일, 월별로 조회할 시 HH:mm 포맷으로 공통 출력하기 위함입니다."
     )
     @ApiResponses({
             @ApiResponse(code = 201, message = "CREATED"),
@@ -258,7 +287,8 @@ public class TaskController {
 
     @ApiOperation(
             value = "태스크 우선순위 SWAP",
-            notes = "태스크 2개의 우선순위를 교체한다."
+            notes = "태스크 2개의 우선순위를 교체합니다. <br>" +
+                    "다만 일일 태스크나 루프 태스크처럼 0 혹은 -1 로 고정된 우선순위를 바꿀 수는 없습니다."
     )
     @ApiResponses({
             @ApiResponse(code = 204, message = "NO CONTENT"),
