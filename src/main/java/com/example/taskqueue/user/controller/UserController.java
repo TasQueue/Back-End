@@ -11,25 +11,22 @@ import com.example.taskqueue.user.controller.dto.response.GetUserDto;
 import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.entity.state.CatState;
 import com.example.taskqueue.user.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
+import io.swagger.annotations.Api;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Tag(name = "User", description = "User 에 관련된 API")
+@Api(tags = "User API")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -39,22 +36,18 @@ public class UserController {
     private final TaskService taskService;
     private final DayOfWeekService dayOfWeekService;
 
-    @Operation(summary = "유저 본인 정보 수정하기",
-            description = "유저 본인 정보(테마 색, 이름, 한줄 소개)를 수정한다.",
-            security = {@SecurityRequirement(name = "Bearer-Key")}
+    @ApiOperation(
+            value = "유저 본인 정보 수정하기",
+            notes = "로그인 중인 유저의 기본 정보를 수정한다."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "NO CONTENT", content = @Content()),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(code = 204, message = "NO CONTENT"),
+            @ApiResponse(code = 400, message = "BAD REQUEST", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class)
     })
     @PutMapping(value = "/users")
     public ResponseEntity<Void> updateUserInfo(
-            @Parameter(hidden = true) @CurrentUser User user,
+            @ApiIgnore @CurrentUser User user,
             @RequestBody @Valid UserUpdateDto userUpdateDto
     ) {
         user.updateThemeColor(userUpdateDto.getColor());
@@ -64,23 +57,19 @@ public class UserController {
     }
 
 
-    @Operation(summary = "유저 정보 조회하기",
-            description = "유저 정보(이름, 한줄 소개, 고양이 상태)를 조회한다.",
-            security = {@SecurityRequirement(name = "Bearer-Key")}
+    @ApiOperation(
+            value = "특정 유저 정보 조회하기",
+            notes = "아이디 값으로 유저의 기본 정보를 조회한다."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetUserDto.class))),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(code = 200, message = "OK", response = GetUserDto.class),
+            @ApiResponse(code = 400, message = "BAD REQUEST", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
     })
     @GetMapping(value = "/users/{userId}")
     public ResponseEntity<GetUserDto> getUserInfo(
-            @Parameter(hidden = true) @CurrentUser User user,
+            @ApiIgnore @CurrentUser User user,
             @PathVariable("userId") Long userId
     ) {
         User findUser = userService.findById(userId);
@@ -103,40 +92,35 @@ public class UserController {
     }
 
 
-    @Operation(summary = "유저 삭제하기(회원 탈퇴)",
-            description = "유저를 삭제(복구 불가)한다.",
-            security = {@SecurityRequirement(name = "Bearer-Key")}
+    @ApiOperation(
+            value = "유저 본인 계정 삭제학기",
+            notes = "회원 탈퇴한다. 계정은 영구 삭제된다."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "NO CONTENT", content = @Content()),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(code = 204, message = "NO CONTENT"),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class)
     })
     @DeleteMapping(value = "/users/delete")
     public ResponseEntity<Void> deleteUserInfo(
-            @Parameter(hidden = true) @CurrentUser User user
+            @ApiIgnore @CurrentUser User user
     ) {
         return null;
     }
 
 
-    @Operation(summary = "검색한 유저 정보 리스트 조회",
-            description = "유저 이름 완전 일치해야 조회됩니다.",
-            security = {@SecurityRequirement(name = "Bearer-Key")}
+    @ApiOperation(
+            value = "검색한 유저 정보 리스트 조회",
+            notes = "유저 이름 완전 일치해야 조회됩니다."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetSearchUserListDto.class))),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(code = 200, message = "OK", response = GetSearchUserListDto.class),
+            @ApiResponse(code = 400, message = "BAD REQUEST", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
     })
     @GetMapping(value = "/users/search/{userName}")
     public ResponseEntity<GetSearchUserListDto> getUserInfoBySearch(
-            @Parameter(hidden = true) @CurrentUser User user,
+            @ApiIgnore @CurrentUser User user,
             @PathVariable("userName") String userName
     ) {
         List<User> findList = userService.findByName(userName);

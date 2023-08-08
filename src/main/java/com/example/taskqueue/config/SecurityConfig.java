@@ -42,12 +42,27 @@ public class SecurityConfig {
     private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
 
+    private final String [] BASIC_URL = {
+            "/",
+            "/css/**",
+            "/images/**",
+            "/js/**",
+            "/favicon.ico",
+            "/h2-console/**"
+    };
+
+    private final String [] SWAGGER_URL = {
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**"
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .formLogin().disable() // FormLogin 사용 X
-                .httpBasic().disable() // httpBasic 사용 X
-                .csrf().disable() // csrf 보안 사용 X
+                .formLogin().disable()
+                .httpBasic().disable()
+                .csrf().disable()
                 .headers().frameOptions().disable()
                 .and()
 
@@ -61,7 +76,8 @@ public class SecurityConfig {
 
                 // 아이콘, css, js 관련
                 // 기본 페이지, css, image, js 하위 폴더에 있는 자료들은 모두 접근 가능, h2-console에 접근 가능
-                .antMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-console/**").permitAll()
+                .antMatchers(BASIC_URL).permitAll()
+                .antMatchers(SWAGGER_URL).permitAll()
                 .antMatchers("/sign-up").permitAll() // 회원가입 접근 가능
                 .antMatchers("/kakao-logout").permitAll()
                 .antMatchers("/user-info").permitAll()
