@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -52,6 +53,29 @@ public class UserService {
      */
     public void changeCatState(User user, CatState catState) {
         user.updateCatState(catState);
+    }
+
+    /**
+     * 유저의 기본 정보를 갱신한다.
+     * @param userId 유저 아이디 값
+     * @param name 새로운 이름
+     * @param intro 새로운 한 줄 소개
+     * @param color 새로운 테마 색상
+     */
+    public void changeUser(Long userId, String name, String intro, String color) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        user.updateName(name);
+        user.updateIntro(intro);
+        user.updateThemeColor(color);
+    }
+
+    /**
+     * 유저의 TotalTask 수를 1 증가시킨다.
+     * @param user 유저 정보
+     */
+    public void plusTotalTask(User user) {
+        int TT = user.getTotalTask();
+        user.updateTotalTask(TT + 1);
     }
 
 

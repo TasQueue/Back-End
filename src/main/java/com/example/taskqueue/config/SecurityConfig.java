@@ -57,6 +57,13 @@ public class SecurityConfig {
             "/swagger-resources/**"
     };
 
+    private final String [] API_URL = {
+            "/users/**",
+            "/tasks/**",
+            "/follows/**",
+            "/categories/**"
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -78,7 +85,7 @@ public class SecurityConfig {
                 // 기본 페이지, css, image, js 하위 폴더에 있는 자료들은 모두 접근 가능, h2-console에 접근 가능
                 .antMatchers(BASIC_URL).permitAll()
                 .antMatchers(SWAGGER_URL).permitAll()
-                .antMatchers("/users/{userId}").permitAll()
+                .antMatchers(API_URL).permitAll()
                 .antMatchers("/sign-up").permitAll() // 회원가입 접근 가능
                 .antMatchers("/kakao-logout").permitAll()
                 .antMatchers("/user-info").permitAll()

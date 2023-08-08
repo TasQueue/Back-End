@@ -13,22 +13,24 @@ import com.example.taskqueue.task.controller.dto.response.GetTaskOfMonthDto;
 import com.example.taskqueue.task.controller.dto.response.GetTaskOfMonthListDto;
 import com.example.taskqueue.task.entity.DayOfWeek;
 import com.example.taskqueue.task.entity.Task;
+import com.example.taskqueue.task.entity.state.AllDayState;
 import com.example.taskqueue.task.entity.state.CompleteState;
 import com.example.taskqueue.task.entity.state.ExpiredState;
 import com.example.taskqueue.task.entity.state.RepeatState;
 import com.example.taskqueue.task.repository.DayOfWeekRepository;
 import com.example.taskqueue.task.repository.TaskDayOfWeekRepository;
+import com.example.taskqueue.task.service.TaskDayOfWeekService;
 import com.example.taskqueue.task.service.TaskService;
 import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +39,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -49,7 +52,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Tag(name = "Task", description = "Task 에 관련된 API")
+@Api(tags = "Task API")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -58,7 +61,7 @@ public class TaskController {
     @Value("${domain.name}")
     private String host;
 
-    private final TaskDayOfWeekRepository taskDayOfWeekRepository;
+    private final TaskDayOfWeekService taskDayOfWeekService;
     private final DayOfWeekRepository dayOfWeekRepository;
 
     private final UserService userService;
@@ -69,63 +72,96 @@ public class TaskController {
     private int priority = 1;
 
 
-    @Operation(summary = "태스크 정보 조회하기(단건)", description = "태스크 정보를 조회한다.")
+    @ApiOperation(
+            value = "태스크 정보 조회하기(단건)",
+            notes = "태스크 정보를 조회한다."
+    )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetTaskDto.class))),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(code = 200, message = "OK", response =  GetTaskDto.class),
+            @ApiResponse(code = 400, message = "BAD REQUEST", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class)
     })
     @GetMapping(value = "/tasks/{taskId}")
     public ResponseEntity<GetTaskDto> getTask(
-            @Parameter(hidden = true) @CurrentUser User user,
+            @ApiIgnore @CurrentUser User user,
             @PathVariable("taskId") Long taskId
     ){
         Task task = taskService.findById(taskId);
-        List<String> dayOfWeekList = taskDayOfWeekRepository.findDayOfWeekByTask(taskId);
+        List<String> dayOfWeekList = taskDayOfWeekService.findByTask(taskId);
         return ResponseEntity.ok(new GetTaskDto(task, user, dayOfWeekList, task.getCategory()));
     }
 
 
-    @Operation(summary = "유저 본인의 태스크 리스트 조회하기(우선순위 순)", description = "태스크 정보를 우선순위 순으로 조회한다.")
+    @ApiOperation(
+            value = "오늘의 태스크 리스트 조회하기(우선순위 순)",
+            notes = "태스크 정보를 우선순위 순으로 조회한다. <br> <br> " +
+                    "일일 태스크는 삭제하지 않는 이상 항상 조회됩니다. <br> " +
+                    "일일 태스크와 루프 태스크의 완료 여부는 고양이의 상태변화와는 무관합니다. <br> " +
+                    "고양이의 상태변화는 일반태스크의 완료 비율 한정으로 계산합니다. <br> <br>" +
+                    "일일 태스크 : 자동으로 생성 시 우선순위 최상이 됩니다. -> (-1) <br> " +
+                    "루프 태스크 : 자동으로 생성 시 우선순위 그다음이 됩니다. -> (0) <br> "
+    )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetTaskListDto.class))),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(code = 200, message = "OK", response =  GetTaskListDto.class),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class)
     })
     @GetMapping(value = "/tasks")
     public ResponseEntity<GetTaskListDto> getTaskList(
-            @Parameter(hidden = true) @CurrentUser User user
+            @ApiIgnore @CurrentUser User user
     ) {
-        List<Task> findList = taskService.getTaskListByUserAndPriority(user);
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
+
+        LocalTime midnight = LocalTime.MIDNIGHT;
+
+        LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
+        LocalDateTime tomorrowMidnight = LocalDateTime.of(tomorrow, midnight);
+
+        List<Task> findList = taskService.getTaskListByUserAndPriority(user, todayMidnight, tomorrowMidnight);
         List<SimpleTaskDto> dtoList = findList.stream().map(SimpleTaskDto::new).collect(Collectors.toList());
         return ResponseEntity.ok(new GetTaskListDto(dtoList));
     }
 
 
-    @Operation(summary = "태스크 생성하기", description = "태스크를 생성한다.")
+    @ApiOperation(
+            value = "태스크 생성하기",
+            notes = "태스크를 생성한다. <br>" +
+                    "일일 태스크 or 일반 태스크의 경우 dayOfWeek = [] (빈 리스트)로 넣어주시면 됩니다. <br>" +
+                    "루프 태스크 (매일) 타입의 경우 dayOfWeek = [\"MON\", \"TUE\", .. \"SUN\"] 까지 모두 넣어주시면 됩니다. <br>" +
+                    "startTime 과 endTime 은 yyyy-MM-dd HH:mm 타입을 반드시 지켜주시면 됩니다. <br> " +
+                    "(..)State 관련 값은 반드시 \"NO\" 혹은 \"YES\" 값으로 넣어주시면 됩니다. <br> <br>" +
+                    "일일 태스크의 경우에도 startTime 과 endTime 은 공백이여서는 안됩니다. <br> " +
+                    "2023-01-01 00:00 와 같은 특정 값을 반드시 넣어주세요"
+    )
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "CREATED", content = @Content()),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(code = 201, message = "CREATED"),
+            @ApiResponse(code = 400, message = "BAD REQUEST", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class)
     })
-    @PostMapping(value = "/api/tasks")
+    @PostMapping(value = "/tasks")
     public ResponseEntity<Void> createTask(
-            @Parameter(hidden = true) @CurrentUser User user,
+            @ApiIgnore @CurrentUser User user,
             @RequestBody @Valid CreateTaskDto createTaskDto
     ) {
+
+        int current_priority = priority;
+
+        //note 루프 태스크 & 일일 태스크 필터
+        if(createTaskDto.getAllDayState().equals(AllDayState.YES) && createTaskDto.getRepeatState().equals(RepeatState.NO)) {
+            current_priority = -1;
+        } else if(createTaskDto.getAllDayState().equals(AllDayState.NO) && createTaskDto.getRepeatState().equals(RepeatState.YES)) {
+            current_priority = 0;
+        } else {
+            priority++;
+        }
+
         Task task = Task.builder()
                 .name(createTaskDto.getName())
                 .user(user)
                 .category(categoryService.findById(createTaskDto.getCategoryId()))
                 .startTime(createTaskDto.getStartTime())
                 .endTime(createTaskDto.getEndTime())
-                .priority(priority)
+                .priority(current_priority)
                 .allDayState(createTaskDto.getAllDayState())
                 .calenderState(createTaskDto.getCalenderState())
                 .repeatState(createTaskDto.getRepeatState())
@@ -133,16 +169,13 @@ public class TaskController {
                 .expiredState(ExpiredState.NO)
                 .build();
 
-        //note 우선순위 증가
-        priority++;
 
-        List<DayOfWeek> listOfDay = new ArrayList<>();
-        for (String dayName : createTaskDto.getDayOfWeek()) {
-            DayOfWeek newDay = dayOfWeekRepository.findDayOfWeekByName(dayName);
-            listOfDay.add(newDay);
-        }
+        List<DayOfWeek> listOfDay =
+                createTaskDto.getDayOfWeek().stream().map(dayOfWeekRepository::findDayOfWeekByName).collect(Collectors.toList());
 
         Long taskId = taskService.saveTask(task, listOfDay);
+        userService.plusTotalTask(user);
+
         URI uri = UriComponentsBuilder
                 .fromHttpUrl(host)
                 .path("/api/tasks/{id}")
@@ -152,124 +185,110 @@ public class TaskController {
     }
 
 
-    @Operation(summary = "태스크 삭제하기", description = "태스크를 삭제한다(복구 불가)")
+
+    @ApiOperation(
+            value = "태스크 삭제하기",
+            notes = "태스크를 삭제한다(복구 불가)."
+    )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetTaskDto.class))),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(code = 204, message = "NO CONTENT"),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
     })
     @DeleteMapping(value = "/tasks/{taskId}")
     public ResponseEntity<Void> deleteTask(
-            @Parameter(hidden = true) @CurrentUser User user,
+            @ApiIgnore @CurrentUser User user,
             @PathVariable("taskId") Long taskId
     ) {
         Task task = taskService.findById(taskId);
+        taskDayOfWeekService.deleteByTask(task);
         taskService.deleteTask(task);
         return ResponseEntity.noContent().build();
     }
 
 
-    @Operation(summary = "태스크 정보 수정(완료 여부 and 우선순위 제외)", description = "태스크 정보를 수정한다.")
+    @ApiOperation(
+            value = "태스크 정보 수정(완료 여부 and 우선순위 제외)",
+            notes = "태스크 정보를 수정한다."
+    )
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "NO CONTENT", content = @Content()),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(code = 204, message = "NO CONTENT"),
+            @ApiResponse(code = 400, message = "BAD REQUEST", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
     })
     @PutMapping(value = "/tasks/{taskId}")
     public ResponseEntity<Void> updateTask(
-            @Parameter(hidden = true) @CurrentUser User user,
+            @ApiIgnore @CurrentUser User user,
             @PathVariable("taskId") Long taskId,
             @RequestBody @Valid UpdateTaskDto updateTaskDto
     ) {
         //note 기본 정보 수정
         Task task = taskService.findById(taskId);
-        task.updateName(updateTaskDto.getName());
-        task.updateCategory(categoryService.findById(updateTaskDto.getCategoryId()));
-        task.updateStartTime(updateTaskDto.getStartTime());
-        task.updateEndTime(updateTaskDto.getEndTime());
-        task.updateAllDayState(updateTaskDto.getAllDayState());
-        task.updateRepeatState(updateTaskDto.getRepeatState());
-        task.updateCalendarState(updateTaskDto.getCalenderState());
+        taskService.updateTaskBasicInfo(task, updateTaskDto);
 
         //note 요일 정보 수정
         List<String> findList = updateTaskDto.getDayOfWeek();
         List<DayOfWeek> updateList =
                 findList.stream().map(dayOfWeekRepository::findDayOfWeekByName).collect(Collectors.toList());
 
-        taskService.changeDayOfWeek(task, updateList);
+        taskService.updateTaskDayOfWeekInfo(task, updateList);
         return ResponseEntity.noContent().build();
     }
 
 
-    @Operation(summary = "태스크 완료 여부 TOGGLE", description = "태스크 완료 여부를 토글한다.")
+    @ApiOperation(
+            value = "태스크 완료 여부 TOGGLE",
+            notes = "태스크 완료 여부를 토글한다.."
+    )
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "NO CONTENT", content = @Content()),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(code = 204, message = "NO CONTENT"),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
     })
     @PutMapping(value = "/tasks/{taskId}/complete/toggle")
     public ResponseEntity<Void> toggleCompleteState(
-            @Parameter(hidden = true) @CurrentUser User user,
+            @ApiIgnore @CurrentUser User user,
             @PathVariable("taskId") Long taskId
     ) {
-        Task findTask = taskService.findById(taskId);
-        if(findTask.getCompleteState().equals(CompleteState.NO)) {
-            findTask.updateCompleteState(CompleteState.YES);
-        } else {
-            findTask.updateCompleteState(CompleteState.NO);
-        }
+        taskService.toggleCompleteState(taskId);
         return ResponseEntity.noContent().build();
     }
 
 
-    @Operation(summary = "태스크 우선순위 SWAP", description = "태스크 2개의 우선순위를 교체한다.")
+    @ApiOperation(
+            value = "태스크 우선순위 SWAP",
+            notes = "태스크 2개의 우선순위를 교체한다."
+    )
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "NO CONTENT", content = @Content()),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(code = 204, message = "NO CONTENT"),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
     })
     @PutMapping(value = "/tasks/{taskId_1}/{taskId_2}/priority")
     public ResponseEntity<Void> swapTaskPriority(
-            @Parameter(hidden = true) @CurrentUser User user,
+            @ApiIgnore @CurrentUser User user,
             @PathVariable("taskId_1") Long taskId_1,
             @PathVariable("taskId_2") Long taskId_2
     ) {
-        Task taskA = taskService.findById(taskId_1);
-        Task taskB = taskService.findById(taskId_2);
-
-        int temp = taskA.getPriority();
-        taskA.updatePriority(taskB.getPriority());
-        taskB.updatePriority(temp);
-
+        taskService.swapTaskPriority(taskId_1, taskId_2);
         return ResponseEntity.noContent().build();
     }
 
 
-    @Operation(summary = "월 별 태스크 조회", description = "입력받은 월의 태스크를 조회한다.")
+    @ApiOperation(
+            value = "월 별 태스크 조회",
+            notes = "입력받은 월의 태스크를 조회한다."
+    )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = GetTaskOfMonthListDto.class))),
-            @ApiResponse(responseCode = "400", description = "BAD REQUEST",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "401", description = "UNAUTHORIZED",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "NOT FOUND",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(code = 200, message = "OK", response =  GetTaskOfMonthListDto.class),
+            @ApiResponse(code = 400, message = "BAD REQUEST", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
     })
     @GetMapping(value = "/users/{userId}/update/month")
     public ResponseEntity<GetTaskOfMonthListDto> getTaskListByMonth(
-            @Parameter(hidden = true) @CurrentUser User user,
+            @ApiIgnore @CurrentUser User user,
             @PathVariable("userId") Long userId,
             @RequestBody @Valid RequiredTaskMonthDto requiredTaskMonthDto
     ) {
@@ -305,7 +324,7 @@ public class TaskController {
                 List<java.time.DayOfWeek> originList = new ArrayList<>();
 
                 //note [MON, TUE, ... SUN]
-                List<String> dayList = taskDayOfWeekRepository.findDayOfWeekByTask(task.getId());
+                List<String> dayList = taskDayOfWeekService.findByTask(task.getId());
                 for (String dayName : dayList) {
                     switch (dayName) {
                         case "MON":

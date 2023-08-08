@@ -18,15 +18,24 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
 
     /**
-     * 만료되지 않은 유저의 태스크를 우선순위 순으로 정렬하여 반환한다.
+     * 오늘의 만료되지 않은 유저 태스크를 우선순위 순으로 정렬하여 반환한다.
      * @param user 유저 정보
      * @param expiredState ExpiredState.NO
+     * @param startOfDay 오늘의 00시 00분
+     * @param endOfDay 내일의 00시 00분
      * @return 태스크 리스트
      */
     @Query("select t from Task t where t.user = :user " +
             "and t.expiredState = :expiredState " +
+            "and t.startTime >= :startOfDay " +
+            "and t.endTime < :endOfDay " +
             "order by t.priority")
-    List<Task> findTaskByUserAndPriority(@Param("user") User user, @Param("expiredState") ExpiredState expiredState);
+    List<Task> findTaskByUserAndPriority(
+            @Param("user") User user,
+            @Param("expiredState") ExpiredState expiredState,
+            @Param("startOfDay") LocalDateTime startOfDay,
+            @Param("endOfDay") LocalDateTime endOfDay
+    );
 
     /**
      * 특정 유저의 만료되지 않은 완료 태스크의 갯수를 반환한다.

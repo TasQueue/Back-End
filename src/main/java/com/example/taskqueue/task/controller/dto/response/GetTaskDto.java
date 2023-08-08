@@ -10,6 +10,7 @@ import com.example.taskqueue.task.entity.state.RepeatState;
 import com.example.taskqueue.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -19,38 +20,38 @@ import java.util.List;
 @Getter
 public class GetTaskDto {
 
-    @Schema(description = "태스크 아이디 값", example = "1")
+    @ApiModelProperty(value = "태스크 아이디 값", example = "1")
     private Long id;
 
-    @Schema(description = "태스크 이름", example = "수학 과제하기")
+    @ApiModelProperty(value = "태스크 이름", example = "수학 과제하기")
     private String name;
 
-    @Schema(description = "태스크 요일 정보", example = "[MON, TUE, WED, THU]")
+    @ApiModelProperty(value = "태스크 요일 정보", example = "[MON, TUE, WED, THU]")
     private List<String> dayOfWeek;
 
-    @Schema(description = "태스크 소유 유저 정보")
+    @ApiModelProperty(value = "태스크 소유 유저 정보")
     @JsonProperty("user")
     private SimpleUserDto simpleUserDto;
 
-    @Schema(description = "태스크 카테고리 정보")
+    @ApiModelProperty(value = "태스크 카테고리 정보")
     @JsonProperty("category")
     private SimpleCategoryDto simpleCategoryDto;
 
-    @Schema(description = "태스크 시작시간 정보", example = "2023-08-08 13:30")
+    @ApiModelProperty(value = "태스크 시작시간 정보", example = "2023-08-08 13:30")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime startTime;
 
-    @Schema(description = "태스크 종료시간 정보", example = "2023-08-08 14:00")
+    @ApiModelProperty(value = "태스크 종료시간 정보", example = "2023-08-08 14:00")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime endTime;
 
-    @Schema(description = "종일 태스크 여부", example = "YES/NO")
+    @ApiModelProperty(value = "종일 태스크 여부", example = "YES/NO")
     private String allDayState;
 
-    @Schema(description = "루프 태스크 여부", example = "YES/NO")
+    @ApiModelProperty(value = "루프 태스크 여부", example = "YES/NO")
     private String repeatState;
 
-    @Schema(description = "달력 표기 여부", example = "YES/NO")
+    @ApiModelProperty(value = "달력 표기 여부", example = "YES/NO")
     private String calenderState;
 
     public GetTaskDto(Task task, User user, List<String> dayOfWeek, Category category) {

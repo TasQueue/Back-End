@@ -1,5 +1,6 @@
 package com.example.taskqueue.task.controller.dto.response;
 
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GetTaskOfMonthListDto {
 
-    @Schema(description = "태스크 정보")
+    @ApiModelProperty(value = "태스크 정보")
     List<GetTaskOfMonthDto> taskList = new ArrayList<>();
 
 }

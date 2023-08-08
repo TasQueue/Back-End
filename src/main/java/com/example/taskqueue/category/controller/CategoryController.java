@@ -7,9 +7,12 @@ import com.example.taskqueue.category.entity.Category;
 import com.example.taskqueue.category.service.CategoryService;
 import com.example.taskqueue.common.annotation.CurrentUser;
 import com.example.taskqueue.common.dto.SimpleCategoryDto;
+import com.example.taskqueue.exceptionhandler.ErrorResponse;
 import com.example.taskqueue.user.entity.User;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,47 +20,55 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.util.UriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
-@Tag(name = "Category", description = "Category 에 관련된 API")
+@Api(tags = "Category API")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 public class CategoryController {
 
+    private final CategoryService categoryService;
+
     @Value("${domain.name}")
     private String host;
 
-    private CategoryService categoryService;
-
-    // 카테고리 조회
-    @ApiResponse()
-    @ResponseStatus()
+    @ApiOperation(
+            value = "유저 본인의 카테고리 목록 조회하기",
+            notes = "자신의 카테고리 목록을 조회한다."
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = CategoryListDto.class),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class)
+    })
     @GetMapping("/categories")
     public ResponseEntity<CategoryListDto> getCategoryList(
-            @Parameter(hidden = true) @CurrentUser User user
+            @ApiIgnore @CurrentUser User user
     ){
-        List<Long> category = categoryService.findAllById(user.getId());
-        List<SimpleCategoryDto> dtoList = new ArrayList<>();
-
-        for (Long categoryId : category){
-            SimpleCategoryDto categoryDto = new SimpleCategoryDto(categoryService.findById(categoryId));
-            dtoList.add(categoryDto);
-        }
+        List<Category> findList = categoryService.findByUser(user);
+        List<SimpleCategoryDto> dtoList = findList.stream().map(SimpleCategoryDto::new).collect(Collectors.toList());
         return ResponseEntity.ok(new CategoryListDto(dtoList));
     }
 
-    // 카테고리 생성
-    @ApiResponse()
-    @ResponseStatus()
+
+    @ApiOperation(
+            value = "카테고리 생성하기",
+            notes = "카테고리를 생성 및 저장한다."
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = CategoryListDto.class),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class)
+    })
     @PostMapping("/categories")
-    public ResponseEntity<Long> saveCategory(
-            @Parameter(hidden = true) @CurrentUser User user,
+    public ResponseEntity<Void> createCategory(
+            @ApiIgnore @CurrentUser User user,
             @RequestBody @Valid CreateCategoryDto createCategoryDto
     ){
         Category category = Category.builder()
@@ -69,39 +80,50 @@ public class CategoryController {
         Long categoryId = categoryService.save(category);
         URI uri = UriComponentsBuilder
                 .fromHttpUrl(host)
-                .path("/api/categories/{id}")
+                .path("/categories/{id}")
                 .build(categoryId);
 
         return ResponseEntity.created(uri).build();
     }
 
-    // 카테고리 수정
-    @ApiResponse
-    @ResponseStatus
+
+    @ApiOperation(
+            value = "카테고리 정보 수정하기",
+            notes = "카테고리 정보를 수정한다."
+    )
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "NO CONTENT"),
+            @ApiResponse(code = 400, message = "BAD REQUEST", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
+    })
     @PutMapping("/categories/{categoryId}")
     public ResponseEntity<Void> updateCategoryInfo(
-            @Parameter(hidden = true)
+            @ApiIgnore @CurrentUser User user,
             @PathVariable("categoryId") Long categoryId,
             @RequestBody @Valid CategoryUpdateDto categoryUpdateDto
     ) {
         Category category = categoryService.findById(categoryId);
-
-        category.updateName(categoryUpdateDto.getName());
-        category.updateColor(categoryUpdateDto.getColor());
-
+        categoryService.updateCategory(category, categoryUpdateDto);
         return ResponseEntity.noContent().build();
     }
 
-    // 카테고리 삭제
+
+    @ApiOperation(
+            value = "카테고리 삭제하기",
+            notes = "카테고리 정보를 삭제한다(복구 불가)."
+    )
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "NO CONTENT"),
+            @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
+    })
     @DeleteMapping("/categories/{categoryId}")
     public ResponseEntity<Void> deleteCategory(
-            @Parameter(hidden = true) @CurrentUser User user,
+            @ApiIgnore @CurrentUser User user,
             @PathVariable("categoryId") Long categoryId
     ) {
         Category category = categoryService.findById(categoryId);
-
         categoryService.delete(category);
-
         return ResponseEntity.noContent().build();
     }
 
