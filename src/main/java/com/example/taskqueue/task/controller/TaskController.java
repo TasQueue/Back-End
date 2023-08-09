@@ -5,8 +5,6 @@ import com.example.taskqueue.common.annotation.CurrentUser;
 import com.example.taskqueue.common.dto.SimpleTaskDto;
 import com.example.taskqueue.exceptionhandler.ErrorResponse;
 import com.example.taskqueue.task.controller.dto.request.CreateTaskDto;
-import com.example.taskqueue.task.controller.dto.request.RequiredTaskDayDto;
-import com.example.taskqueue.task.controller.dto.request.RequiredTaskMonthDto;
 import com.example.taskqueue.task.controller.dto.request.UpdateTaskDto;
 import com.example.taskqueue.task.controller.dto.response.GetTaskDto;
 import com.example.taskqueue.task.controller.dto.response.GetTaskListDto;
@@ -137,7 +135,7 @@ public class TaskController {
         }
 
         //note 해당 유저의 태스크 중 [일반 태스크]가 우선순위 순으로 정렬되어있다. 루프태스크(X) 일일 태스크(X)
-        List<Task> findList = taskService.getTaskListByUserAndPriority(user, todayMidnight, tomorrowMidnight);
+        List<Task> findList = taskService.getTaskOfDay(user, todayMidnight, tomorrowMidnight);
         for (Task task : findList) {
             dtoList.add(new SimpleTaskDto(task));
         }
@@ -268,7 +266,7 @@ public class TaskController {
 
     @ApiOperation(
             value = "태스크 완료 여부 TOGGLE",
-            notes = "태스크 완료 여부를 토글한다.."
+            notes = "태스크 완료 여부를 토글한다."
     )
     @ApiResponses({
             @ApiResponse(code = 204, message = "NO CONTENT"),
@@ -288,10 +286,12 @@ public class TaskController {
     @ApiOperation(
             value = "태스크 우선순위 SWAP",
             notes = "태스크 2개의 우선순위를 교체합니다. <br>" +
-                    "다만 일일 태스크나 루프 태스크처럼 0 혹은 -1 로 고정된 우선순위를 바꿀 수는 없습니다."
+                    "다만 일일 태스크나 루프 태스크처럼 0 혹은 -1 로 고정된 우선순위를 바꿀 수는 없습니다. <br> " +
+                    "두 종류의 태스크를 우선순위 변환 시도할 시 400 BAD REQUEST 오류가 발생합니다."
     )
     @ApiResponses({
             @ApiResponse(code = 204, message = "NO CONTENT"),
+            @ApiResponse(code = 400, message = "BAD REQUEST", response = ErrorResponse.class),
             @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class),
             @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
     })
@@ -308,7 +308,9 @@ public class TaskController {
 
     @ApiOperation(
             value = "월 별 태스크 조회",
-            notes = "입력받은 월의 태스크를 조회한다."
+            notes = "입력받은 월의 태스크를 조회한다 <br>. " +
+                    "연, 월 그리고 1일의 정보가 필요합니다. <br>" +
+                    "반드시 yyyy-MM-01 형식을 지켜주세요. ex) 2023-08-01"
     )
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response =  GetTaskOfMonthListDto.class),
@@ -320,41 +322,54 @@ public class TaskController {
     public ResponseEntity<GetTaskOfMonthListDto> getTaskListByMonth(
             @ApiIgnore @CurrentUser User user,
             @PathVariable("userId") Long userId,
-            @RequestBody @Valid RequiredTaskMonthDto requiredTaskMonthDto
+            @RequestParam("month") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate present
     ) {
         User findUser = userService.findById(userId);
-
-        LocalDate present = requiredTaskMonthDto.getLocalDate();
         LocalDate next = present.plusMonths(1);
 
         LocalTime localTime = LocalTime.of(0, 0, 0);
         LocalDateTime month = present.atTime(localTime);
         LocalDateTime nextMonth = next.atTime(localTime);
 
+        List<Task> findRepeatList = taskService.findRepeatTaskByUser(user);
+        List<Task> findAllDayList = taskService.findAllDayTaskByUser(user);
+        List<Task> findNormalList = taskService.getTaskOfMonth(user, month, nextMonth);
 
+        List<Task> combinedList = new ArrayList<>();
+        combinedList.addAll(findNormalList);
+        combinedList.addAll(findRepeatList);
+        combinedList.addAll(findAllDayList);
 
-        //note 이 중에는 루프 태스크 and 일반 태스크가 섞여있다.
-        List<Task> findList = taskService.getTaskOfMonth(findUser, month, nextMonth);
         List<GetTaskOfMonthDto> dtoList = new ArrayList<>();
-
-        for (Task task : findList) {
+        for (Task task : combinedList) {
 
             List<LocalDate> localDateList = new ArrayList<>();
 
             //note 일반 태스크
-            if(task.getRepeatState().equals(RepeatState.NO)) {
+            if(task.getRepeatState().equals(RepeatState.NO) && task.getAllDayState().equals(AllDayState.NO)) {
                 localDateList.add(task.getStartTime().toLocalDate());
+                dtoList.add(new GetTaskOfMonthDto(
+                        task.getId(),
+                        task.getName(),
+                        localDateList,
+                        task.getStartTime().toLocalTime(),
+                        task.getEndTime().toLocalTime(),
+                        "NO",
+                        "NO"));
                 continue;
             }
 
-            //note 루프 태스크
-            if(task.getRepeatState().equals(RepeatState.YES))  {
+
+            //note 루프 태스크 or 일일 태스크
+            if(task.getRepeatState().equals(RepeatState.YES) || task.getAllDayState().equals(AllDayState.YES))  {
 
                 //note Java 기본형 DayOfWeek
                 List<java.time.DayOfWeek> originList = new ArrayList<>();
 
-                //note [MON, TUE, ... SUN]
+                //note 해당 태스크의 요일 리스트 ex_[MON, TUE, ... SUN]
                 List<String> dayList = taskDayOfWeekService.findByTask(task.getId());
+
+
                 for (String dayName : dayList) {
                     switch (dayName) {
                         case "MON":
@@ -401,8 +416,27 @@ public class TaskController {
 
             LocalTime startTime = task.getStartTime().toLocalTime();
             LocalTime endTime = task.getEndTime().toLocalTime();
-            dtoList.add(new GetTaskOfMonthDto(task.getId(), task.getName(), localDateList, startTime, endTime));
 
+            if(task.getAllDayState().equals(AllDayState.YES)) {
+                dtoList.add(new GetTaskOfMonthDto(
+                        task.getId(),
+                        task.getName(),
+                        localDateList,
+                        startTime,
+                        endTime,
+                        "YES",
+                        "NO"));
+            }
+            else {
+                dtoList.add(new GetTaskOfMonthDto(
+                        task.getId(),
+                        task.getName(),
+                        localDateList,
+                        startTime,
+                        endTime,
+                        "NO",
+                        "YES"));
+            }
         }
 
         return ResponseEntity.ok(new GetTaskOfMonthListDto(dtoList));

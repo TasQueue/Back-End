@@ -32,4 +32,10 @@ public class GetTaskOfMonthDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
     private LocalTime endTime;
 
+    @ApiModelProperty(value = "종일 태스크 여부", example = "YES/NO")
+    private String allDayState;
+
+    @ApiModelProperty(value = "루프 태스크 여부", example = "YES/NO")
+    private String repeatState;
+
 }
