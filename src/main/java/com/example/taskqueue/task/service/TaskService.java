@@ -78,17 +78,19 @@ public class TaskService {
      * 태스크를 삭제한다.
      * @param task 삭제할 태스크 정보
      */
-    public void deleteTask(Task task) { taskRepository.delete(task);}
+    public void deleteTask(Task task) {
+        taskRepository.delete(task);
+    }
 
 
     /**
-     * 오늘의 만료되지 않은 유저 태스크를 우선순위 정렬하여 반환한다.
+     * 특정 [일] 의 만료되지 않은 유저의 [일반 태스크] 를 우선순위 정렬하여 반환한다.
      * @param user 유저 정보
      * @param startOfDay 오늘의 00시 00분
      * @param endOfDay 내일의 00시 00분
      * @return 태스크 리스트
      */
-    public List<Task> getTaskListByUserAndPriority(
+    public List<Task> getTaskOfDay(
             User user,
             LocalDateTime startOfDay,
             LocalDateTime endOfDay
@@ -101,6 +103,47 @@ public class TaskService {
                 startOfDay,
                 endOfDay
         );
+    }
+
+    /**
+     * 특정 [달] 의 만료되지 않은 유저의 [일반 태스크] 를 우선순위 정렬하여 반환한다.
+     * @param user 유저 정보
+     * @param startOfDay 특정 달 1일의 00시 00분
+     * @param endOfDay 다음 달 1일의 00시 00분
+     * @return 태스크 리스트
+     */
+    public List<Task> getTaskOfMonth(
+            User user,
+            LocalDateTime startOfDay,
+            LocalDateTime endOfDay
+    ) {
+        return taskRepository.findTaskByUserAndPriority(
+                user,
+                ExpiredState.NO,
+                RepeatState.NO,
+                AllDayState.NO,
+                startOfDay,
+                endOfDay
+        );
+    }
+
+
+    /**
+     * 유저의 루프 태스크를 찾아 모두 반환한다.
+     * @param user 유저 정보
+     * @return 루프 태스크 리스트
+     */
+    public List<Task> findRepeatTaskByUser(User user) {
+        return taskRepository.findRepeatTaskByUser(user, ExpiredState.NO, RepeatState.YES);
+    }
+
+    /**
+     * 유저의 일일 태스크를 찾아 모두 반환한다.
+     * @param user 유저 정보
+     * @return 일일 태스크 리스트
+     */
+    public List<Task> findAllDayTaskByUser(User user) {
+        return taskRepository.findAllDayTaskByUser(user, ExpiredState.NO, AllDayState.YES);
     }
 
     /**
@@ -131,20 +174,10 @@ public class TaskService {
     }
 
     /**
-     * 해당 월의 태스크를 모두 반환한다.
-     * @param user 유저 정보
-     * @param month 해당 월 : 2023-08
-     * @param nextMonth 다음 월 : 2023-09
-     * @return 태스크 리스트
-     */
-    public List<Task> getTaskOfMonth(User user, LocalDateTime month, LocalDateTime nextMonth) {
-        return taskRepository.findByMonthOfTask(month, nextMonth, user, ExpiredState.NO);
-    }
-
-    /**
-     *
-     * @param taskId_1
-     * @param taskId_2
+     * 태스크 우선순위를 SWAP 한다. 루프 태스트(X) 일일 태스크(X)
+     * 두 종류는 우선순위 SWAP 시도할 경우 400 ERROR 발생
+     * @param taskId_1 태스크 1
+     * @param taskId_2 태스크 2
      */
     public void swapTaskPriority(Long taskId_1, Long taskId_2) {
         Task taskA = taskRepository.findById(taskId_1).orElseThrow(TaskNotFoundException::new);
@@ -189,24 +222,6 @@ public class TaskService {
         task.updateAllDayState(updateTaskDto.getAllDayState());
         task.updateRepeatState(updateTaskDto.getRepeatState());
         task.updateCalendarState(updateTaskDto.getCalenderState());
-    }
-
-    /**
-     * 유저의 루프 태스크를 찾아 모두 반환한다.
-     * @param user 유저 정보
-     * @return 루프 태스크 리스트
-     */
-    public List<Task> findRepeatTaskByUser(User user) {
-        return taskRepository.findRepeatTaskByUser(user, ExpiredState.NO, RepeatState.YES);
-    }
-
-    /**
-     * 유저의 일일 태스크를 찾아 모두 반환한다.
-     * @param user 유저 정보
-     * @return 일일 태스크 리스트
-     */
-    public List<Task> findAllDayTaskByUser(User user) {
-        return taskRepository.findAllDayTaskByUser(user, ExpiredState.NO, AllDayState.YES);
     }
 
     /**
