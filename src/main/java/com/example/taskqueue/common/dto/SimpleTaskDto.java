@@ -31,6 +31,9 @@ public class SimpleTaskDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
     private LocalTime endTime;
 
+    @ApiModelProperty(value = "시간정보가 필요한지 여부", example = "true")
+    private boolean requiredTime;
+
     @ApiModelProperty(value = "종일 태스크 여부", example = "YES/NO")
     private String allDayState;
 
@@ -46,6 +49,7 @@ public class SimpleTaskDto {
         this.priority = task.getPriority();
         this.startTime = task.getStartTime().toLocalTime();
         this.endTime = task.getEndTime().toLocalTime();
+        this.requiredTime = task.getRequiredTime();
 
         if(task.getAllDayState().equals(AllDayState.NO)) {
             this.allDayState = "NO";

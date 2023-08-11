@@ -50,6 +50,7 @@ public class TaskService {
     /**
      * 입력받은 태스크를 저장한다.
      * 태스크를 저장하면서 태스크의 요일정보도 함께 저장한다.
+     * 유저의 TotalTask 증가
      *
      * @param task 태크스 정보
      * @param dayOfWeekList 태스크의 요일 정보
@@ -60,7 +61,18 @@ public class TaskService {
             TaskDayOfWeek taskDayOfWeek = new TaskDayOfWeek(task, day);
             taskDayOfWeekRepository.save(taskDayOfWeek);
         }
+
+        User user = task.getUser();
         return taskRepository.save(task).getId();
+    }
+
+    /**
+     * 태스크를 삭제한다.
+     * 유저의 TotalTask 감소
+     * @param task 삭제할 태스크 정보
+     */
+    public void deleteTask(Task task) {
+        taskRepository.delete(task);
     }
 
     /**
@@ -77,15 +89,6 @@ public class TaskService {
             taskDayOfWeekRepository.save(taskDayOfWeek);
         }
     }
-
-    /**
-     * 태스크를 삭제한다.
-     * @param task 삭제할 태스크 정보
-     */
-    public void deleteTask(Task task) {
-        taskRepository.delete(task);
-    }
-
 
     /**
      * 특정 [일] 의 만료되지 않은 유저의 [일반 태스크] 를 우선순위 정렬하여 반환한다.
@@ -176,24 +179,7 @@ public class TaskService {
     public int getStateOfCat(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
-        //note 자정 이후 첫 조회시 TotalTask 갱신 필요
-        int countOfAvailableTask = taskRepository.countOfAvailableTask(userId, ExpiredState.NO);
-        if(user.getTotalTask() != countOfAvailableTask) {
-            user.updateTotalTask(countOfAvailableTask);
-        }
-
-        //note 나누기 0 연산 방지
-        if(user.getTotalTask() == 0) {
-            return 4;
-        }
-
-        int percentage =
-                (100 * taskRepository.countOfCompleteTask(userId, CompleteState.YES, ExpiredState.NO)) / user.getTotalTask();
-
-        if(percentage <= 100 && percentage >= 75) return 1;
-        else if(percentage < 75 && percentage >= 50) return 2;
-        else if(percentage < 50 && percentage >= 25) return 3;
-        else return 4;
+        return 4;
     }
 
     /**
@@ -225,11 +211,21 @@ public class TaskService {
      */
     public void toggleCompleteState(Long taskId) {
         Task findTask = taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
-        if(findTask.getCompleteState().equals(CompleteState.NO)) {
+        User user = findTask.getUser();
+        if(findTask.getCompleteState().equals(CompleteState.NO))
             findTask.updateCompleteState(CompleteState.YES);
-        } else {
+        else
             findTask.updateCompleteState(CompleteState.NO);
-        }
+    }
+
+    /**
+     * 입력받은 태스크가 [일반 태스크] 인지 아닌지 반환한다.
+     * @param task 태스크 정보
+     * @return 태스크의 [일반 태스크] 여부
+     */
+    public boolean isNormalTask(Task task) {
+        if(task.getRepeatState().equals(RepeatState.YES)) return false;
+        return !task.getAllDayState().equals(AllDayState.YES);
     }
 
     /**
@@ -258,11 +254,19 @@ public class TaskService {
     }
 
     /**
-     * 매일 자정 : 예정일이 이틀이상 지난 태스크를 자동 만료처리한다.
-     * 일일 태스크와 루프 태스크는 만료되지 않는다.
+     * [매일 자정 자동 업데이트]
+     * [루프 태스크] 와 [일일 태스크] 의 CompleteState 를 NO 로 초기화한다.
+     *
      */
     @Scheduled(cron = "0 0 0 * * *")
     public void deleteExpiredTask() {
+
+        taskRepository.resetCompleteStateOfAllTask(
+                CompleteState.NO,
+                AllDayState.YES,
+                RepeatState.YES
+        );
+
         LocalDate presentDate = LocalDate.now();
         LocalDate expiryDate = presentDate.minusDays(2);
 

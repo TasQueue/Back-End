@@ -30,32 +30,37 @@ public class Task extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column()//태스크 이름
+    @Column
     private String name;
 
-    @Column()//태스크 시작시간
+    @Column
     private LocalDateTime startTime;
 
-    @Column()//태스크 종료시간
+    @Column
     private LocalDateTime endTime;
 
-    @Column()//태스크 우선순위
+    @Column
+    private Boolean requiredTime;
+
+    @Column
     private int priority;
 
-    @Enumerated(EnumType.STRING)//태스크 하루종일 여부
+    @Enumerated(EnumType.STRING)
     private AllDayState allDayState;
 
-    @Enumerated(EnumType.STRING)//태스크 달력 표시 여부 : 기본 값 = OFF
+    @Enumerated(EnumType.STRING)
     private CalenderState calenderState;
 
-    @Enumerated(EnumType.STRING)//태스크 수행 여부 : 기본 값 = OFF
+    @Enumerated(EnumType.STRING)
     private CompleteState completeState;
 
-    @Enumerated(EnumType.STRING)//루프 태스크 여부
+    @Enumerated(EnumType.STRING)
     private RepeatState repeatState;
 
-    @Enumerated(EnumType.STRING)//만료일 지남 여부
+    @Enumerated(EnumType.STRING)
     private ExpiredState expiredState;
+
+
 
     @Builder
     public Task(User user,
@@ -68,7 +73,8 @@ public class Task extends BaseEntity {
                 CalenderState calenderState,
                 CompleteState completeState,
                 RepeatState repeatState,
-                ExpiredState expiredState
+                ExpiredState expiredState,
+                boolean requiredTime
     ) {
         this.user = user;
         this.category = category;
@@ -81,6 +87,7 @@ public class Task extends BaseEntity {
         this.completeState = completeState;
         this.repeatState = repeatState;
         this.expiredState = expiredState;
+        this.requiredTime = requiredTime;
     }
 
 
@@ -121,6 +128,8 @@ public class Task extends BaseEntity {
     }
 
     public void updateExpiredState(ExpiredState expiredState) { this.expiredState = expiredState; }
+
+    public void updateRequiredTime(boolean requiredTime) {this.requiredTime = requiredTime;}
 
 
 }

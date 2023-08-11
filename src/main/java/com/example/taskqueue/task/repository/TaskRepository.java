@@ -134,6 +134,67 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             @Param("endOfDay") LocalDateTime endOfDay
     );
 
+
+
+
+
+
+
+    //note 매일 자정 필요 기능
+    /**
+     * 모든 [루프 태스크] 와 [일일 태스크] 의 CompleteState 를 NO 로 전환한다.
+     * @param completeState CompleteState.NO
+     * @param allDayState AllDayState.YES
+     * @param repeatState RepeatState.YES
+     */
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("update Task t " +
+            "set t.completeState = :completeState " +
+            "where t.allDayState = :allDayState " +
+            "or t.repeatState = :repeatState")
+    void resetCompleteStateOfAllTask(
+            @Param("completeState") CompleteState completeState,
+            @Param("allDayState") AllDayState allDayState,
+            @Param("repeatState") RepeatState repeatState
+    );
+
+    /**
+     * 입력받은 유저의 [루프 태스크] 와 [일일 태스크] 중 CompleteState.YES 인 태스크의 수를 반환한다.
+     * @param user 유저 정보
+     * @param completeState CompleteState.YES
+     * @param allDayState AllDayState.YES
+     * @param repeatState RepeatState.YES
+     * @return
+     */
+    @Query("select count(t) from Task t where t.user = :user " +
+            "and t.completeState = :completeState " +
+            "and t.allDayState = :allDayState " +
+            "or t.repeatState = :repeatState")
+    Integer countOfCompleteAbNormalTask(
+            @Param("user") User user,
+            @Param("completeState") CompleteState completeState,
+            @Param("allDayState") AllDayState allDayState,
+            @Param("repeatState") RepeatState repeatState
+    );
+
+    /**
+     * 유저의 [루프 태스크] + [일반 태스크] 의 갯수를 반환한다.
+     * @param user 유저 정보
+     * @param allDayState AllDayState.YES
+     * @param repeatState RepeatState.YES
+     * @return
+     */
+    @Query("select count(t) from Task t where t.user = :user " +
+            "and t.completeState = :completeState " +
+            "and (t.allDayState = :allDayState " +
+            "or t.repeatState = :repeatState)")
+    Integer countOfAbNormalTask(
+            @Param("user") User user,
+            @Param("allDayState") AllDayState allDayState,
+            @Param("repeatState") RepeatState repeatState
+    );
+
+
     /**
      * 특정 유저의 만료되지 않은 완료 태스크의 갯수를 반환한다.
      * @param userId 유저 아이디 값
@@ -144,7 +205,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query("select count(t) from Task t where t.user.id = :userId " +
             "and t.completeState = :completeState " +
             "and t.expiredState = :expiredState")
-    int countOfCompleteTask(@Param("userId") Long userId,
+    Integer countOfCompleteTask(@Param("userId") Long userId,
                             @Param("completeState") CompleteState completeState,
                             @Param("expiredState") ExpiredState expiredState);
 
@@ -175,7 +236,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      */
     @Query("select count(t) from Task t where t.user.id = :userId " +
             "and t.expiredState = :expiredState")
-    int countOfAvailableTask(@Param("userId") Long userId,
+    Integer countOfAvailableTask(@Param("userId") Long userId,
                              @Param("expiredState") ExpiredState expiredState);
 
 

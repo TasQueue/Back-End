@@ -146,18 +146,24 @@ public class TaskController {
 
     @ApiOperation(
             value = "태스크 생성하기",
-            notes = "태스크를 생성한다. <br>" +
-                    "일반 태스크의 경우 dayOfWeek = [] (빈 리스트)로 넣어주시면 됩니다. <br>" +
+            notes = "태스크를 생성한다. <br> " +
+                    "일반 태스크에 대한 설명 <br><br> " +
+                    "일반 태스크의 경우 dayOfWeek = [] (빈 리스트)로 넣어주시면 됩니다. <br> " +
+                    "yyyy-MM-dd HH:mm 정보는 반드시 필요합니다. <br>" +
+                    "하지만 언제 해도 상관없는 일반 태스크라면 requiredTime = false 값을 넣어주시고(아니면 true) HH:mm 는 00:00 로 통일해주세요.<br><br> " +
+                    "루프 태스크에 대한 설명 <br><br> " +
                     "루프 태스크 (매일) 타입의 경우 dayOfWeek = [\"MON\", \"TUE\", .. \"SUN\"] 까지 모두 넣어주시면 됩니다. <br> " +
                     "루프 태스크 (특정 요일) 타입의 경우 해당 요일을 넣어주시면 됩니다. <br> " +
+                    "yyyy-MM-dd HH:mm 정보는 반드시 필요합니다. <br> " +
+                    "다만 yyyy-MM-dd 의 정보는 반드시 해당 루프태스크가 처음 시작하는 날짜의 정보여야합니다. (현재 일이 아닐 수 있음) <br> " +
+                    "HH:mm 정보는 루프태스크의 수행 시간으로 넣으시면 됩니다. <br><br> " +
+                    "일일 태스크에 대한 설명 <br><br> " +
                     "일일 태스크의 경우 루프 태스크(매일) 처럼 dayOfWeek = [ 모든요일 ] 넣어주시면 됩니다. <br> " +
-                    "startTime 과 endTime 은 yyyy-MM-dd HH:mm 타입을 반드시 지켜주시면 됩니다. <br> " +
+                    "yyyy-MM-dd HH:mm 정보는 반드시 필요합니다. <br> " +
+                    "yyyy-MM-dd 정보는 해당 일일 태스크를 처음 시작하는 날짜 정보를 넣어주시면 됩니다. <br> " +
+                    "다만 일일 태스크는 매일 하되 언제 하는지 정보는 필요 없기때문에 HH:mm 값은 00:00 으로 통일해주세요 <br>" +
+                    "또한 위의 일반 태스크 중 언제해도 상관없는 태스크 처럼 requiredTime = false 값을 넣어주세요 <br><br>" +
                     "(..)State 관련 값은 반드시 \"NO\" 혹은 \"YES\" 값으로 넣어주시면 됩니다. <br> <br>" +
-                    "일일 태스크의 경우에도 startTime 과 endTime 은 공백이여서는 안됩니다. <br> " +
-                    "일일 태스크를 처음 시작하는 날짜의 00:00 값을 넣어주세요. 8울 5일부터 시작하는 일일 태스크라면 <br>" +
-                    "2023-08-05 00:00 값을 반드시 넣어주세요 <br> <br> " +
-                    "루프 태스크의 경우에도 startTime 과 endTime 은 공백이여서는 안됩니다. <br> " +
-                    "8월 5일부터 시작하는 루프 태스크라면 2023-08-05 HH:mm 값을 정확히 넣어주세요! <br><br> " +
                     "위와 같이 입력하는 이유는 분리된 태스크 유형을 일, 월별로 조회할 시 HH:mm 포맷으로 공통 출력하기 위함입니다."
     )
     @ApiResponses({
@@ -194,6 +200,7 @@ public class TaskController {
                 .repeatState(createTaskDto.getRepeatState())
                 .completeState(CompleteState.NO)
                 .expiredState(ExpiredState.NO)
+                .requiredTime(createTaskDto.getRequiredTime())
                 .build();
 
 
@@ -201,7 +208,6 @@ public class TaskController {
                 createTaskDto.getDayOfWeek().stream().map(dayOfWeekRepository::findDayOfWeekByName).collect(Collectors.toList());
 
         Long taskId = taskService.saveTask(task, listOfDay);
-        userService.plusTotalTask(user);
 
         URI uri = UriComponentsBuilder
                 .fromHttpUrl(host)
@@ -343,6 +349,9 @@ public class TaskController {
         List<GetTaskOfMonthDto> dtoList = new ArrayList<>();
         for (Task task : combinedList) {
 
+
+            System.out.println("task = " + task);
+
             List<LocalDate> localDateList = new ArrayList<>();
 
             //note 일반 태스크
@@ -352,6 +361,7 @@ public class TaskController {
                         task.getId(),
                         task.getName(),
                         localDateList,
+                        task.getRequiredTime(),
                         task.getStartTime().toLocalTime(),
                         task.getEndTime().toLocalTime(),
                         "NO",
@@ -418,6 +428,7 @@ public class TaskController {
                         task.getId(),
                         task.getName(),
                         localDateList,
+                        task.getRequiredTime(),
                         startTime,
                         endTime,
                         "YES",
@@ -428,6 +439,7 @@ public class TaskController {
                         task.getId(),
                         task.getName(),
                         localDateList,
+                        task.getRequiredTime(),
                         startTime,
                         endTime,
                         "NO",

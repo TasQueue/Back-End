@@ -34,8 +34,8 @@ public class User extends BaseEntity {
     private String intro;
 
     @Column
-    @ColumnDefault("0")
-    private int totalTask;
+    @ColumnDefault(value = "0")
+    private int runStreak;
 
     @Column
     private String themeColor;
@@ -53,30 +53,19 @@ public class User extends BaseEntity {
     private String socialId;
 
 
-    //유저 이름 변경
     public void updateName(String name) {
         this.name = name;
     }
-
-    public void updateTotalTask(int totalTask) {
-        this.totalTask = totalTask;
-    }
-
-    //유저 한 줄 소개 변경
+    public void updateRunStreak(int runStreak) {this.runStreak = runStreak;}
     public void updateIntro(String intro) {
         this.intro = intro;
     }
-
-    //유저 고양이 상태 변경
     public void updateCatState(CatState catState) {
         this.catState = catState;
     }
-
-    //유저 잔디 색깔 변경(테마 컬러)
     public void updateThemeColor(String themeColor) {
         this.themeColor = themeColor;
     }
-
     public void updateRefreshToken(String updateRefreshToken){ this.refreshToken = updateRefreshToken; }
     public void updateEmail(String updateEmail){ this.email = updateEmail; }
 }

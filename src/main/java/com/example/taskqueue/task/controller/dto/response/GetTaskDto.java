@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -45,6 +46,9 @@ public class GetTaskDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime endTime;
 
+    @ApiModelProperty(value = "시간 정보가 필요한지 여부", example = "true")
+    private boolean requiredTime;
+
     @ApiModelProperty(value = "종일 태스크 여부", example = "YES/NO")
     private String allDayState;
 
@@ -62,6 +66,7 @@ public class GetTaskDto {
         this.simpleCategoryDto = new SimpleCategoryDto(category);
         this.startTime = task.getStartTime();
         this.endTime = task.getEndTime();
+        this.requiredTime = task.getRequiredTime();
 
         if(task.getAllDayState().equals(AllDayState.NO)) {
             this.allDayState = "NO";

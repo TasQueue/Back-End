@@ -1,6 +1,10 @@
 package com.example.taskqueue.user.service;
 
 import com.example.taskqueue.exception.notfound.UserNotFoundException;
+import com.example.taskqueue.task.entity.state.AllDayState;
+import com.example.taskqueue.task.entity.state.CompleteState;
+import com.example.taskqueue.task.entity.state.RepeatState;
+import com.example.taskqueue.task.repository.TaskRepository;
 import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.entity.state.CatState;
 import com.example.taskqueue.user.repository.UserRepository;
@@ -19,6 +23,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final TaskRepository taskRepository;
 
     /**
      * 아이디 값으로 유저를 찾아 반환한다.
@@ -69,14 +74,7 @@ public class UserService {
         user.updateThemeColor(color);
     }
 
-    /**
-     * 유저의 TotalTask 수를 1 증가시킨다.
-     * @param user 유저 정보
-     */
-    public void plusTotalTask(User user) {
-        int TT = user.getTotalTask();
-        user.updateTotalTask(TT + 1);
-    }
+
 
 
 }
