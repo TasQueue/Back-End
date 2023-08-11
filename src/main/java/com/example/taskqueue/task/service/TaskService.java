@@ -48,9 +48,11 @@ public class TaskService {
     }
 
     /**
-     * 태스크를 생성한다.
-     * @param task 저장할 태크스 정보
-     * @param dayOfWeekList 저장할 태스크의 요일 정보
+     * 입력받은 태스크를 저장한다.
+     * 태스크를 저장하면서 태스크의 요일정보도 함께 저장한다.
+     *
+     * @param task 태크스 정보
+     * @param dayOfWeekList 태스크의 요일 정보
      * @return 저장한 태스크의 아이디 값
      */
     public Long saveTask(Task task, List<DayOfWeek> dayOfWeekList) {
@@ -63,6 +65,8 @@ public class TaskService {
 
     /**
      * 입력받은 요일 리트스틀 기준으로 태스크의 요일 정보를 수정한다.
+     * 기존의 요일정보는 모두 삭제한다.
+     *
      * @param task 태스크 정보
      * @param dayOfWeekList 새로 갱신할 요일 리스트 정보
      */
@@ -106,44 +110,63 @@ public class TaskService {
     }
 
     /**
-     * 특정 [달] 의 만료되지 않은 유저의 [일반 태스크] 를 우선순위 정렬하여 반환한다.
+     * 특정 [달] 의 만료되지 않은 유저의 [캘린더 ON 일반 태스크] 를 우선순위 정렬하여 반환한다.
      * @param user 유저 정보
      * @param startOfDay 특정 달 1일의 00시 00분
      * @param endOfDay 다음 달 1일의 00시 00분
      * @return 태스크 리스트
      */
-    public List<Task> getTaskOfMonth(
+    public List<Task> getTaskOnCalenderOfMonth(
             User user,
             LocalDateTime startOfDay,
             LocalDateTime endOfDay
     ) {
-        return taskRepository.findTaskByUserAndPriority(
+        return taskRepository.findTaskOnCalenderByUserAndPriority(
                 user,
                 ExpiredState.NO,
                 RepeatState.NO,
                 AllDayState.NO,
+                CalenderState.YES,
                 startOfDay,
                 endOfDay
         );
     }
 
-
     /**
-     * 유저의 루프 태스크를 찾아 모두 반환한다.
+     * 유저의 [특정 시점 이후] 의 [모든] 루프 태스크를 찾아 모두 반환한다.
      * @param user 유저 정보
      * @return 루프 태스크 리스트
      */
-    public List<Task> findRepeatTaskByUser(User user) {
-        return taskRepository.findRepeatTaskByUser(user, ExpiredState.NO, RepeatState.YES);
+    public List<Task> findRepeatTaskByUser(User user, LocalDateTime startTime) {
+        return taskRepository.findRepeatTaskByUser(user, RepeatState.YES, startTime);
     }
 
     /**
-     * 유저의 일일 태스크를 찾아 모두 반환한다.
+     * 유저의 [캘린더 ON 상태] 루프 태스크를 찾아 모두 반환한다.
+     * @param user 유저 정보
+     * @return 루프 태스크 리스트
+     */
+    public List<Task> findRepeatTaskOnCalenderByUser(User user) {
+        return taskRepository.findRepeatTaskOnCalenderByUser(user, RepeatState.YES, CalenderState.YES);
+    }
+
+    /**
+     * 유저의 [특정 시점 이후] 의 [모든] 일일 태스크를 찾아 모두 반환한다.
+     * @param user 유저 정보
+     * @param startTime 특정 시점
+     * @return 일일 태스크 리스트
+     */
+    public List<Task> findAllDayTaskByUser(User user, LocalDateTime startTime) {
+        return taskRepository.findAllDayTaskByUser(user, AllDayState.YES, startTime);
+    }
+
+    /**
+     * 유저의 [캘린더 ON 상태] 일일 태스크를 찾아 모두 반환한다.
      * @param user 유저 정보
      * @return 일일 태스크 리스트
      */
-    public List<Task> findAllDayTaskByUser(User user) {
-        return taskRepository.findAllDayTaskByUser(user, ExpiredState.NO, AllDayState.YES);
+    public List<Task> findAllDayTaskOnCalenderByUser(User user) {
+        return taskRepository.findAllDayTaskOnCalenderByUser(user, AllDayState.YES, CalenderState.YES);
     }
 
     /**

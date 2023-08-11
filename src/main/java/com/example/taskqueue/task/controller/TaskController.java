@@ -121,13 +121,13 @@ public class TaskController {
         List<SimpleTaskDto> dtoList = new ArrayList<>();
 
         //note 해당 유저의 모든 [일일 태스크 -> 우선순위 -1]
-        List<Task> findAllDayList = taskService.findAllDayTaskByUser(user);
+        List<Task> findAllDayList = taskService.findAllDayTaskByUser(user, todayMidnight);
         for (Task allDayTask : findAllDayList) {
             dtoList.add(new SimpleTaskDto(allDayTask));
         }
 
         //note 해당 유저의 모든 [루프 태스크 -> 우선순위 0]
-        List<Task> findRepeatList = taskService.findRepeatTaskByUser(user);
+        List<Task> findRepeatList = taskService.findRepeatTaskByUser(user, todayMidnight);
         for (Task repeatTask : findRepeatList) {
             if(taskService.isTaskOfThisDay(day, repeatTask)) {
                 dtoList.add(new SimpleTaskDto(repeatTask));
@@ -147,17 +147,17 @@ public class TaskController {
     @ApiOperation(
             value = "태스크 생성하기",
             notes = "태스크를 생성한다. <br>" +
-                    "일일 태스크 or 일반 태스크의 경우 dayOfWeek = [] (빈 리스트)로 넣어주시면 됩니다. <br>" +
-                    "루프 태스크 (매일) 타입의 경우 dayOfWeek = [\"MON\", \"TUE\", .. \"SUN\"] 까지 모두 넣어주시면 됩니다. <br>" +
+                    "일반 태스크의 경우 dayOfWeek = [] (빈 리스트)로 넣어주시면 됩니다. <br>" +
+                    "루프 태스크 (매일) 타입의 경우 dayOfWeek = [\"MON\", \"TUE\", .. \"SUN\"] 까지 모두 넣어주시면 됩니다. <br> " +
+                    "루프 태스크 (특정 요일) 타입의 경우 해당 요일을 넣어주시면 됩니다. <br> " +
+                    "일일 태스크의 경우 루프 태스크(매일) 처럼 dayOfWeek = [ 모든요일 ] 넣어주시면 됩니다. <br> " +
                     "startTime 과 endTime 은 yyyy-MM-dd HH:mm 타입을 반드시 지켜주시면 됩니다. <br> " +
                     "(..)State 관련 값은 반드시 \"NO\" 혹은 \"YES\" 값으로 넣어주시면 됩니다. <br> <br>" +
                     "일일 태스크의 경우에도 startTime 과 endTime 은 공백이여서는 안됩니다. <br> " +
-                    "2023-01-01 00:00 와 같은 특정 값을 반드시 넣어주세요 <br> <br> " +
+                    "일일 태스크를 처음 시작하는 날짜의 00:00 값을 넣어주세요. 8울 5일부터 시작하는 일일 태스크라면 <br>" +
+                    "2023-08-05 00:00 값을 반드시 넣어주세요 <br> <br> " +
                     "루프 태스크의 경우에도 startTime 과 endTime 은 공백이여서는 안됩니다. <br> " +
-                    "년,월,일 값은 무작위여도 되지만 HH:mm 값은 태스크 수행 시간으로 정확히 넣어주세요! <br> " +
-                    "예를 들어 15:00 시작 17:00 종료 태스크라면 년, 월, 일은 임의 값으로 넣어주시되 <br>" +
-                    "startTime = 2023-01-01 15:00 <br> " +
-                    "endTime = 2023-01-01 17:00 처럼 HH:mm 값만 정확하게 넣어주시면 됩니다! <br><br> " +
+                    "8월 5일부터 시작하는 루프 태스크라면 2023-08-05 HH:mm 값을 정확히 넣어주세요! <br><br> " +
                     "위와 같이 입력하는 이유는 분리된 태스크 유형을 일, 월별로 조회할 시 HH:mm 포맷으로 공통 출력하기 위함입니다."
     )
     @ApiResponses({
@@ -331,9 +331,9 @@ public class TaskController {
         LocalDateTime month = present.atTime(localTime);
         LocalDateTime nextMonth = next.atTime(localTime);
 
-        List<Task> findRepeatList = taskService.findRepeatTaskByUser(user);
-        List<Task> findAllDayList = taskService.findAllDayTaskByUser(user);
-        List<Task> findNormalList = taskService.getTaskOfMonth(user, month, nextMonth);
+        List<Task> findRepeatList = taskService.findRepeatTaskOnCalenderByUser(user);
+        List<Task> findAllDayList = taskService.findAllDayTaskOnCalenderByUser(user);
+        List<Task> findNormalList = taskService.getTaskOnCalenderOfMonth(user, month, nextMonth);
 
         List<Task> combinedList = new ArrayList<>();
         combinedList.addAll(findNormalList);
@@ -398,19 +398,15 @@ public class TaskController {
 
 
                 //note 해당 월의 루프태스크 일자 모두 찾아내기
-                LocalDate startDate = task.getStartTime().toLocalDate();
-                LocalDate endDate = startDate.plusMonths(1).withDayOfMonth(1);
-                while (startDate.isBefore(endDate)) {
-
+                LocalDate startDate = present;
+                while (startDate.isBefore(next)) {
                     java.time.DayOfWeek dayOfWeek = startDate.getDayOfWeek();
-                    if(originList.contains(dayOfWeek)) {
+                    if(originList.contains(dayOfWeek) && task.getStartTime().isBefore(startDate.atTime(0,0,0))) {
                         localDateList.add(startDate);
                     }
-
                     startDate = startDate.plusDays(1);
-
                 }
-
+                if(localDateList.isEmpty()) continue;
 
             }
 
