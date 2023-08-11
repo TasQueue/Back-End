@@ -1,16 +1,28 @@
 package com.example.taskqueue.user.service;
 
+import com.example.taskqueue.common.dto.SimpleTaskDto;
 import com.example.taskqueue.exception.notfound.UserNotFoundException;
+import com.example.taskqueue.task.entity.Task;
+import com.example.taskqueue.task.entity.state.CompleteState;
+import com.example.taskqueue.task.entity.state.RepeatState;
+import com.example.taskqueue.task.repository.TaskDayOfWeekRepository;
+import com.example.taskqueue.task.repository.TaskRepository;
+import com.example.taskqueue.task.service.TaskService;
 import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.entity.state.CatState;
 import com.example.taskqueue.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -19,6 +31,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final TaskService taskService;
 
     /**
      * 아이디 값으로 유저를 찾아 반환한다.
@@ -70,13 +83,37 @@ public class UserService {
     }
 
     /**
-     * 유저의 TotalTask 수를 1 증가시킨다.
-     * @param user 유저 정보
+     * 매일 한번 씩 진행하는 유저 업데이트.
+     *
+     * 매일 자정 유저의 dailyUpdate 값은 false 로 초기화된다.
+     * 따라서 이 업데이트를 한번 진행하여 dailyUpdate 를 true 로 바꾼 뒤에는 다음 날까지 진행하지 않는다.
+     *
+     * 전날 기본 태스크 모두 클리어 -> 연속 달리기 지속
+     * 전날 기본 태스크 모두 클리어 X -> 0으로 초기화
+     *
+     * @param user
      */
-    public void plusTotalTask(User user) {
-        int TT = user.getTotalTask();
-        user.updateTotalTask(TT + 1);
+    public void updateDailyState(User user, LocalDate localDate) {
+        user.updateDailyUpdate(true);
+        LocalDateTime present = localDate.atTime(0, 0, 0);
+        LocalDateTime next = present.plusDays(1);
+
+        boolean ALL_CLEAR =
+                taskService.getTaskOfDay(user, present, next)
+                .stream()
+                .anyMatch(task -> task.getCompleteState().equals(CompleteState.NO));
+
+        int curr = user.getRunStreak();
+        user.updateRunStreak(ALL_CLEAR ? curr + 1 : 0);
     }
 
+    /**
+     * [매일 자정 자동 업데이트]
+     * 모든 유저의 dailyUpdate 값을 false 로 초기화한다.
+     */
+    @Scheduled(cron = "0 0 0 * * *")
+    public void dailyUpdate() {
+        userRepository.dailyUpdateForUser();
+    }
 
 }

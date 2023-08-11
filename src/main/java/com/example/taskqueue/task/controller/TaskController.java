@@ -12,9 +12,7 @@ import com.example.taskqueue.task.controller.dto.response.GetTaskOfMonthDto;
 import com.example.taskqueue.task.controller.dto.response.GetTaskOfMonthListDto;
 import com.example.taskqueue.task.entity.DayOfWeek;
 import com.example.taskqueue.task.entity.Task;
-import com.example.taskqueue.task.entity.state.AllDayState;
 import com.example.taskqueue.task.entity.state.CompleteState;
-import com.example.taskqueue.task.entity.state.ExpiredState;
 import com.example.taskqueue.task.entity.state.RepeatState;
 import com.example.taskqueue.task.repository.DayOfWeekRepository;
 import com.example.taskqueue.task.repository.TaskDayOfWeekRepository;
@@ -120,12 +118,6 @@ public class TaskController {
         String day = today.getDayOfWeek().toString().substring(0, 3);
         List<SimpleTaskDto> dtoList = new ArrayList<>();
 
-        //note 해당 유저의 모든 [일일 태스크 -> 우선순위 -1]
-        List<Task> findAllDayList = taskService.findAllDayTaskByUser(user, todayMidnight);
-        for (Task allDayTask : findAllDayList) {
-            dtoList.add(new SimpleTaskDto(allDayTask));
-        }
-
         //note 해당 유저의 모든 [루프 태스크 -> 우선순위 0]
         List<Task> findRepeatList = taskService.findRepeatTaskByUser(user, todayMidnight);
         for (Task repeatTask : findRepeatList) {
@@ -146,18 +138,18 @@ public class TaskController {
 
     @ApiOperation(
             value = "태스크 생성하기",
-            notes = "태스크를 생성한다. <br>" +
-                    "일반 태스크의 경우 dayOfWeek = [] (빈 리스트)로 넣어주시면 됩니다. <br>" +
+            notes = "태스크를 생성한다. <br> " +
+                    "일반 태스크에 대한 설명 <br><br> " +
+                    "일반 태스크의 경우 dayOfWeek = [] (빈 리스트)로 넣어주시면 됩니다. <br> " +
+                    "yyyy-MM-dd HH:mm 정보는 반드시 필요합니다. <br>" +
+                    "하지만 언제 해도 상관없는 일반 태스크라면 requiredTime = false 값을 넣어주시고(아니면 true) HH:mm 는 00:00 로 통일해주세요.<br><br> " +
+                    "루프 태스크에 대한 설명 <br><br> " +
                     "루프 태스크 (매일) 타입의 경우 dayOfWeek = [\"MON\", \"TUE\", .. \"SUN\"] 까지 모두 넣어주시면 됩니다. <br> " +
                     "루프 태스크 (특정 요일) 타입의 경우 해당 요일을 넣어주시면 됩니다. <br> " +
-                    "일일 태스크의 경우 루프 태스크(매일) 처럼 dayOfWeek = [ 모든요일 ] 넣어주시면 됩니다. <br> " +
-                    "startTime 과 endTime 은 yyyy-MM-dd HH:mm 타입을 반드시 지켜주시면 됩니다. <br> " +
+                    "yyyy-MM-dd HH:mm 정보는 반드시 필요합니다. <br> " +
+                    "다만 yyyy-MM-dd 의 정보는 반드시 해당 루프태스크가 처음 시작하는 날짜의 정보여야합니다. (현재 일이 아닐 수 있음) <br> " +
+                    "HH:mm 정보는 루프태스크의 수행 시간으로 넣으시면 됩니다.<br><br> " +
                     "(..)State 관련 값은 반드시 \"NO\" 혹은 \"YES\" 값으로 넣어주시면 됩니다. <br> <br>" +
-                    "일일 태스크의 경우에도 startTime 과 endTime 은 공백이여서는 안됩니다. <br> " +
-                    "일일 태스크를 처음 시작하는 날짜의 00:00 값을 넣어주세요. 8울 5일부터 시작하는 일일 태스크라면 <br>" +
-                    "2023-08-05 00:00 값을 반드시 넣어주세요 <br> <br> " +
-                    "루프 태스크의 경우에도 startTime 과 endTime 은 공백이여서는 안됩니다. <br> " +
-                    "8월 5일부터 시작하는 루프 태스크라면 2023-08-05 HH:mm 값을 정확히 넣어주세요! <br><br> " +
                     "위와 같이 입력하는 이유는 분리된 태스크 유형을 일, 월별로 조회할 시 HH:mm 포맷으로 공통 출력하기 위함입니다."
     )
     @ApiResponses({
@@ -173,10 +165,8 @@ public class TaskController {
 
         int current_priority = priority;
 
-        //note 루프 태스크 & 일일 태스크 필터
-        if(createTaskDto.getAllDayState().equals(AllDayState.YES) && createTaskDto.getRepeatState().equals(RepeatState.NO)) {
-            current_priority = -1;
-        } else if(createTaskDto.getAllDayState().equals(AllDayState.NO) && createTaskDto.getRepeatState().equals(RepeatState.YES)) {
+        //note 루프 태스크 필터
+        if(createTaskDto.getRepeatState().equals(RepeatState.YES)) {
             current_priority = 0;
         } else {
             priority++;
@@ -189,11 +179,10 @@ public class TaskController {
                 .startTime(createTaskDto.getStartTime())
                 .endTime(createTaskDto.getEndTime())
                 .priority(current_priority)
-                .allDayState(createTaskDto.getAllDayState())
                 .calenderState(createTaskDto.getCalenderState())
                 .repeatState(createTaskDto.getRepeatState())
                 .completeState(CompleteState.NO)
-                .expiredState(ExpiredState.NO)
+                .requiredTime(createTaskDto.getRequiredTime())
                 .build();
 
 
@@ -201,7 +190,6 @@ public class TaskController {
                 createTaskDto.getDayOfWeek().stream().map(dayOfWeekRepository::findDayOfWeekByName).collect(Collectors.toList());
 
         Long taskId = taskService.saveTask(task, listOfDay);
-        userService.plusTotalTask(user);
 
         URI uri = UriComponentsBuilder
                 .fromHttpUrl(host)
@@ -332,13 +320,11 @@ public class TaskController {
         LocalDateTime nextMonth = next.atTime(localTime);
 
         List<Task> findRepeatList = taskService.findRepeatTaskOnCalenderByUser(user);
-        List<Task> findAllDayList = taskService.findAllDayTaskOnCalenderByUser(user);
         List<Task> findNormalList = taskService.getTaskOnCalenderOfMonth(user, month, nextMonth);
 
         List<Task> combinedList = new ArrayList<>();
         combinedList.addAll(findNormalList);
         combinedList.addAll(findRepeatList);
-        combinedList.addAll(findAllDayList);
 
         List<GetTaskOfMonthDto> dtoList = new ArrayList<>();
         for (Task task : combinedList) {
@@ -346,22 +332,23 @@ public class TaskController {
             List<LocalDate> localDateList = new ArrayList<>();
 
             //note 일반 태스크
-            if(task.getRepeatState().equals(RepeatState.NO) && task.getAllDayState().equals(AllDayState.NO)) {
+            if(task.getRepeatState().equals(RepeatState.NO)) {
                 localDateList.add(task.getStartTime().toLocalDate());
                 dtoList.add(new GetTaskOfMonthDto(
                         task.getId(),
                         task.getName(),
                         localDateList,
+                        task.getRequiredTime(),
                         task.getStartTime().toLocalTime(),
                         task.getEndTime().toLocalTime(),
-                        "NO",
-                        "NO"));
+                        "NO")
+                );
                 continue;
             }
 
 
-            //note 루프 태스크 or 일일 태스크
-            if(task.getRepeatState().equals(RepeatState.YES) || task.getAllDayState().equals(AllDayState.YES))  {
+            //note 루프 태스크
+            if(task.getRepeatState().equals(RepeatState.YES))  {
 
                 //note Java 기본형 DayOfWeek
                 List<java.time.DayOfWeek> originList = new ArrayList<>();
@@ -413,26 +400,15 @@ public class TaskController {
             LocalTime startTime = task.getStartTime().toLocalTime();
             LocalTime endTime = task.getEndTime().toLocalTime();
 
-            if(task.getAllDayState().equals(AllDayState.YES)) {
-                dtoList.add(new GetTaskOfMonthDto(
-                        task.getId(),
-                        task.getName(),
-                        localDateList,
-                        startTime,
-                        endTime,
-                        "YES",
-                        "NO"));
-            }
-            else {
-                dtoList.add(new GetTaskOfMonthDto(
-                        task.getId(),
-                        task.getName(),
-                        localDateList,
-                        startTime,
-                        endTime,
-                        "NO",
-                        "YES"));
-            }
+            dtoList.add(new GetTaskOfMonthDto(
+                    task.getId(),
+                    task.getName(),
+                    localDateList,
+                    task.getRequiredTime(),
+                    startTime,
+                    endTime,
+                    "YES"
+            ));
         }
 
         return ResponseEntity.ok(new GetTaskOfMonthListDto(dtoList));

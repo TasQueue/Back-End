@@ -30,32 +30,31 @@ public class Task extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column()//태스크 이름
+    @Column
     private String name;
 
-    @Column()//태스크 시작시간
+    @Column
     private LocalDateTime startTime;
 
-    @Column()//태스크 종료시간
+    @Column
     private LocalDateTime endTime;
 
-    @Column()//태스크 우선순위
+    @Column
+    private Boolean requiredTime;
+
+    @Column
     private int priority;
 
-    @Enumerated(EnumType.STRING)//태스크 하루종일 여부
-    private AllDayState allDayState;
-
-    @Enumerated(EnumType.STRING)//태스크 달력 표시 여부 : 기본 값 = OFF
+    @Enumerated(EnumType.STRING)
     private CalenderState calenderState;
 
-    @Enumerated(EnumType.STRING)//태스크 수행 여부 : 기본 값 = OFF
+    @Enumerated(EnumType.STRING)
     private CompleteState completeState;
 
-    @Enumerated(EnumType.STRING)//루프 태스크 여부
+    @Enumerated(EnumType.STRING)
     private RepeatState repeatState;
 
-    @Enumerated(EnumType.STRING)//만료일 지남 여부
-    private ExpiredState expiredState;
+
 
     @Builder
     public Task(User user,
@@ -64,11 +63,10 @@ public class Task extends BaseEntity {
                 LocalDateTime startTime,
                 LocalDateTime endTime,
                 int priority,
-                AllDayState allDayState,
                 CalenderState calenderState,
                 CompleteState completeState,
                 RepeatState repeatState,
-                ExpiredState expiredState
+                boolean requiredTime
     ) {
         this.user = user;
         this.category = category;
@@ -76,11 +74,10 @@ public class Task extends BaseEntity {
         this.startTime = startTime;
         this.endTime = endTime;
         this.priority = priority;
-        this.allDayState = allDayState;
         this.calenderState = calenderState;
         this.completeState = completeState;
         this.repeatState = repeatState;
-        this.expiredState = expiredState;
+        this.requiredTime = requiredTime;
     }
 
 
@@ -104,10 +101,6 @@ public class Task extends BaseEntity {
         this.endTime = endTime;
     }
 
-    public void updateAllDayState(AllDayState allDayState) {
-        this.allDayState = allDayState;
-    }
-
     public void updateCalendarState(CalenderState calenderState) {
         this.calenderState = calenderState;
     }
@@ -120,7 +113,7 @@ public class Task extends BaseEntity {
         this.repeatState = repeatState;
     }
 
-    public void updateExpiredState(ExpiredState expiredState) { this.expiredState = expiredState; }
+    public void updateRequiredTime(boolean requiredTime) {this.requiredTime = requiredTime;}
 
 
 }

@@ -50,6 +50,7 @@ public class TaskService {
     /**
      * 입력받은 태스크를 저장한다.
      * 태스크를 저장하면서 태스크의 요일정보도 함께 저장한다.
+     * 유저의 TotalTask 증가
      *
      * @param task 태크스 정보
      * @param dayOfWeekList 태스크의 요일 정보
@@ -60,7 +61,18 @@ public class TaskService {
             TaskDayOfWeek taskDayOfWeek = new TaskDayOfWeek(task, day);
             taskDayOfWeekRepository.save(taskDayOfWeek);
         }
+
+        User user = task.getUser();
         return taskRepository.save(task).getId();
+    }
+
+    /**
+     * 태스크를 삭제한다.
+     * 유저의 TotalTask 감소
+     * @param task 삭제할 태스크 정보
+     */
+    public void deleteTask(Task task) {
+        taskRepository.delete(task);
     }
 
     /**
@@ -79,16 +91,7 @@ public class TaskService {
     }
 
     /**
-     * 태스크를 삭제한다.
-     * @param task 삭제할 태스크 정보
-     */
-    public void deleteTask(Task task) {
-        taskRepository.delete(task);
-    }
-
-
-    /**
-     * 특정 [일] 의 만료되지 않은 유저의 [일반 태스크] 를 우선순위 정렬하여 반환한다.
+     * 특정 [일] 유저의 [일반 태스크] 를 우선순위 정렬하여 반환한다.
      * @param user 유저 정보
      * @param startOfDay 오늘의 00시 00분
      * @param endOfDay 내일의 00시 00분
@@ -101,9 +104,7 @@ public class TaskService {
     ) {
         return taskRepository.findTaskByUserAndPriority(
                 user,
-                ExpiredState.NO,
                 RepeatState.NO,
-                AllDayState.NO,
                 startOfDay,
                 endOfDay
         );
@@ -123,9 +124,7 @@ public class TaskService {
     ) {
         return taskRepository.findTaskOnCalenderByUserAndPriority(
                 user,
-                ExpiredState.NO,
                 RepeatState.NO,
-                AllDayState.NO,
                 CalenderState.YES,
                 startOfDay,
                 endOfDay
@@ -151,54 +150,16 @@ public class TaskService {
     }
 
     /**
-     * 유저의 [특정 시점 이후] 의 [모든] 일일 태스크를 찾아 모두 반환한다.
-     * @param user 유저 정보
-     * @param startTime 특정 시점
-     * @return 일일 태스크 리스트
-     */
-    public List<Task> findAllDayTaskByUser(User user, LocalDateTime startTime) {
-        return taskRepository.findAllDayTaskByUser(user, AllDayState.YES, startTime);
-    }
-
-    /**
-     * 유저의 [캘린더 ON 상태] 일일 태스크를 찾아 모두 반환한다.
-     * @param user 유저 정보
-     * @return 일일 태스크 리스트
-     */
-    public List<Task> findAllDayTaskOnCalenderByUser(User user) {
-        return taskRepository.findAllDayTaskOnCalenderByUser(user, AllDayState.YES, CalenderState.YES);
-    }
-
-    /**
-     * YES 상태의 완료여부를 가진 태스크의 비율에 따른 고양이의 상태를 측정하여 반환한다.
+     * 유저 고양이 상태를 반환한다.
      * @param userId 유저 아이디
      */
     public int getStateOfCat(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-
-        //note 자정 이후 첫 조회시 TotalTask 갱신 필요
-        int countOfAvailableTask = taskRepository.countOfAvailableTask(userId, ExpiredState.NO);
-        if(user.getTotalTask() != countOfAvailableTask) {
-            user.updateTotalTask(countOfAvailableTask);
-        }
-
-        //note 나누기 0 연산 방지
-        if(user.getTotalTask() == 0) {
-            return 4;
-        }
-
-        int percentage =
-                (100 * taskRepository.countOfCompleteTask(userId, CompleteState.YES, ExpiredState.NO)) / user.getTotalTask();
-
-        if(percentage <= 100 && percentage >= 75) return 1;
-        else if(percentage < 75 && percentage >= 50) return 2;
-        else if(percentage < 50 && percentage >= 25) return 3;
-        else return 4;
+        return user.getRunStreak();
     }
 
     /**
-     * 태스크 우선순위를 SWAP 한다. 루프 태스트(X) 일일 태스크(X)
-     * 두 종류는 우선순위 SWAP 시도할 경우 400 ERROR 발생
+     * 태스크 우선순위를 SWAP 한다. 루프 태스트(X) 시도할 경우 400 ERROR 발생
      * @param taskId_1 태스크 1
      * @param taskId_2 태스크 2
      */
@@ -208,10 +169,6 @@ public class TaskService {
 
         if(taskA.getRepeatState().equals(RepeatState.YES) || taskB.getRepeatState().equals(RepeatState.YES)) {
             throw new LoopTaskPriorityBadInputException();
-        }
-
-        if(taskA.getAllDayState().equals(AllDayState.YES) || taskB.getAllDayState().equals(AllDayState.YES)) {
-            throw new AllDayTaskPriorityBadInputException();
         }
 
         int temp = taskA.getPriority();
@@ -225,11 +182,11 @@ public class TaskService {
      */
     public void toggleCompleteState(Long taskId) {
         Task findTask = taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
-        if(findTask.getCompleteState().equals(CompleteState.NO)) {
+        User user = findTask.getUser();
+        if(findTask.getCompleteState().equals(CompleteState.NO))
             findTask.updateCompleteState(CompleteState.YES);
-        } else {
+        else
             findTask.updateCompleteState(CompleteState.NO);
-        }
     }
 
     /**
@@ -242,7 +199,6 @@ public class TaskService {
         task.updateCategory(category);
         task.updateStartTime(updateTaskDto.getStartTime());
         task.updateEndTime(updateTaskDto.getEndTime());
-        task.updateAllDayState(updateTaskDto.getAllDayState());
         task.updateRepeatState(updateTaskDto.getRepeatState());
         task.updateCalendarState(updateTaskDto.getCalenderState());
     }
@@ -255,19 +211,6 @@ public class TaskService {
     public boolean isTaskOfThisDay(String day, Task task) {
         List<String> dayOfWeekByTask = taskDayOfWeekRepository.findDayOfWeekByTask(task.getId());
         return dayOfWeekByTask.contains(day);
-    }
-
-    /**
-     * 매일 자정 : 예정일이 이틀이상 지난 태스크를 자동 만료처리한다.
-     * 일일 태스크와 루프 태스크는 만료되지 않는다.
-     */
-    @Scheduled(cron = "0 0 0 * * *")
-    public void deleteExpiredTask() {
-        LocalDate presentDate = LocalDate.now();
-        LocalDate expiryDate = presentDate.minusDays(2);
-
-        //note DB 전체 만료태스크 전환
-        taskRepository.updateExpiredTask(expiryDate, ExpiredState.YES, RepeatState.NO, AllDayState.NO);
     }
 
 }

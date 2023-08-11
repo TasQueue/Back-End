@@ -1,6 +1,6 @@
 package com.example.taskqueue.task.controller.dto.request;
 
-import com.example.taskqueue.task.entity.state.AllDayState;
+
 import com.example.taskqueue.task.entity.state.CalenderState;
 import com.example.taskqueue.task.entity.state.RepeatState;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -43,10 +43,6 @@ public class UpdateTaskDto {
     @NotNull(message = "태스크 요일은 필수 값입니다.")
     private List<String> dayOfWeek;
 
-    @ApiModelProperty(value = "종일 태스크 여부 - YES/NO", example = "YES")
-    @NotNull(message = "종일 태스크 여부는 필수 값입니다.")
-    private AllDayState allDayState;
-
     @ApiModelProperty(value = "루프 태스크 여부 - YES/NO", example = "YES")
     @NotNull(message = "루프 태스크 여부는 필수 값입니다.")
     private RepeatState repeatState;
@@ -54,5 +50,6 @@ public class UpdateTaskDto {
     @ApiModelProperty(value = "캘린더 표기 여부 - YES/NO", example = "YES")
     @NotNull(message = "캘린더 표기 여부는 필수 값입니다.")
     private CalenderState calenderState;
+
 
 }
