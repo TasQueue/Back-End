@@ -99,7 +99,7 @@ public class UserService {
         LocalDateTime next = present.plusDays(1);
 
         boolean ALL_CLEAR =
-                taskService.getTaskOfDay(user, present, next)
+                taskService.getTaskList(user, present, next)
                 .stream()
                 .anyMatch(task -> task.getCompleteState().equals(CompleteState.NO));
 

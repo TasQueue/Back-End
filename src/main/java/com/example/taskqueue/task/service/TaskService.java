@@ -35,7 +35,6 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
-    private final DayOfWeekService dayOfWeekService;
     private final TaskDayOfWeekRepository taskDayOfWeekRepository;
 
     /**
@@ -91,18 +90,38 @@ public class TaskService {
     }
 
     /**
-     * 특정 [일] 유저의 [일반 태스크] 를 우선순위 정렬하여 반환한다.
+     * 특정 기간 유저의 [일반 태스크] 를 우선순위 정렬하여 반환한다.
      * @param user 유저 정보
-     * @param startOfDay 오늘의 00시 00분
-     * @param endOfDay 내일의 00시 00분
+     * @param startOfDay 기간의 시작
+     * @param endOfDay 기간의 끝
      * @return 태스크 리스트
      */
-    public List<Task> getTaskOfDay(
+    public List<Task> getTaskList(
             User user,
             LocalDateTime startOfDay,
             LocalDateTime endOfDay
     ) {
         return taskRepository.findTaskByUserAndPriority(
+                user,
+                RepeatState.NO,
+                startOfDay,
+                endOfDay
+        );
+    }
+
+    /**
+     * 특정 기간 유저의 [시간표 ON 일반 태스크] 를 우선순위 정렬하여 반환한다.
+     * @param user 유저 정보
+     * @param startOfDay 기간의 시작
+     * @param endOfDay 기간의 끝
+     * @return 태스크 리스트
+     */
+    public List<Task> getTaskOnScheduleList(
+            User user,
+            LocalDateTime startOfDay,
+            LocalDateTime endOfDay
+    ) {
+        return taskRepository.findTaskOnScheduleByUserAndPriority(
                 user,
                 RepeatState.NO,
                 startOfDay,
