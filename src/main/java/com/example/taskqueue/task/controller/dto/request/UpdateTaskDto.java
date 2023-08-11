@@ -43,10 +43,6 @@ public class UpdateTaskDto {
     @NotNull(message = "태스크 요일은 필수 값입니다.")
     private List<String> dayOfWeek;
 
-    @ApiModelProperty(value = "종일 태스크 여부 - YES/NO", example = "YES")
-    @NotNull(message = "종일 태스크 여부는 필수 값입니다.")
-    private AllDayState allDayState;
-
     @ApiModelProperty(value = "루프 태스크 여부 - YES/NO", example = "YES")
     @NotNull(message = "루프 태스크 여부는 필수 값입니다.")
     private RepeatState repeatState;

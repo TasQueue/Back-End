@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,19 +76,23 @@ public class UserController {
             @ApiIgnore @CurrentUser User user,
             @PathVariable("userId") Long userId
     ) {
-        User findUser = userService.findById(userId);
-        int state = taskService.getStateOfCat(userId);
 
+        User findUser = userService.findById(userId);
+        if(!findUser.getDailyUpdate()) {
+            userService.updateDailyState(findUser, LocalDate.now());
+        }
+
+        int state = taskService.getStateOfCat(userId);
         CatState catState;
 
-        if(state == 1) {
-            catState = CatState.ONE;
+        if(state == 0) {
+            catState = CatState.FOUR;
+        } else if (state == 1) {
+            catState = CatState.THREE;
         } else if (state == 2) {
             catState = CatState.TWO;
-        } else if (state == 3) {
-            catState = CatState.THREE;
         } else {
-            catState = CatState.FOUR;
+            catState = CatState.ONE;
         }
 
         findUser.updateCatState(catState);

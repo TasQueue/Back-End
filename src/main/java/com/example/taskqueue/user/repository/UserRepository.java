@@ -19,6 +19,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     List<User> findByName(String name);
 
+    /**
+     * 매일 자정 실행되는 업데이트
+     * 모든 유저의 dailyUpdate 값을 false 로 전환한다.
+     */
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("update User u set u.dailyUpdate = false")
+    void dailyUpdateForUser();
 
 
     Optional<User> findByEmail(String email);

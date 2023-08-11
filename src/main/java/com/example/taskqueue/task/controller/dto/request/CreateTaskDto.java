@@ -1,7 +1,6 @@
 package com.example.taskqueue.task.controller.dto.request;
 
-import com.example.taskqueue.category.entity.Category;
-import com.example.taskqueue.task.entity.state.AllDayState;
+
 import com.example.taskqueue.task.entity.state.CalenderState;
 import com.example.taskqueue.task.entity.state.RepeatState;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -30,10 +29,6 @@ public class CreateTaskDto {
     @ApiModelProperty(value = "태스크 카테고리 아이디 값", example = "1")
     @NotNull(message = "카테고리 아이디는 필수 값입니다.")
     private Long categoryId;
-
-    @ApiModelProperty(value = "종일 태스크 여부 - YES/NO", example = "YES")
-    @NotNull(message = "종일 태스크 여부는 필수 값입니다.")
-    private AllDayState allDayState;
 
     @ApiModelProperty(value = "태스크의 구체적인 시각 필요 여부", example = "true")
     @NotNull(message = "시각 필요 여부는 필수 값입니다.")

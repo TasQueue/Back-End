@@ -38,6 +38,11 @@ public class User extends BaseEntity {
     private int runStreak;
 
     @Column
+    @ColumnDefault(value = "false")
+    private Boolean dailyUpdate;
+
+    @Column
+    @ColumnDefault(value = "#C2D9FA")
     private String themeColor;
 
     @Column
@@ -57,6 +62,7 @@ public class User extends BaseEntity {
         this.name = name;
     }
     public void updateRunStreak(int runStreak) {this.runStreak = runStreak;}
+    public void updateDailyUpdate(Boolean dailyUpdate) {this.dailyUpdate = dailyUpdate;}
     public void updateIntro(String intro) {
         this.intro = intro;
     }

@@ -4,7 +4,6 @@ import com.example.taskqueue.category.entity.Category;
 import com.example.taskqueue.common.dto.SimpleCategoryDto;
 import com.example.taskqueue.common.dto.SimpleUserDto;
 import com.example.taskqueue.task.entity.Task;
-import com.example.taskqueue.task.entity.state.AllDayState;
 import com.example.taskqueue.task.entity.state.CalenderState;
 import com.example.taskqueue.task.entity.state.RepeatState;
 import com.example.taskqueue.user.entity.User;
@@ -67,12 +66,6 @@ public class GetTaskDto {
         this.startTime = task.getStartTime();
         this.endTime = task.getEndTime();
         this.requiredTime = task.getRequiredTime();
-
-        if(task.getAllDayState().equals(AllDayState.NO)) {
-            this.allDayState = "NO";
-        } else {
-            this.allDayState = "YES";
-        }
 
         if(task.getRepeatState().equals(RepeatState.NO)) {
             this.repeatState = "NO";
