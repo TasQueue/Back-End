@@ -18,12 +18,10 @@ public class Category {
     @Column(name = "category_id")
     private Long id;
 
-
-    @Column()//카테고리 이름
+    @Column
     private String name;
 
-
-    @Column()//카테고리 색상
+    @Column
     private String color;
 
     @ManyToOne(fetch = FetchType.LAZY)

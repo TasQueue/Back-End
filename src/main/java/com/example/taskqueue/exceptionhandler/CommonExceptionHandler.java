@@ -38,7 +38,7 @@ public class CommonExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .code(e.getErrorCode().getCode())
                 .message(e.getMessage())
-                .errors(Map.of())
+                .errors(e.getBadInputMaps())
                 .build();
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);

@@ -4,7 +4,8 @@ import com.example.taskqueue.exception.base.BaseErrorCode;
 
 public enum BadInputErrorCode implements BaseErrorCode {
 
-    TASK_TIME_REVERSE("TASK_01", "잘못된 형식의 태스크 수행시간 입력입니다.");
+    TASK_LOOP_PRIORITY("TASK_01", "루프 태스크의 우선순위는 바꿀 수 없습니다."),
+    TASK_ALL_DAY_PRIORITY("TASK_02", "일일 태스크의 우선순위는 바꿀 수 없습니다.");
 
 
     private String code;
@@ -17,11 +18,11 @@ public enum BadInputErrorCode implements BaseErrorCode {
 
     @Override
     public String getCode() {
-        return null;
+        return code;
     }
 
     @Override
     public String getMessage() {
-        return null;
+        return message;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.taskqueue.task.controller.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,21 +15,27 @@ import java.util.List;
 @AllArgsConstructor
 public class GetTaskOfMonthDto {
 
-    @Schema(description = "태스크 아이디 값", example = "1")
+    @ApiModelProperty(value = "태스크 아이디 값", example = "1")
     private Long id;
 
-    @Schema(description = "태스크 이름", example = "수학 과제")
+    @ApiModelProperty(value = "태스크 이름", example = "수학 과제")
     private String name;
 
-    @Schema(description = "일자 정보")
+    @ApiModelProperty(value = "일자 정보")
     private List<LocalDate> dayList = new ArrayList<>();
 
-    @Schema(description = "시작 시각", example = "HH:mm")
+    @ApiModelProperty(value = "시작 시각", example = "HH:mm")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
     private LocalTime startTime;
 
-    @Schema(description = "종료 시각", example = "HH:mm")
+    @ApiModelProperty(value = "종료 시각", example = "HH:mm")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
     private LocalTime endTime;
+
+    @ApiModelProperty(value = "종일 태스크 여부", example = "YES/NO")
+    private String allDayState;
+
+    @ApiModelProperty(value = "루프 태스크 여부", example = "YES/NO")
+    private String repeatState;
 
 }
