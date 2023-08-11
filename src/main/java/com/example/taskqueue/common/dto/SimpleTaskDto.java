@@ -1,7 +1,6 @@
 package com.example.taskqueue.common.dto;
 
 import com.example.taskqueue.task.entity.Task;
-import com.example.taskqueue.task.entity.state.AllDayState;
 import com.example.taskqueue.task.entity.state.CalenderState;
 import com.example.taskqueue.task.entity.state.RepeatState;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -34,9 +33,6 @@ public class SimpleTaskDto {
     @ApiModelProperty(value = "시간정보가 필요한지 여부", example = "true")
     private boolean requiredTime;
 
-    @ApiModelProperty(value = "종일 태스크 여부", example = "YES/NO")
-    private String allDayState;
-
     @ApiModelProperty(value = "루프 태스크 여부", example = "YES/NO")
     private String repeatState;
 
@@ -50,12 +46,6 @@ public class SimpleTaskDto {
         this.startTime = task.getStartTime().toLocalTime();
         this.endTime = task.getEndTime().toLocalTime();
         this.requiredTime = task.getRequiredTime();
-
-        if(task.getAllDayState().equals(AllDayState.NO)) {
-            this.allDayState = "NO";
-        } else {
-            this.allDayState = "YES";
-        }
 
         if(task.getRepeatState().equals(RepeatState.NO)) {
             this.repeatState = "NO";
