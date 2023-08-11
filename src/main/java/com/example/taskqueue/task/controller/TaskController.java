@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Api(tags = "Task API")
 @Slf4j
@@ -127,7 +128,7 @@ public class TaskController {
         }
 
         //note 해당 유저의 태스크 중 [일반 태스크]가 우선순위 순으로 정렬되어있다. 루프태스크(X) 일일 태스크(X)
-        List<Task> findList = taskService.getTaskOfDay(user, todayMidnight, tomorrowMidnight);
+        List<Task> findList = taskService.getTaskList(user, todayMidnight, tomorrowMidnight);
         for (Task task : findList) {
             dtoList.add(new SimpleTaskDto(task));
         }
@@ -295,7 +296,126 @@ public class TaskController {
 
 
     @ApiOperation(
-            value = "월 별 태스크 조회",
+            value = "주 간 시간표 태스크 조회",
+            notes = "입력받은 주의 태스크를 조회한다 <br>. " +
+                    "해당 주의 첫날 정보가 필요합니다. <br>" +
+                    "반드시 yyyy-MM-dd 형식을 지켜주세요. ex) 2023-08-01"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response =  GetTaskOfMonthListDto.class),
+            @ApiResponse(code = 400, message = "BAD REQUEST", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
+    })
+    @GetMapping(value = "/users/{userId}/schedule/week")
+    public ResponseEntity<GetTaskOfMonthListDto> getTaskOnScheduleListByWeek(
+            @ApiIgnore @CurrentUser User user,
+            @PathVariable("userId") Long userId,
+            @RequestParam("week") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate present
+    ) {
+        User findUser = userService.findById(userId);
+
+        LocalDateTime week = present.atTime(0, 0, 0);
+        LocalDateTime next = week.plusWeeks(1);
+
+        List<Task> findNormalList = taskService.getTaskOnScheduleList(findUser, week, next);
+        List<Task> findRepeatList = taskService.findRepeatTaskByUser(findUser, week);
+
+        List<Task> combinedList =
+                Stream.concat(findNormalList.stream(), findRepeatList.stream()).collect(Collectors.toList());
+
+        List<GetTaskOfMonthDto> dtoList = new ArrayList<>();
+        for (Task task : combinedList) {
+
+            List<LocalDate> localDateList = new ArrayList<>();
+
+            //note 일반 태스크
+            if(task.getRepeatState().equals(RepeatState.NO)) {
+                localDateList.add(task.getStartTime().toLocalDate());
+                dtoList.add(new GetTaskOfMonthDto(
+                        task.getId(),
+                        task.getName(),
+                        localDateList,
+                        task.getRequiredTime(),
+                        task.getStartTime().toLocalTime(),
+                        task.getEndTime().toLocalTime(),
+                        "NO")
+                );
+                continue;
+            }
+
+
+            //note 루프 태스크
+            if(task.getRepeatState().equals(RepeatState.YES))  {
+
+                //note Java 기본형 DayOfWeek
+                List<java.time.DayOfWeek> originList = new ArrayList<>();
+
+                //note 해당 태스크의 요일 리스트 ex_[MON, TUE, ... SUN]
+                List<String> dayList = taskDayOfWeekService.findByTask(task.getId());
+
+
+                for (String dayName : dayList) {
+                    switch (dayName) {
+                        case "MON":
+                            originList.add(java.time.DayOfWeek.MONDAY);
+                            break;
+                        case "TUE":
+                            originList.add(java.time.DayOfWeek.TUESDAY);
+                            break;
+                        case "WED":
+                            originList.add(java.time.DayOfWeek.WEDNESDAY);
+                            break;
+                        case "THU":
+                            originList.add(java.time.DayOfWeek.THURSDAY);
+                            break;
+                        case "FRI":
+                            originList.add(java.time.DayOfWeek.FRIDAY);
+                            break;
+                        case "SAT":
+                            originList.add(java.time.DayOfWeek.SATURDAY);
+                            break;
+                        default:
+                            originList.add(java.time.DayOfWeek.SUNDAY);
+                            break;
+                    }
+                }
+
+
+                //note 해당 월의 루프태스크 일자 모두 찾아내기
+                LocalDate startDate = present;
+                while (startDate.isBefore(next.toLocalDate())) {
+                    java.time.DayOfWeek dayOfWeek = startDate.getDayOfWeek();
+                    if(originList.contains(dayOfWeek) && task.getStartTime().isBefore(startDate.atTime(0,0,0))) {
+                        localDateList.add(startDate);
+                    }
+                    startDate = startDate.plusDays(1);
+                }
+                if(localDateList.isEmpty()) continue;
+
+            }
+
+            LocalTime startTime = task.getStartTime().toLocalTime();
+            LocalTime endTime = task.getEndTime().toLocalTime();
+
+            dtoList.add(new GetTaskOfMonthDto(
+                    task.getId(),
+                    task.getName(),
+                    localDateList,
+                    task.getRequiredTime(),
+                    startTime,
+                    endTime,
+                    "YES"
+            ));
+        }
+
+        return ResponseEntity.ok(new GetTaskOfMonthListDto(dtoList));
+
+    }
+
+
+    @ApiOperation(
+            value = "월 별 캘린더 태스크 조회",
             notes = "입력받은 월의 태스크를 조회한다 <br>. " +
                     "연, 월 그리고 1일의 정보가 필요합니다. <br>" +
                     "반드시 yyyy-MM-01 형식을 지켜주세요. ex) 2023-08-01"
@@ -319,12 +439,11 @@ public class TaskController {
         LocalDateTime month = present.atTime(localTime);
         LocalDateTime nextMonth = next.atTime(localTime);
 
-        List<Task> findRepeatList = taskService.findRepeatTaskOnCalenderByUser(user);
-        List<Task> findNormalList = taskService.getTaskOnCalenderOfMonth(user, month, nextMonth);
+        List<Task> findRepeatList = taskService.findRepeatTaskOnCalenderByUser(findUser);
+        List<Task> findNormalList = taskService.getTaskOnCalenderOfMonth(findUser, month, nextMonth);
 
-        List<Task> combinedList = new ArrayList<>();
-        combinedList.addAll(findNormalList);
-        combinedList.addAll(findRepeatList);
+        List<Task> combinedList =
+                Stream.concat(findNormalList.stream(), findRepeatList.stream()).collect(Collectors.toList());
 
         List<GetTaskOfMonthDto> dtoList = new ArrayList<>();
         for (Task task : combinedList) {

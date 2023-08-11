@@ -69,6 +69,29 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     );
 
     /**
+     * 특정 기간의 유저 [ 시간표 ON 기본 ] 태스크를 우선순위 순으로 정렬하여 반환한다.
+     * @param user 유저 정보
+     * @param repeatState 기간의 시작
+     * @param startOfDay 기간의 끝
+     * @param endOfDay 태스크 리스트
+     * @return
+     */
+    @Query("select t from Task t where t.user = :user " +
+            "and t.repeatState = :repeatState " +
+            "and t.startTime >= :startOfDay " +
+            "and t.endTime < :endOfDay " +
+            "and t.requiredTime = true " +
+            "order by t.priority")
+    List<Task> findTaskOnScheduleByUserAndPriority(
+            @Param("user") User user,
+            @Param("repeatState") RepeatState repeatState,
+            @Param("startOfDay") LocalDateTime startOfDay,
+            @Param("endOfDay") LocalDateTime endOfDay
+    );
+
+
+
+    /**
      * 특정 기간의 유저 [캘린더 ON 기본] 태스크를 우선순위 순으로 정렬하여 반환한다.
      * @param user 유저 정보
      * @param startOfDay 기간의 시작

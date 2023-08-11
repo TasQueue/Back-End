@@ -5,9 +5,7 @@ import com.example.taskqueue.task.entity.state.CalenderState;
 import com.example.taskqueue.task.entity.state.RepeatState;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
