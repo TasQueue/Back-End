@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FollowRepository extends JpaRepository<Follow, Long> {
 
@@ -34,4 +35,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
      */
     @Query("select f.user.id from Follow f where f.followUserId = :userId and f.followState = com.example.taskqueue.follow.entity.state.FollowState.REQUEST")
     List<Long> findRequestFollowById(@Param("userId") Long userId);
+
+    @Query("select f.id from Follow f where f.user.id = :userId and f.followUserId = :followUserId")
+    List<Long> findExistFollow(@Param("userId") Long userId, @Param("followUserId") Long followUserId);
 }
