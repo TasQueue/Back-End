@@ -39,19 +39,24 @@ class FollowRepositoryTest {
 //        userRepository.save(user3);
 //        userRepository.save(user4);
 
-        List<User> all = userRepository.findAll();
-
-        Follow follow1 = new Follow(100L, all.get(0), all.get(1).getId(), FollowState.ACCEPT);
-        Follow follow2 = new Follow(200L, all.get(0), all.get(2).getId(), FollowState.ACCEPT);
-        Follow follow3 = new Follow(300L, all.get(2), all.get(0).getId(), FollowState.REQUEST);
-        Follow follow4 = new Follow(400L, all.get(3), all.get(0).getId(), FollowState.ACCEPT);
-
-        ///when
+//        List<User> all = userRepository.findAll();
+//
+//        Follow follow1 = new Follow(100L, all.get(0), all.get(1).getId(), FollowState.REQUEST);
+//        Follow follow2 = new Follow(200L, all.get(0), all.get(2).getId(), FollowState.REQUEST);
+//        Follow follow3 = new Follow(300L, all.get(2), all.get(0).getId(), FollowState.REQUEST);
+//        Follow follow4 = new Follow(400L, all.get(3), all.get(0).getId(), FollowState.REQUEST);
+//
+//        ///when
 //        followService.saveFollow(follow1);
 //        followService.saveFollow(follow2);
 //        followService.saveFollow(follow3);
 //        followService.saveFollow(follow4);
 //
+//        List<Long> requestFollow = followService.findRequestFollow(100L);
+//        for (Long aLong : requestFollow) {
+//            System.out.println("requestId = " + aLong);
+//        }
+
 //        List<Follow> following = followService.findFollowing(all.get(0).getId());
 //        List<Follow> follower = followService.findFollower(all.get(0).getId());
 //

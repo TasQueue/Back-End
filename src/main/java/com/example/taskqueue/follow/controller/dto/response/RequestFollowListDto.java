@@ -13,9 +13,10 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FollowingListDto {
+public class RequestFollowListDto {
 
-    @ApiModelProperty(value = "팔로잉 유저 리스트")
-    @JsonProperty("followingList")
+    @ApiModelProperty(value = "팔로우 요청 유저 리스트")
+    @JsonProperty("requestFollowList")
     private List<SimpleUserDto> simpleUserDtos = new ArrayList<>();
 }
+
