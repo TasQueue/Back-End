@@ -1,7 +1,8 @@
 spring:
 
   profiles:
-    include: oauth, jwt
+    include: oauth, jwt,db,real
+    active : db,real
 
   datasource:
     url: jdbc:h2:tcp://localhost/~/task-queue
