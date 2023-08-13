@@ -1,0 +1,77 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+
+    - name: Set up NTP
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ntp
+        sudo service ntp start
+
+
+    - name: make application-db.yml
+      run: |
+          cd ./src/main/resources
+          touch ./application-db.yml
+          echo "${{ secrets.DB_PROPERTIES }}" > ./application-db.yml
+      shell: bash
+
+    - name: make application-real.yml
+      run: |
+        cd ./src/main/resources
+        touch ./application-real.yml
+        echo "${{ secrets.PROPERTIES_PROD }}" > ./application-real.yml
+      shell: bash
+      
+    - name: Grant execute permission for gradlew
+      run: chmod +x ./gradlew
+    - name: Build with Gradle
+      run: ./gradlew build -x test
+
+    - name: Docker build
+      run: |
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        docker build -t app -f DockerFile .
+        docker tag app ${{ secrets.DOCKER_USERNAME }}/taskqserver:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/taskqserver:latest
+
+        
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST_PROD }} # EC2 인스턴스 퍼블릭 DNS
+        username: ubuntu
+        key: ${{ secrets.PRIVATE_KEY }} # pem 키
+        # 도커 작업
+        script: |
+          docker pull ${{ secrets.DOCKER_USERNAME }}/taskqserver:latest
+          docker stop $(docker ps -a -q)
+          docker run -d —log-driver=syslog -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/taskqserver:latest
+          docker rm $(docker ps —filter 'status=exited' -a -q)
+          docker image prune -a -f
