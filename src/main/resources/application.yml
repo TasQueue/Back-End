@@ -1,13 +1,7 @@
 spring:
 
   profiles:
-    include: oauth, jwt, db
-
-  datasource:
-    url: jdbc:h2:tcp://localhost/~/task-queue
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    include: oauth, jwt
 
   mvc:
     pathmatch:
