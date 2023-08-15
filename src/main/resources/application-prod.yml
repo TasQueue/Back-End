@@ -5,7 +5,7 @@ spring:
 
   datasource:
     url: jdbc:mysql://taskqdb.ctyqxxk6djja.ap-northeast-2.rds.amazonaws.com:3306/taskq
-    username: taksq
+    username: taskq
     password: taskqdb2023!
     driver-class-name: com.mysql.cj.jdbc.Driver
 
