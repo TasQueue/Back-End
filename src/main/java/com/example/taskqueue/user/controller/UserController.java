@@ -78,7 +78,9 @@ public class UserController {
     ) {
 
         User findUser = userService.findById(userId);
-        if(!findUser.getDailyUpdate()) {
+
+        if(!findUser.getDailyUpdate())
+        {
             userService.updateDailyState(findUser, LocalDate.now());
         }
 
@@ -117,7 +119,8 @@ public class UserController {
     public ResponseEntity<Void> deleteUserInfo(
             @CurrentUser User user
     ) {
-        return null;
+        userService.deleteUser(user);
+        return ResponseEntity.noContent().build();
     }
 
 

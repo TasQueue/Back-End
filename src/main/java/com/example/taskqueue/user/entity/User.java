@@ -5,6 +5,8 @@ import com.example.taskqueue.common.BaseEntity;
 import com.example.taskqueue.user.entity.state.CatState;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -17,6 +19,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @ToString
+@Where(clause = "deleted = false")
+@SQLDelete(sql = "update users set deleted = true where user_id = ?")
 public class User extends BaseEntity {
 
     @Id
@@ -57,7 +61,12 @@ public class User extends BaseEntity {
     @Column
     private String socialId;
 
+    @Column
+    private boolean deleted = false;
 
+
+    public void updateDeleted(boolean deleted) {
+        this.deleted = deleted;}
     public void updateName(String name) {
         this.name = name;
     }

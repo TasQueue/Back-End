@@ -24,7 +24,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * 모든 유저의 dailyUpdate 값을 false 로 전환한다.
      */
     @Modifying(clearAutomatically = true, flushAutomatically = true)
-    @Query("update User u set u.dailyUpdate = false")
+    @Query("update User u " +
+            "set u.dailyUpdate = false " +
+            "where u.deleted = false")
     void dailyUpdateForUser();
 
 
