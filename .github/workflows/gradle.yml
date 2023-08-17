@@ -10,7 +10,7 @@ name: Java CI with Gradle
 on:
   push:
     branches:
-      - develop
+      - feat/sangeun
 
 permissions:
   contents: read
@@ -34,21 +34,13 @@ jobs:
         sudo apt-get install -y ntp
         sudo service ntp start
 
-
-    - name: make application-db.yml
-      run: |
-          cd ./src/main/resources
-          touch ./application-db.yml
-          echo "${{ secrets.DB_PROPERTIES }}" > ./application-db.yml
-      shell: bash
-
-    - name: make application-real.yml
+    - name: make application-prod.yml
       run: |
         cd ./src/main/resources
-        touch ./application-real.yml
-        echo "${{ secrets.PROPERTIES_PROD }}" > ./application-real.yml
+        touch ./application-db.yml
+        echo "${{ secrets.DB_PROPERTIES }}" > ./application-prod.yml
       shell: bash
-      
+
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
     - name: Build with Gradle
