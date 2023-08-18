@@ -1,9 +1,16 @@
-package com.example.taskqueue.oauth.jwt;
+package com.example.taskqueue.security.filter;
 
+import com.example.taskqueue.exception.notfound.UserNotFoundException;
+import com.example.taskqueue.exception.jwt.JwtErrorCode;
+import com.example.taskqueue.exception.notfound.config.ResourceNotFoundErrorCode;
+import com.example.taskqueue.oauth.jwt.JwtService;
+import com.example.taskqueue.security.ResponseUtils;
 import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.repository.UserRepository;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
@@ -21,7 +28,6 @@ import java.util.Optional;
 
 /**
  * Jwt 인증 필터
- * "/login" 이외의 URI 요청이 왔을 때 처리하는 필터
  *
  * 기본적으로 사용자는 요청 헤더에 AccessToken만 담아서 요청
  * AccessToken 만료 시에만 RefreshToken을 요청 헤더에 AccessToken과 함께 요청
@@ -40,6 +46,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final ResponseUtils responseUtils;
 
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
@@ -57,7 +64,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         String refreshToken = jwtService.extractRefreshToken(request)
                 .filter(jwtService::isTokenValid)
                 .orElse(null);
-        System.out.println("리프레시 토큰을 추출한 결과 refreshToken = " + refreshToken);
         // 리프레시 토큰이 요청 헤더에 존재했다면, 사용자가 AccessToken이 만료되어서
         // RefreshToken까지 보낸 것이므로 리프레시 토큰이 DB의 리프레시 토큰과 일치하는지 판단 후,
         // 일치한다면 AccessToken을 재발급해준다.
@@ -114,13 +120,37 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     public void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
                                                   FilterChain filterChain) throws ServletException, IOException {
         log.info("checkAccessTokenAndAuthentication() 호출");
-        Optional<String> res = jwtService.extractAccessToken(request);
 
-        jwtService.extractAccessToken(request)
-                .filter(jwtService::isTokenValid)
-                .ifPresent(accessToken -> jwtService.extractEmail(accessToken)
-                        .ifPresent(email -> userRepository.findByEmail(email)
-                                .ifPresent(this::saveAuthentication)));
+        Optional<String> accessToken = jwtService.extractAccessToken(request);
+
+        Optional<String> email;
+        if (accessToken.isPresent()) {
+            System.out.println("accessToken = " + accessToken);
+            if(!jwtService.isTokenValid(accessToken.get())){
+                responseUtils.setErrorResponse(response,HttpStatus.UNAUTHORIZED,JwtErrorCode.JWT_EXPIRED);
+                return;
+            }
+            email = jwtService.extractEmail(request,response,accessToken.get());
+            System.out.println("email = " + email);
+            if (email.isPresent()) {
+                try {
+                    User user = userRepository.findByEmail(email.get()).orElseThrow(UserNotFoundException::new);
+                    System.out.println("user.toString() = " + user.toString());
+                    saveAuthentication(user);
+                    //request.setAttribute("user", email);
+                } catch (UserNotFoundException e) {
+                    responseUtils.setErrorResponse(response, HttpStatus.NOT_FOUND, ResourceNotFoundErrorCode.USER_NOT_FOUND);
+                    return;
+                }
+            }
+        }
+
+
+//        jwtService.extractAccessToken(request)
+//                .filter(jwtService::isTokenValid)
+//                .ifPresent(accessToken -> jwtService.extractEmail(accessToken)
+//                        .ifPresent(email -> userRepository.findByEmail(email)
+//                                .ifPresent(this::saveAuthentication)));
 
         filterChain.doFilter(request, response);
     }

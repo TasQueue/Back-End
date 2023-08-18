@@ -3,7 +3,8 @@ package com.example.taskqueue.config;
 
 import com.example.taskqueue.oauth.handler.OAuth2LoginFailureHandler;
 import com.example.taskqueue.oauth.handler.OAuth2LoginSuccessHandler;
-import com.example.taskqueue.oauth.jwt.JwtAuthenticationProcessingFilter;
+import com.example.taskqueue.security.ResponseUtils;
+import com.example.taskqueue.security.filter.JwtAuthenticationProcessingFilter;
 import com.example.taskqueue.oauth.jwt.JwtService;
 import com.example.taskqueue.oauth.login.filter.CustomJsonUsernamePasswordAuthenticationFilter;
 import com.example.taskqueue.oauth.login.handler.LoginFailureHandler;
@@ -23,7 +24,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 /**
  * 인증은 CustomJsonUsernamePasswordAuthenticationFilter에서 authenticate()로 인증된 사용자로 처리
@@ -34,9 +34,9 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    //private final LoginService loginService;
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final ResponseUtils responseUtils;
     private final ObjectMapper objectMapper;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
@@ -160,7 +160,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
-        JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, userRepository);
+        JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, userRepository,responseUtils);
         return jwtAuthenticationFilter;
     }
 }
