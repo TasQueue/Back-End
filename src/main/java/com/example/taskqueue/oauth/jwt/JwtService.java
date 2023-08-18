@@ -203,7 +203,7 @@ public class JwtService {
     public boolean isTokenValid(String token) {
         try {
             if (redisUtil.hasKeyBlackList(token)){
-                // TODO 에러 발생시키는 부분 수정
+                // 에러 발생시키는 부분 수정
                 log.error("로그아웃 이미 했으므로 해당 액세스토큰을 사용할 수 없음.");
 //                Map<String, String> errorMap = new HashMap<>();
 //                errorMap.put(token,"로그아웃 처리된 사용자입니다.");
