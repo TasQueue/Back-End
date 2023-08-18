@@ -2,4 +2,4 @@ FROM openjdk:11-jre-slim
 ARG JAR_FILE=build/libs/*.jar
 EXPOSE 8080
 COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","--spring.profiles.active=prod", "/app.jar"]
+ENTRYPOINT ["java","-jar","-Dspring.profiles.active=prod", "/app.jar"]
