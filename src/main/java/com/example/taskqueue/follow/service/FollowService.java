@@ -1,9 +1,15 @@
 package com.example.taskqueue.follow.service;
 
 
+import com.example.taskqueue.exception.badinput.ExistFollowBadInputException;
+import com.example.taskqueue.exception.badinput.FollowUserIdBadInputException;
+import com.example.taskqueue.exception.badinput.LoopTaskPriorityBadInputException;
+import com.example.taskqueue.exception.badinput.NotExistUserBadInputException;
+import com.example.taskqueue.exception.notfound.FollowNotFoundException;
 import com.example.taskqueue.follow.entity.Follow;
 import com.example.taskqueue.follow.entity.state.FollowState;
 import com.example.taskqueue.follow.repository.FollowRepository;
+import com.example.taskqueue.task.entity.state.RepeatState;
 import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,22 +35,25 @@ public class FollowService {
      * @return 팔로우
      */
     public Follow findById(Long followId) {
-        return followRepository.findById(followId).orElseThrow(()->{
-            return new IllegalArgumentException("Follow Id를 찾을 수 없습니다.");
-        });
+        return followRepository.findById(followId).orElseThrow(FollowNotFoundException::new);
     }
 
     /**
      * 팔로우를 요청(저장)한다.
-     * @param userId 팔로우 하는 유저 아이디
-     * @param followUserId 팔로우 할 유저 아이디
+     * @param follow 팔로우
      * @return 저장한 팔로우의 아이디 값
      */
-    public Long requestFollow(Long userId, Long followUserId) {
-        User user = userRepository.findById(userId).get();
-        Follow follow = Follow.createFollow(user, followUserId);
-        followRepository.save(follow);
-        return follow.getId();
+    public Long saveFollow(Follow follow) {
+        if(follow.getFollowUserId().equals(follow.getUser().getId())) {
+            throw new FollowUserIdBadInputException();
+        }
+        if(userRepository.findById(follow.getFollowUserId()).isEmpty()) {
+            throw new NotExistUserBadInputException();
+        }
+        if(!followRepository.findExistFollow(follow.getUser().getId(), follow.getFollowUserId()).isEmpty()) {
+            throw new ExistFollowBadInputException();
+        }
+        return followRepository.save(follow).getId();
     }
 
     /**
@@ -58,7 +67,7 @@ public class FollowService {
     /**
      * 유저가 팔로워 하는 유저들 아이디를 반환한다.
      * @param userId 팔로워 하는 유저아이디
-     * @return user 가 팔로우 하는 유저 리스트
+     * @return user 가 팔로우 하는 유저 아이디 리스트
      */
     public List<Long> findFollowing(Long userId) {
         return followRepository.findFollowingById(userId);
@@ -67,7 +76,7 @@ public class FollowService {
     /**
      * 유저를 팔로워 하는 유저들 아이디를 반환한다.
      * @param userId 팔로워 받는 유저아이디
-     * @return user 를 팔로우 하는 유저 리스트
+     * @return user 를 팔로우 하는 유저 아이디 리스트
      */
     public List<Long> findFollower(Long userId) {
         return followRepository.findFollowerById(userId);
@@ -81,18 +90,13 @@ public class FollowService {
         follow.updateFollowState(FollowState.ACCEPT);
     }
 
-
-    //TODO 팔로잉 팔로워 정보 조회
-
-    //TODO 팔로워 수락
-
-    //TODO 팔로워 삭제
-
-    //TODO 팔로우 검색
-
-    //TODO 팔로우 상세 정보
-
-    //TODO 팔로우 요청
-
+    /**
+     * 유저에게 팔로우 요청한 유저들 이름들을 반환한다.
+     * @param userId 팔로워 받는 유저
+     * @return user 를 팔로우 하는 유저 아이디 리스트
+     */
+    public List<Long> findRequestFollow(Long userId) {
+        return followRepository.findRequestFollowById(userId);
+    }
 
 }

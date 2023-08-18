@@ -24,6 +24,9 @@ public class GetTaskOfMonthDto {
     @ApiModelProperty(value = "일자 정보")
     private List<LocalDate> dayList = new ArrayList<>();
 
+    @ApiModelProperty(value = "시간 정보가 필요한지 여부", example = "true")
+    private boolean requiredTime;
+
     @ApiModelProperty(value = "시작 시각", example = "HH:mm")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
     private LocalTime startTime;
@@ -31,9 +34,6 @@ public class GetTaskOfMonthDto {
     @ApiModelProperty(value = "종료 시각", example = "HH:mm")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
     private LocalTime endTime;
-
-    @ApiModelProperty(value = "종일 태스크 여부", example = "YES/NO")
-    private String allDayState;
 
     @ApiModelProperty(value = "루프 태스크 여부", example = "YES/NO")
     private String repeatState;
