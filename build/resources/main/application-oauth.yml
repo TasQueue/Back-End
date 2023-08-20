@@ -17,5 +17,5 @@ spring:
             authorization-uri: https://kauth.kakao.com/oauth/authorize?prompt=login
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
-            logout-uri: https://kauth.kakao.com/oauth/logout
+            # logout-uri: https://kauth.kakao.com/oauth/logout
             user-name-attribute: id
