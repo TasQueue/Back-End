@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="054c5c4b-6596-45b8-8c6e-1433516ba048" name="Changes" comment="init" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="taskqueue" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="taskqueue" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="taskqueue" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+        <option value="AnnotationType" />
+        <option value="Interface" />
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="develop" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2SKP0913Ya32tddgmeRBZ3e5J28" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+    <ConfirmationsSetting value="2" id="Remove" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/study/taskqueue/build.gradle&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;7a73569bd954aab719e45a74d540948f&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;GitStage.ChangesTree.GroupingKeys&quot;: [
+      &quot;directory&quot;,
+      &quot;module&quot;,
+      &quot;repository&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.example.taskqueue.task.repository" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.TaskqueueApplication">
+    <configuration name="taskqueue [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="TaskqueueApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <envs>
+        <env name="JWT_TOKEN" value="2544ec6cb127724963dd908fd356bb5fd3fc9f1c19980015ffdbb2aea4833d79afbe405495db7608be94ba5b8d3e6fcaa71eefbb0a84f15943617e969e3afe3d" />
+      </envs>
+      <module name="taskqueue.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.taskqueue.TaskqueueApplication" />
+      <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+        <option name="credential" />
+        <option name="region" />
+        <option name="useCurrentConnection" value="false" />
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Gradle.taskqueue [build]" />
+      <item itemvalue="Spring Boot.TaskqueueApplication" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.taskqueue [build]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="054c5c4b-6596-45b8-8c6e-1433516ba048" name="Changes" comment="" />
+      <created>1688892073149</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1688892073149</updated>
+      <workItem from="1688892074282" duration="4268000" />
+      <workItem from="1689409485675" duration="2256000" />
+      <workItem from="1689685479252" duration="671000" />
+      <workItem from="1690026549454" duration="2320000" />
+      <workItem from="1690092442252" duration="45893000" />
+      <workItem from="1690611975081" duration="471000" />
+      <workItem from="1690612580268" duration="1137000" />
+      <workItem from="1690695752154" duration="23582000" />
+      <workItem from="1690781797878" duration="416000" />
+      <workItem from="1691394607273" duration="71268000" />
+      <workItem from="1691774615162" duration="3033000" />
+      <workItem from="1691907071284" duration="4933000" />
+      <workItem from="1692248701172" duration="2772000" />
+      <workItem from="1692251528148" duration="17000" />
+      <workItem from="1692251566244" duration="211000" />
+      <workItem from="1692252321301" duration="4644000" />
+      <workItem from="1692512748165" duration="3624000" />
+      <workItem from="1692614068495" duration="21000" />
+      <workItem from="1692614429436" duration="46000" />
+    </task>
+    <task id="LOCAL-00001" summary="init">
+      <created>1688895466269</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1688895466269</updated>
+    </task>
+    <task id="LOCAL-00002" summary="init">
+      <created>1689409943579</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1689409943579</updated>
+    </task>
+    <task id="LOCAL-00003" summary="init">
+      <created>1689410165479</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1689410165479</updated>
+    </task>
+    <task id="LOCAL-00004" summary="[feat] application.yml 파일 초기설정">
+      <created>1689411382136</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1689411382136</updated>
+    </task>
+    <task id="LOCAL-00005" summary="[feat] application.yml 파일 초기설정">
+      <created>1689685514822</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1689685514822</updated>
+    </task>
+    <task id="LOCAL-00006" summary="[feat] 엔티티 구조 설계">
+      <created>1690028728278</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1690028728278</updated>
+    </task>
+    <task id="LOCAL-00007" summary="[feat] 엔티티 구조 설계">
+      <created>1690092662822</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1690092662822</updated>
+    </task>
+    <task id="LOCAL-00008" summary="[feat] 예외처리 기본 설계">
+      <created>1690094540846</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1690094540846</updated>
+    </task>
+    <task id="LOCAL-00009" summary="[feat] 예외처리 기본 설계">
+      <created>1690096701855</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1690096701855</updated>
+    </task>
+    <task id="LOCAL-00010" summary="[fix] 예외처리 기본 설계 수정">
+      <created>1690096997393</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1690096997394</updated>
+    </task>
+    <task id="LOCAL-00011" summary="[feat] RefreshToken 패키지 추가">
+      <created>1690097769168</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1690097769168</updated>
+    </task>
+    <task id="LOCAL-00012" summary="[feat] TaskService 기능 추가">
+      <created>1690099150172</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1690099150172</updated>
+    </task>
+    <task id="LOCAL-00013" summary="[feat] SwaggerConfig 설정 추가">
+      <created>1690100169077</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1690100169077</updated>
+    </task>
+    <task id="LOCAL-00014" summary="[feat] SwaggerConfig 설정 추가">
+      <created>1690100176778</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1690100176778</updated>
+    </task>
+    <task id="LOCAL-00015" summary="[feat] UserAPI 작업, 예외처리 작업 추가">
+      <created>1690112612081</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1690112612081</updated>
+    </task>
+    <task id="LOCAL-00016" summary="[feat] UserAPI 작업, TaskAPI 작업 추가">
+      <created>1690347037368</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1690347037368</updated>
+    </task>
+    <task id="LOCAL-00017" summary="[feat] User 엔티티 이메일 속성 추가">
+      <created>1690347846670</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1690347846670</updated>
+    </task>
+    <task id="LOCAL-00018" summary="[feat] TaskService 만료 태스크 자동삭제 기능 추가">
+      <created>1690348609394</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1690348609394</updated>
+    </task>
+    <task id="LOCAL-00019" summary="[feat] DayOfWEek 작업 추가">
+      <created>1690351482125</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1690351482125</updated>
+    </task>
+    <task id="LOCAL-00020" summary="[feat] DayOfWEek 작업 추가">
+      <created>1690351539147</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1690351539147</updated>
+    </task>
+    <task id="LOCAL-00021" summary="[feat] DayOfWEek 작업 추가">
+      <created>1690352545578</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1690352545578</updated>
+    </task>
+    <task id="LOCAL-00022" summary="[feat] TaskAPI 작업 추가">
+      <created>1690354638068</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1690354638068</updated>
+    </task>
+    <task id="LOCAL-00023" summary="[feat] TaskAPI 작업 추가">
+      <created>1690358208701</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1690358208701</updated>
+    </task>
+    <task id="LOCAL-00024" summary="[feat] TaskAPI 작업 추가">
+      <created>1690364905925</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1690364905925</updated>
+    </task>
+    <task id="LOCAL-00025" summary="[feat] TaskAPI 작업 추가">
+      <created>1690611997441</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1690611997441</updated>
+    </task>
+    <task id="LOCAL-00026" summary="[feat] TaskAPI 작업 추가">
+      <created>1690613261408</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1690613261408</updated>
+    </task>
+    <task id="LOCAL-00027" summary="[feat] TaskAPI 작업 추가">
+      <created>1690698890182</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1690698890183</updated>
+    </task>
+    <task id="LOCAL-00028" summary="[refactor] CategoryAPI 리팩토링">
+      <created>1690699274848</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1690699274848</updated>
+    </task>
+    <task id="LOCAL-00029" summary="[feat] UserAPI 작업">
+      <created>1690700533232</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1690700533232</updated>
+    </task>
+    <task id="LOCAL-00030" summary="[feat] UserAPI 작업">
+      <created>1690727400255</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1690727400255</updated>
+    </task>
+    <task id="LOCAL-00031" summary="[feat] UserAPI 작업">
+      <created>1690736717732</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1690736717732</updated>
+    </task>
+    <task id="LOCAL-00032" summary="[feat] UserAPI 작업">
+      <created>1691400156418</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1691400156418</updated>
+    </task>
+    <task id="LOCAL-00033" summary="[feat] UserAPI 작업">
+      <created>1691400206022</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1691400206022</updated>
+    </task>
+    <task id="LOCAL-00034" summary="[feat] swagger 연결작업">
+      <created>1691467756202</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1691467756202</updated>
+    </task>
+    <task id="LOCAL-00035" summary="[feat] swagger 연결작업">
+      <created>1691469533685</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1691469533685</updated>
+    </task>
+    <task id="LOCAL-00036" summary="[feat] swagger 연결작업">
+      <created>1691502252119</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1691502252119</updated>
+    </task>
+    <task id="LOCAL-00037" summary="[feat] Exception 작업">
+      <created>1691509647188</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1691509647188</updated>
+    </task>
+    <task id="LOCAL-00038" summary="[feat] TaskAPI 작업">
+      <created>1691566018934</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1691566018934</updated>
+    </task>
+    <task id="LOCAL-00039" summary="[feat] TaskAPI 작업">
+      <created>1691737306629</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1691737306629</updated>
+    </task>
+    <task id="LOCAL-00040" summary="[feat] TaskAPI 작업">
+      <created>1691767762625</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1691767762625</updated>
+    </task>
+    <task id="LOCAL-00041" summary="[feat] UserAPI 작업">
+      <created>1691772310260</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1691772310260</updated>
+    </task>
+    <task id="LOCAL-00042" summary="[feat] UserAPI 작업">
+      <created>1691772331834</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1691772331834</updated>
+    </task>
+    <task id="LOCAL-00043" summary="[feat] UserAPI 작업">
+      <created>1691772439160</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1691772439160</updated>
+    </task>
+    <task id="LOCAL-00044" summary="[feat] 시간표 API 추가">
+      <created>1691777644651</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1691777644651</updated>
+    </task>
+    <task id="LOCAL-00045" summary="[feat] 시간표 API 추가">
+      <created>1691907373608</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1691907373608</updated>
+    </task>
+    <task id="LOCAL-00046" summary="[feat] 시간표 API 추가">
+      <created>1691907387237</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1691907387237</updated>
+    </task>
+    <task id="LOCAL-00047" summary="[feat] 시간표 API 추가">
+      <created>1692248755211</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1692248755211</updated>
+    </task>
+    <task id="LOCAL-00048" summary="[feat] soft delete 관련 기능 추가">
+      <created>1692255493594</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1692255493594</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="init" />
+    <MESSAGE value="[feat] application.yml 파일 초기설정" />
+    <MESSAGE value="[feat] 엔티티 구조 설계" />
+    <MESSAGE value="[feat] 예외처리 기본 설계" />
+    <MESSAGE value="[fix] 예외처리 기본 설계 수정" />
+    <MESSAGE value="[feat] RefreshToken 패키지 추가" />
+    <MESSAGE value="[feat] TaskService 기능 추가" />
+    <MESSAGE value="[feat] SwaggerConfig 설정 추가" />
+    <MESSAGE value="[feat] UserAPI 작업, 예외처리 작업 추가" />
+    <MESSAGE value="[feat] UserAPI 작업, TaskAPI 작업 추가" />
+    <MESSAGE value="[feat] User 엔티티 이메일 속성 추가" />
+    <MESSAGE value="[feat] TaskService 만료 태스크 자동삭제 기능 추가" />
+    <MESSAGE value="[feat] DayOfWEek 작업 추가" />
+    <MESSAGE value="[feat] TaskAPI 작업 추가" />
+    <MESSAGE value="[refactor] CategoryAPI 리팩토링" />
+    <MESSAGE value="[feat] swagger 연결작업" />
+    <MESSAGE value="[feat] Exception 작업" />
+    <MESSAGE value="[feat] TaskAPI 작업" />
+    <MESSAGE value="[feat] UserAPI 작업" />
+    <MESSAGE value="[feat] 시간표 API 추가" />
+    <MESSAGE value="[feat] soft delete 관련 기능 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="[feat] soft delete 관련 기능 추가" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

@@ -42,12 +42,10 @@ public class User extends BaseEntity {
     private int runStreak;
 
     @Column
-    @ColumnDefault(value = "false")
-    private Boolean dailyUpdate;
+    private Boolean dailyUpdate = false;
 
     @Column
-    @ColumnDefault(value = "#C2D9FA")
-    private String themeColor;
+    private String themeColor = "#C2D9FA";
 
     @Column
     private CatState catState;
