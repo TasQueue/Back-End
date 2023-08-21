@@ -42,8 +42,8 @@ public class User extends BaseEntity {
     private Boolean dailyUpdate;
 
     @Column
-    @ColumnDefault(value = "#C2D9FA")
-    private String themeColor;
+    //@ColumnDefault(value = "#C2D9FA")
+    private String themeColor = "#C2D9FA";
 
     @Column
     private CatState catState;
