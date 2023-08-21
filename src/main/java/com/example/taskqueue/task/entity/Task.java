@@ -5,6 +5,8 @@ import com.example.taskqueue.common.BaseEntity;
 import com.example.taskqueue.task.entity.state.*;
 import com.example.taskqueue.user.entity.User;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +17,8 @@ import java.time.LocalDateTime;
 @Table(name = "task")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Where(clause = "deleted = false")
+@SQLDelete(sql = "update task set deleted = true where task_id = ?")
 public class Task extends BaseEntity {
 
     @Id
@@ -54,6 +58,8 @@ public class Task extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private RepeatState repeatState;
 
+    @Column
+    private boolean deleted = false;
 
 
     @Builder
@@ -81,8 +87,8 @@ public class Task extends BaseEntity {
     }
 
 
-    //Task 내부 메서드
-
+    public void updateDeleted(boolean deleted) {
+        this.deleted = deleted;}
     public void updateName(String name) {
         this.name = name;
     }

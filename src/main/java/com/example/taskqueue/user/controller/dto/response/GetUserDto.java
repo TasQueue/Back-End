@@ -1,13 +1,16 @@
 package com.example.taskqueue.user.controller.dto.response;
 
+import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.entity.state.CatState;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class GetUserDto {
+
+    @ApiModelProperty(value = "유저 아이디 정보", example = "1")
+    private Long id;
 
     @ApiModelProperty(value = "유저 이름정보", example = "전용수")
     private String name;
@@ -17,5 +20,12 @@ public class GetUserDto {
 
     @ApiModelProperty(value = "유저 고양이 상태", example = "ONE | TWO | THREE | FOUR")
     private CatState catState;
+
+    public GetUserDto(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.intro = user.getIntro();
+        this.catState = user.getCatState();
+    }
 
 }

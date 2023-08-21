@@ -1,19 +1,22 @@
 spring:
-
   profiles:
-    include: oauth, jwt
+    default: create
 
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  jpa:
-    hibernate:
-      ddl-auto: update
 
-    properties:
-      hibernate:
-        format_sql: true
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type: trace
 
-domain:
-  name: http://www.localhost:8080
+jwt:
+  secretKey: ${JWT_TOKEN}
 
+  access:
+    expiration: 3600000
+    header: Authorization
+
+  refresh:
+    expiration: 1209600000
+    header: Authorization-refresh

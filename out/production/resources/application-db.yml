@@ -1,0 +1,19 @@
+spring:
+  config:
+    activate:
+      on-profile: db
+
+  datasource:
+    url: jdbc:mysql://taskqdb.ctyqxxk6djja.ap-northeast-2.rds.amazonaws.com:3306/taskq
+    username: taksq
+    password: taskqdb2023!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    properties:
+      hibernate:
+        format_sql: true
+
