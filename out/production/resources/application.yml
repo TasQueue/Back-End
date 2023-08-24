@@ -8,7 +8,7 @@ spring:
     host: 127.0.0.1
 
   profiles:
-    include: oauth, jwt
+    include: oauth, jwt # db
 
   datasource:
     url: jdbc:h2:tcp://localhost/~/task-queue

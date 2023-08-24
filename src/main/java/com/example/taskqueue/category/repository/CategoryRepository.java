@@ -15,7 +15,19 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
      * @param user 유저 정보
      * @return 카테고리 목록
      */
-    @Query("select c from Category c where c.user = :user")
+    @Query("select c " +
+            "from Category c " +
+            "where c.user = :user " +
+            "and c.deleted = false")
     List<Category> findCategoriesByUser(@Param("user") User user);
+
+    /**
+     * 특정 유저의 카테고리를 모두 삭제한다.
+     * @param user 유저 정보
+     */
+    @Query("update Category c " +
+            "set c.deleted = true " +
+            "where c.user = :user")
+    void deleteAllByUser(@Param("user") User user);
 
 }

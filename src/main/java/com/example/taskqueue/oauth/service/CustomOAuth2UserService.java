@@ -37,6 +37,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
          * 카카오에서 제공해주는 access token은 아래와 같이 확인 가능함.
          * */
         accessToken = userRequest.getAccessToken().getTokenValue();
+        System.out.println("카카오에서 제공한 accessToken = " + accessToken);
         /**
          * DefaultOAuth2UserService 객체를 생성하여, loadUser(userRequest)를 통해 DefaultOAuth2User 객체를 생성 후 반환
          * DefaultOAuth2UserService의 loadUser()는 소셜 로그인 API의 사용자 정보 제공 URI로 요청을 보내서

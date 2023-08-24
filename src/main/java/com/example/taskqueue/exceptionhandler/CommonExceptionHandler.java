@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.Map;
 
 @RestControllerAdvice
-public class CommonExceptionHandler {
+public class  CommonExceptionHandler {
 
     /**
      * ResourceNotFoundException 타입 예외처리 ExceptionHandler

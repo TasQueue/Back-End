@@ -2,6 +2,8 @@ package com.example.taskqueue.category.entity;
 
 import com.example.taskqueue.user.entity.User;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -11,6 +13,8 @@ import javax.persistence.*;
 @Table(name = "category")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Where(clause = "deleted = false")
+@SQLDelete(sql = "update category set deleted = true where category_id = ?")
 public class Category {
 
     @Id
@@ -28,6 +32,9 @@ public class Category {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column
+    private boolean deleted = false;
+
     @Builder
     public Category (
             User user,
@@ -39,7 +46,8 @@ public class Category {
         this.color = color;
     }
 
-    //Category 내부 메서드
+    public void updateDeleted(boolean deleted) {
+        this.deleted = deleted;}
     public void updateName(String name) {
         this.name = name;
     }

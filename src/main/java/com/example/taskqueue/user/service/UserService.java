@@ -1,7 +1,9 @@
 package com.example.taskqueue.user.service;
 
+import com.example.taskqueue.category.repository.CategoryRepository;
 import com.example.taskqueue.common.dto.SimpleTaskDto;
 import com.example.taskqueue.exception.notfound.UserNotFoundException;
+import com.example.taskqueue.follow.repository.FollowRepository;
 import com.example.taskqueue.task.entity.Task;
 import com.example.taskqueue.task.entity.state.CompleteState;
 import com.example.taskqueue.task.entity.state.RepeatState;
@@ -31,6 +33,9 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+    private final TaskRepository taskRepository;
+    private final FollowRepository followRepository;
     private final TaskService taskService;
 
     /**
@@ -56,16 +61,11 @@ public class UserService {
      * @param user 회원 탈퇴할 유저 정보
      */
     public void deleteUser(User user) {
+        taskRepository.deleteAllByUser(user);
+        categoryRepository.deleteAllByUser(user);
+        followRepository.deleteAllByFollower(user.getId());
+        followRepository.deleteAllByUser(user);
         userRepository.delete(user);
-    }
-
-    /**
-     * 특정 유저의 고양이 상태를 전환한다.
-     * @param user 유저 정보
-     * @param catState 고양이 상태 정보
-     */
-    public void changeCatState(User user, CatState catState) {
-        user.updateCatState(catState);
     }
 
     /**
