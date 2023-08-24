@@ -75,8 +75,6 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .csrf().disable()
                 .headers()
-                    .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
-                    .and()
                 .frameOptions()
                     .disable()
                 .and()
