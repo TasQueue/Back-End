@@ -61,10 +61,10 @@ public class UserService {
      * @param user 회원 탈퇴할 유저 정보
      */
     public void deleteUser(User user) {
+        taskRepository.deleteAllByUser(user);
         categoryRepository.deleteAllByUser(user);
         followRepository.deleteAllByFollower(user.getId());
         followRepository.deleteAllByUser(user);
-        taskRepository.deleteAllByUser(user);
         userRepository.delete(user);
     }
 

@@ -1,6 +1,13 @@
 spring:
+  redis:
+    pool:
+      max-idle: 8
+      max-active: 8
+    port: 6379
+    host: 127.0.0.1
+
   profiles:
-    default: create
+    default: prod
 
   mvc:
     pathmatch:
@@ -20,3 +27,6 @@ jwt:
   refresh:
     expiration: 1209600000
     header: Authorization-refresh
+
+server:
+  port: 3000

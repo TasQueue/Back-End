@@ -42,10 +42,10 @@ public class User extends BaseEntity {
     private int runStreak;
 
     @Column
-    private Boolean dailyUpdate = false;
+    private Boolean dailyUpdate;
 
     @Column
-    private String themeColor = "#C2D9FA";
+    private String themeColor;
 
     @Column
     private CatState catState;
@@ -60,7 +60,7 @@ public class User extends BaseEntity {
     private String socialId;
 
     @Column
-    private boolean deleted = false;
+    private boolean deleted;
 
 
     public void updateDeleted(boolean deleted) {

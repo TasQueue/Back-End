@@ -1,4 +1,11 @@
 spring:
+  redis:
+    pool:
+      min-idle: 0
+      max-idle: 8
+      max-active: 8
+    port: 6379
+    host: 127.0.0.1
 
   profiles:
     include: oauth, jwt # db
@@ -22,5 +29,8 @@ spring:
 
 
 domain:
-  name: http://www.localhost:8080
+  name: http://www.localhost:3000
+
+server:
+  port: 3000
 

@@ -4,18 +4,26 @@ package com.example.taskqueue.oauth.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.example.taskqueue.exception.jwt.JwtErrorCode;
+import com.example.taskqueue.exceptionhandler.ErrorResponse;
+import com.example.taskqueue.redis.RedisUtil;
+import com.example.taskqueue.security.ResponseUtils;
 import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.repository.UserRepository;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +56,13 @@ public class JwtService {
     private static final String BEARER = "Bearer ";
 
     private final UserRepository userRepository;
+    private final ResponseUtils responseUtils;
+    private final RedisUtil redisUtil;
+    private String JWTAccessToken;
+
+    public void expireAccessToken(String accessToken){
+        redisUtil.setBlackList(accessToken, "accessToken", 5);
+    }
 
     /**
      * AccessToken 생성 메소드
@@ -55,13 +70,14 @@ public class JwtService {
     public String createAccessToken(String email) {
         System.out.println("JWT Access Token 생성");
         Date now = new Date();
-        return JWT.create() // JWT 토큰을 생성하는 빌더 반환
+        JWTAccessToken = JWT.create() // JWT 토큰을 생성하는 빌더 반환
                 .withSubject(ACCESS_TOKEN_SUBJECT) // JWT의 Subject 지정 -> AccessToken이므로 AccessToken
                 .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod)) // 토큰 만료 시간 설정
 
-                //클레임으로 email 하나만 사용함.
+                //클레임으로 email을 사용함
                 .withClaim(EMAIL_CLAIM, email)
                 .sign(Algorithm.HMAC512(secretKey)); // HMAC512 알고리즘 사용, application-jwt.yml에서 지정한 secret 키로 암호화
+        return JWTAccessToken;
     }
 
     /**
@@ -94,7 +110,7 @@ public class JwtService {
         setAccessTokenHeader(response, accessToken);
         setRefreshTokenHeader(response, refreshToken);
         log.info("Access Token, Refresh Token 헤더 설정 완료");
-        //이 부분에서 http 헤더에 토큰들을 실어서 보낸다.
+        //이 부분에서 http 헤더에 쿠키를 만들고 토큰들을 실어서 보낸다.
         System.out.println("accessToken = " + accessToken);
         System.out.println("refreshToken = " + refreshToken);
     }
@@ -106,9 +122,18 @@ public class JwtService {
      */
     public Optional<String> extractRefreshToken(HttpServletRequest request) {
         System.out.println("헤더에서 리프레시 토큰 추출");
-        return Optional.ofNullable(request.getHeader(refreshHeader))
-                .filter(refreshToken -> refreshToken.startsWith(BEARER))
-                .map(refreshToken -> refreshToken.replace(BEARER, ""));
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            return Arrays.stream(cookies)
+                    .filter(cookie -> "refreshToken".equals(cookie.getName()))
+                    .map(Cookie::getValue)
+                    .findFirst();
+        }
+        return Optional.empty();
+//        return Optional.ofNullable(request.getHeader(refreshHeader))
+//                .filter(refreshToken -> refreshToken.startsWith(BEARER))
+//                .map(refreshToken -> refreshToken.replace(BEARER, ""));
     }
 
     /**
@@ -130,7 +155,7 @@ public class JwtService {
      * 유효하다면 getClaim()으로 이메일 추출
      * 유효하지 않다면 빈 Optional 객체 반환
      */
-    public Optional<String> extractEmail(String accessToken) {
+    public Optional<String> extractEmail(HttpServletRequest request, HttpServletResponse response, String accessToken) throws IOException {
         try {
             // 토큰 유효성 검사하는 데에 사용할 알고리즘이 있는 JWT verifier builder 반환
             return Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
@@ -139,7 +164,8 @@ public class JwtService {
                     .getClaim(EMAIL_CLAIM) // claim(Email) 가져오기
                     .asString());
         } catch (Exception e) {
-            log.error("액세스 토큰이 유효하지 않습니다.");
+            log.error("Access Token Expired");
+            responseUtils.setErrorResponse(response, HttpStatus.UNAUTHORIZED, JwtErrorCode.JWT_EXPIRED);
             return Optional.empty();
         }
     }
@@ -155,7 +181,11 @@ public class JwtService {
      * RefreshToken 헤더 설정
      */
     public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
-        response.setHeader(refreshHeader, refreshToken);
+        //response.setHeader(refreshHeader, refreshToken);
+        Cookie jwtRefreshCookie = new Cookie("refreshToken", refreshToken);
+        jwtRefreshCookie.setMaxAge(3600); // 쿠키 만료 시간 설정 (초 단위)
+        jwtRefreshCookie.setHttpOnly(true); // JavaScript에서 쿠키에 접근하지 못하도록 설정
+        response.addCookie(jwtRefreshCookie);
     }
 
     /**
@@ -172,9 +202,25 @@ public class JwtService {
 
     public boolean isTokenValid(String token) {
         try {
+            if (redisUtil.hasKeyBlackList(token)){
+                // 에러 발생시키는 부분 수정
+                log.error("로그아웃 이미 했으므로 해당 액세스토큰을 사용할 수 없음.");
+//                Map<String, String> errorMap = new HashMap<>();
+//                errorMap.put(token,"로그아웃 처리된 사용자입니다.");
+//
+//                ErrorResponse errorResponse = new ErrorResponse("UNAUTHORIZED", "Unauthorized", errorMap);
+//                ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return false;
+            }
             JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token);
             return true;
         } catch (JWTVerificationException e) {
+            Map<String, String> errorMap = new HashMap<>();
+            errorMap.put(e.getMessage(), "유효하지 않은 토큰입니다. {}");
+
+            ErrorResponse errorResponse = new ErrorResponse("UNAUTHORIZED", "Unauthorized", errorMap);
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+
             log.error("유효하지 않은 토큰입니다. {}", e.getMessage());
             return false;
         }

@@ -40,4 +40,4 @@ spring:
             user-name-attribute: id
 
 domain:
-  name: http://www.localhost:8080
+  name: http://www.localhost:3000
