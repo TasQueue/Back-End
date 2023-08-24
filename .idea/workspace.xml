@@ -189,6 +189,7 @@
       <workItem from="1692512748165" duration="3624000" />
       <workItem from="1692614068495" duration="21000" />
       <workItem from="1692614429436" duration="46000" />
+      <workItem from="1692614609290" duration="3590000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <created>1688895466269</created>
@@ -526,7 +527,14 @@
       <option name="project" value="LOCAL" />
       <updated>1692255493594</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="[feat] soft delete 관련 기능 추가">
+      <created>1692615192521</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1692615192521</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
