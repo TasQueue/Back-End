@@ -30,6 +30,3 @@ jwt:
 
 server:
   port: 3000
-  servlet:
-    context-params:
-      referrer-policy: "no-referrer"
