@@ -38,3 +38,5 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             # logout-uri: https://kauth.kakao.com/oauth/logout
             user-name-attribute: id
+domain:
+  name: http://ec2-13-124-52-172.ap-northeast-2.compute.amazonaws.com:8080
