@@ -67,3 +67,4 @@ jobs:
           docker run -d --log-driver=syslog -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/taskqserver:latest
           docker rm $(docker ps --filter 'status=exited' -a -q)
           docker image prune -a -f
+          
