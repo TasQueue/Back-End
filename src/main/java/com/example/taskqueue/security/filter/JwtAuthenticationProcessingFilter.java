@@ -64,7 +64,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         String refreshToken = jwtService.extractRefreshToken(request)
                 .filter(jwtService::isTokenValid)
                 .orElse(null);
-        System.out.println("이런 시발 refreshToken = " + refreshToken);
+        System.out.println("refreshToken = " + refreshToken);
         checkAccessTokenAndAuthentication(request, response, filterChain);
 
 //        // 리프레시 토큰이 요청 헤더에 존재했다면, 사용자가 AccessToken이 만료되어서
