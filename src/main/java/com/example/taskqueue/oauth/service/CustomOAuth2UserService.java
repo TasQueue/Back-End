@@ -93,7 +93,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private User saveUser(OAuthAttributes attributes) {
         User createdUser = attributes.toEntity(attributes.getOauth2UserInfo());
         createdUser.updateRunStreak(0);
-        createdUser.updateThemeColor("#ABC123");
+        createdUser.updateThemeColor("#C2D9FA");
         createdUser.updateDailyUpdate(false);
         createdUser.updateIntro("");
         createdUser.updateCatState(CatState.FOUR);
