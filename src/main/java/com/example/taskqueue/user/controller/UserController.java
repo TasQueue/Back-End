@@ -117,7 +117,7 @@ public class UserController {
     })
     @DeleteMapping(value = "/users/delete")
     public ResponseEntity<Void> deleteUserInfo(
-            @CurrentUser User user
+            @ApiIgnore @CurrentUser User user
     ) {
         userService.deleteUser(user);
         return ResponseEntity.noContent().build();
