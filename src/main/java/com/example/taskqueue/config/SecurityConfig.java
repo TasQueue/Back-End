@@ -92,9 +92,12 @@ public class SecurityConfig {
                 .antMatchers(BASIC_URL).permitAll()
                 .antMatchers(SWAGGER_URL).permitAll()
                 .antMatchers(API_URL).permitAll()
-                .antMatchers("/sign-up").permitAll() // 회원가입 접근 가능
                 .antMatchers("/kakao-logout").permitAll()
+                .antMatchers("/kakao-login").permitAll()
+                .antMatchers("/login/oauth2/code/kakao").permitAll()
                 .antMatchers("/user-info").permitAll()
+                .antMatchers("/oauth/get").permitAll()
+                .antMatchers("/refreshtoken/get").permitAll()
                 .anyRequest().authenticated() // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
                 .and()
                 //== 소셜 로그인 설정 ==//

@@ -7,15 +7,16 @@ spring:
     host: 127.0.0.1
 
   profiles:
-    default: create
+    default: dev
 
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-logging.level:
-  org.hibernate.SQL: debug
-  org.hibernate.type: trace
+#logging.level:
+  #org.hibernate.SQL: debug
+  #org.hibernate.type: trace
+  #org.springframework.security: DEBUG #임의로 추가
 
 jwt:
   secretKey: 2544ec6cb127724963dd908fd356bb5fd3fc9f1c19980015ffdbb2aea4833d79afbe405495db7608be94ba5b8d3e6fcaa71eefbb0a84f15943617e969e3afe3d

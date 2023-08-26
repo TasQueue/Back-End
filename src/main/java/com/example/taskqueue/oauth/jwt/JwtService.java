@@ -59,6 +59,7 @@ public class JwtService {
     private final ResponseUtils responseUtils;
     private final RedisUtil redisUtil;
     private String JWTAccessToken;
+    private String JWTRefreshToken;
 
     public void expireAccessToken(String accessToken){
         redisUtil.setBlackList(accessToken, "accessToken", 5);
@@ -86,10 +87,11 @@ public class JwtService {
      */
     public String createRefreshToken() {
         Date now = new Date();
-        return JWT.create()
+        JWTRefreshToken = JWT.create()
                 .withSubject(REFRESH_TOKEN_SUBJECT)
                 .withExpiresAt(new Date(now.getTime() + refreshTokenExpirationPeriod))
                 .sign(Algorithm.HMAC512(secretKey));
+        return JWTRefreshToken;
     }
 
     /**
