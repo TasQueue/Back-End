@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 @Service
 @Transactional
@@ -16,7 +17,11 @@ public class initService implements ApplicationListener<ContextRefreshedEvent> {
     private final DayOfWeekRepository dayOfWeekRepository;
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-
+        if(!ObjectUtils.isEmpty(dayOfWeekRepository.countByDayWeek())) {
+            if(dayOfWeekRepository.countByDayWeek() == 0) {
+                insertDayOfWeek();
+            }
+        }
     }
 
     /**

@@ -2,6 +2,7 @@ package com.example.taskqueue.task.repository;
 
 import com.example.taskqueue.task.entity.DayOfWeek;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface DayOfWeekRepository extends JpaRepository<DayOfWeek, Long> {
     /**
@@ -10,4 +11,8 @@ public interface DayOfWeekRepository extends JpaRepository<DayOfWeek, Long> {
      * @return 요일
      */
     DayOfWeek findDayOfWeekByName(String name);
+
+    @Query("select count(d) from DayOfWeek d")
+    Integer countByDayWeek();
+
 }
