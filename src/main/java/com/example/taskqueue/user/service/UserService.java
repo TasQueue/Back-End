@@ -62,9 +62,12 @@ public class UserService {
      */
     public void deleteUser(User user) {
         taskRepository.deleteAllByUser(user);
-        categoryRepository.deleteAllByUser(user);
+
         followRepository.deleteAllByFollower(user.getId());
         followRepository.deleteAllByUser(user);
+
+        categoryRepository.deleteAllByUser(user);
+
         userRepository.delete(user);
     }
 

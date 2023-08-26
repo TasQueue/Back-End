@@ -4,6 +4,7 @@ import com.example.taskqueue.common.annotation.CurrentUser;
 import com.example.taskqueue.oauth.CustomOAuth2User;
 import com.example.taskqueue.oauth.OAuthAttributes;
 import com.example.taskqueue.user.entity.User;
+import com.example.taskqueue.user.entity.state.CatState;
 import com.example.taskqueue.user.repository.UserRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.Map;
@@ -22,6 +24,7 @@ import java.util.Map;
 @Slf4j
 @Getter
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
@@ -89,6 +92,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
      */
     private User saveUser(OAuthAttributes attributes) {
         User createdUser = attributes.toEntity(attributes.getOauth2UserInfo());
+        createdUser.updateRunStreak(0);
+        createdUser.updateThemeColor("#ABC123");
+        createdUser.updateDailyUpdate(false);
+        createdUser.updateIntro("");
+        createdUser.updateCatState(CatState.FOUR);
         return userRepository.save(createdUser);
     }
 }

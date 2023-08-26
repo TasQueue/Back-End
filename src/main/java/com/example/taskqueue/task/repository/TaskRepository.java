@@ -18,7 +18,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
 
     /**
-     * 유저의 [특정 시점 이후] 의 [모든] 루프태스크를 모두 반환한다.
+     * 유저의 [특정 시점 이전에 생성된] [모든] 루프태스크를 모두 반환한다.
      * @param user 유저 정보
      * @param repeatState RepeatState.YES
      * @param startTime 특정 시점
@@ -31,6 +31,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             "and t.repeatState = :repeatState " +
             "and t.startTime < :startTime")
     List<Task> findRepeatTaskByUser(
+            // startTime = 08-27 00:00
             @Param("user") User user,
             @Param("repeatState") RepeatState repeatState,
             @Param("startTime") LocalDateTime startTime
@@ -132,6 +133,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      * 특정 유저의 태스크 정보를 모두 삭제한다.
      * @param user 유저 정보
      */
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update Task t " +
             "set  t.deleted = true " +
             "where t.user = :user")

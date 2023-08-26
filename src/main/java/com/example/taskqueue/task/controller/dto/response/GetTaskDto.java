@@ -48,9 +48,6 @@ public class GetTaskDto {
     @ApiModelProperty(value = "시간 정보가 필요한지 여부", example = "true")
     private boolean requiredTime;
 
-    @ApiModelProperty(value = "종일 태스크 여부", example = "YES/NO")
-    private String allDayState;
-
     @ApiModelProperty(value = "루프 태스크 여부", example = "YES/NO")
     private String repeatState;
 

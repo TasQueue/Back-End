@@ -120,7 +120,10 @@ public class TaskController {
         List<SimpleTaskDto> dtoList = new ArrayList<>();
 
         //note 해당 유저의 모든 [루프 태스크 -> 우선순위 0]
-        List<Task> findRepeatList = taskService.findRepeatTaskByUser(user, todayMidnight);
+        List<Task> findRepeatList = taskService.findRepeatTaskByUser(user, todayMidnight.plusDays(1));
+
+        System.out.println("findRepeatList = " + findRepeatList);
+        System.out.println("day = " + day);
         for (Task repeatTask : findRepeatList) {
             if(taskService.isTaskOfThisDay(day, repeatTask)) {
                 dtoList.add(new SimpleTaskDto(repeatTask));
@@ -148,7 +151,7 @@ public class TaskController {
                     "루프 태스크 (매일) 타입의 경우 dayOfWeek = [\"MON\", \"TUE\", .. \"SUN\"] 까지 모두 넣어주시면 됩니다. <br> " +
                     "루프 태스크 (특정 요일) 타입의 경우 해당 요일을 넣어주시면 됩니다. <br> " +
                     "yyyy-MM-dd HH:mm 정보는 반드시 필요합니다. <br> " +
-                    "다만 yyyy-MM-dd 의 정보는 반드시 해당 루프태스크가 처음 시작하는 날짜의 정보여야합니다. (현재 일이 아닐 수 있음) <br> " +
+                    "yyyy-MM-dd 의 정보는 현재 날짜를 넣어주세요. <br> " +
                     "HH:mm 정보는 루프태스크의 수행 시간으로 넣으시면 됩니다.<br><br> " +
                     "(..)State 관련 값은 반드시 \"NO\" 혹은 \"YES\" 값으로 넣어주시면 됩니다. <br> <br>" +
                     "위와 같이 입력하는 이유는 분리된 태스크 유형을 일, 월별로 조회할 시 HH:mm 포맷으로 공통 출력하기 위함입니다."
@@ -271,6 +274,24 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
+    @ApiOperation(
+            value = "태스크의 캘린더 표출 여부 TOGGLE",
+            notes = "태스크의 캘린터 여부를 토글한다."
+    )
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "NO CONTENT"),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
+    })
+    @PutMapping(value = "/tasks/{taskId}/calender/toggle")
+    public ResponseEntity<Void> toggleCalenderState(
+            @ApiIgnore @CurrentUser User user,
+            @PathVariable("taskId") Long taskId
+    ) {
+        taskService.toggleCalenderState(taskId);
+        return ResponseEntity.noContent().build();
+    }
+
 
     @ApiOperation(
             value = "태스크 우선순위 SWAP",
@@ -319,7 +340,7 @@ public class TaskController {
         LocalDateTime next = week.plusWeeks(1);
 
         List<Task> findNormalList = taskService.getTaskOnScheduleList(findUser, week, next);
-        List<Task> findRepeatList = taskService.findRepeatTaskByUser(findUser, week);
+        List<Task> findRepeatList = taskService.findRepeatTaskByUser(findUser, next);
 
         List<Task> combinedList =
                 Stream.concat(findNormalList.stream(), findRepeatList.stream()).collect(Collectors.toList());
@@ -382,16 +403,23 @@ public class TaskController {
                 }
 
 
-                //note 해당 월의 루프태스크 일자 모두 찾아내기
+                //note 해당 주의 루프태스크 일자 모두 찾아내기
                 LocalDate startDate = present;
+                //present = 2023-08-20
+                //next = 2023-08-27
                 while (startDate.isBefore(next.toLocalDate())) {
                     java.time.DayOfWeek dayOfWeek = startDate.getDayOfWeek();
-                    if(originList.contains(dayOfWeek) && task.getStartTime().isBefore(startDate.atTime(0,0,0))) {
+                    // task.getStartTime() = 2023-08-26 11:00
+                    if(originList.contains(dayOfWeek) && task.getStartTime().isBefore(startDate.atTime(23,59,59))) {
                         localDateList.add(startDate);
                     }
                     startDate = startDate.plusDays(1);
                 }
-                if(localDateList.isEmpty()) continue;
+                if(localDateList.isEmpty())
+                {
+                    System.out.println("없다!!!");
+                    continue;
+                }
 
             }
 
