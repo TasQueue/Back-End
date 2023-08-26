@@ -8,7 +8,7 @@ spring:
     password: kiminjeong
 
   profiles:
-    default: dev
+    default: prod
 
   mvc:
     pathmatch:
@@ -22,7 +22,7 @@ jwt:
   secretKey: 2544ec6cb127724963dd908fd356bb5fd3fc9f1c19980015ffdbb2aea4833d79afbe405495db7608be94ba5b8d3e6fcaa71eefbb0a84f15943617e969e3afe3d
 
   access:
-    expiration: 3600000
+    expiration: 36000000
     header: Authorization
 
   refresh:

@@ -53,7 +53,23 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="taskqueue" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="taskqueue" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="taskqueue" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -140,7 +156,7 @@
       <recent name="$PROJECT_DIR$/src/main/java/com/example/taskqueue" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.TaskqueueApplication (1)">
+  <component name="RunManager" selected="Gradle.taskqueue [bootJar]">
     <configuration name="TaskqueueApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.taskqueue.TaskqueueApplication" />
       <module name="Back-End.taskqueue.main" />
@@ -153,6 +169,27 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration name="taskqueue [bootJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="bootJar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
     </configuration>
     <configuration name="TaskqueueApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <module name="taskqueue.main" />
@@ -179,11 +216,13 @@
     </configuration>
     <list>
       <item itemvalue="Application.TaskqueueApplication" />
+      <item itemvalue="Gradle.taskqueue [bootJar]" />
       <item itemvalue="Spring Boot.TaskqueueApplication" />
       <item itemvalue="Spring Boot.TaskqueueApplication (1)" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.taskqueue [bootJar]" />
         <item itemvalue="Spring Boot.TaskqueueApplication (1)" />
         <item itemvalue="Application.TaskqueueApplication" />
       </list>
@@ -439,7 +478,14 @@
       <option name="project" value="LOCAL" />
       <updated>1693041369229</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="[feat] SOFT DELETE 리팩토링">
+      <created>1693048255012</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1693048255012</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

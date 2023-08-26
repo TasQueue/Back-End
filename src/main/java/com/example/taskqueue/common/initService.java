@@ -16,7 +16,7 @@ public class initService implements ApplicationListener<ContextRefreshedEvent> {
     private final DayOfWeekRepository dayOfWeekRepository;
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-
+        insertDayOfWeek();
     }
 
     /**
