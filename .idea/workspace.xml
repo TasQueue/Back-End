@@ -418,7 +418,28 @@
       <option name="project" value="LOCAL" />
       <updated>1692878273282</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="[feat] SOFT DELETE 리팩토링">
+      <created>1693041278616</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1693041278616</updated>
+    </task>
+    <task id="LOCAL-00029" summary="[feat] SOFT DELETE 리팩토링">
+      <created>1693041324556</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1693041324556</updated>
+    </task>
+    <task id="LOCAL-00030" summary="[feat] SOFT DELETE 리팩토링">
+      <created>1693041369229</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1693041369229</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -450,6 +471,7 @@
     <MESSAGE value="[fix] application.yml 수정" />
     <MESSAGE value="[fix] gradle.yml 수정" />
     <MESSAGE value="[fix] jwt secret key" />
-    <option name="LAST_COMMIT_MESSAGE" value="[fix] jwt secret key" />
+    <MESSAGE value="[feat] SOFT DELETE 리팩토링" />
+    <option name="LAST_COMMIT_MESSAGE" value="[feat] SOFT DELETE 리팩토링" />
   </component>
 </project>

@@ -4,10 +4,10 @@ spring:
       max-idle: 8
       max-active: 8
     port: 6379
-    host: 13.124.52.172 #127.0.0.1
+    host: 127.0.0.1 #13.124.52.172
 
   profiles:
-    default: prod
+    default: dev
 
   mvc:
     pathmatch:
