@@ -38,7 +38,6 @@ public class User extends BaseEntity {
     private String intro;
 
     @Column
-    @ColumnDefault(value = "0")
     private int runStreak;
 
     @Column
