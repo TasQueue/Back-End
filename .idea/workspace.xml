@@ -115,6 +115,11 @@
   "keyToStringList": {
     "DatabaseDriversLRU": [
       "h2"
+    ],
+    "GitStage.ChangesTree.GroupingKeys": [
+      "directory",
+      "module",
+      "repository"
     ]
   }
 }]]></component>
@@ -268,7 +273,7 @@
       <workItem from="1690983920540" duration="2781000" />
       <workItem from="1691044011934" duration="10791000" />
       <workItem from="1691468547482" duration="80521000" />
-      <workItem from="1693027932660" duration="311000" />
+      <workItem from="1693027932660" duration="666000" />
     </task>
     <task id="LOCAL-00001" summary="[feat] 카카오 로그인 기능 추가">
       <option name="closed" value="true" />
@@ -355,7 +360,14 @@
       <option name="project" value="LOCAL" />
       <updated>1692891719626</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="[feat] 배포 관련코드 추가">
+      <created>1693028697742</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1693028697742</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
