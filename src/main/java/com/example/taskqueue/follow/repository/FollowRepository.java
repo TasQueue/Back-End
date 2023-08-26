@@ -4,6 +4,7 @@ package com.example.taskqueue.follow.repository;
 import com.example.taskqueue.follow.entity.Follow;
 import com.example.taskqueue.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -60,6 +61,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
      * 특정 유저가 팔로우하는 Follow 정보를 모두 삭제한다.
      * @param user 유저 정보
      */
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update Follow f " +
             "set f.deleted = true " +
             "where f.user = :user")
@@ -70,6 +72,7 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
      * 특정 유저를 팔로우하는 Follow 정보를 모두 삭제한다.
      * @param userId 특정 유저의 아이디 값
      */
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update Follow f " +
             "set f.deleted = true " +
             "where f.followUserId = :userId")

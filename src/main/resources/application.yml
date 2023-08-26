@@ -7,7 +7,7 @@ spring:
     host: 127.0.0.1
 
   profiles:
-    default: prod
+    default: dev
 
   mvc:
     pathmatch:
