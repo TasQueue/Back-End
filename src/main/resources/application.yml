@@ -5,6 +5,7 @@ spring:
       max-active: 8
     port: 6379
     host: 13.124.52.172 #127.0.0.1
+    password: kiminjeong
 
   profiles:
     default: prod
