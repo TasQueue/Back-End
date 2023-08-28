@@ -18,16 +18,20 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
 
     /**
-     * 유저의 [특정 시점 이후] 의 [모든] 루프태스크를 모두 반환한다.
+     * 유저의 [특정 시점 이전에 생성된] [모든] 루프태스크를 모두 반환한다.
      * @param user 유저 정보
      * @param repeatState RepeatState.YES
      * @param startTime 특정 시점
      * @return 루프 태스크 리스트
      */
-    @Query("select t from Task t where t.user = :user " +
+    @Query("select t " +
+            "from Task t " +
+            "inner join User u on t.user = u and u.deleted = false " +
+            "where t.user = :user " +
             "and t.repeatState = :repeatState " +
             "and t.startTime < :startTime")
     List<Task> findRepeatTaskByUser(
+            // startTime = 08-27 00:00
             @Param("user") User user,
             @Param("repeatState") RepeatState repeatState,
             @Param("startTime") LocalDateTime startTime
@@ -40,7 +44,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      * @param calenderState CalenderState.YES
      * @return 루프 태스크 리스트
      */
-    @Query("select t from Task t where t.user = :user " +
+    @Query("select t " +
+            "from Task t " +
+            "inner join User u on t.user = u and u.deleted = false " +
+            "where t.user = :user " +
             "and t.repeatState = :repeatState " +
             "and t.calenderState = :calenderState")
     List<Task> findRepeatTaskOnCalenderByUser(
@@ -56,7 +63,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      * @param endOfDay 기간의 끝
      * @return 태스크 리스트
      */
-    @Query("select t from Task t where t.user = :user " +
+    @Query("select t " +
+            "from Task t " +
+            "inner join User u on t.user = u and u.deleted = false " +
+            "where t.user = :user " +
             "and t.repeatState = :repeatState " +
             "and t.startTime >= :startOfDay " +
             "and t.endTime < :endOfDay " +
@@ -76,7 +86,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      * @param endOfDay 태스크 리스트
      * @return
      */
-    @Query("select t from Task t where t.user = :user " +
+    @Query("select t " +
+            "from Task t " +
+            "inner join User u on t.user = u and u.deleted = false " +
+            "where t.user = :user " +
             "and t.repeatState = :repeatState " +
             "and t.startTime >= :startOfDay " +
             "and t.endTime < :endOfDay " +
@@ -98,7 +111,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      * @param endOfDay 기간의 끝
      * @return 태스크 리스트
      */
-    @Query("select t from Task t where t.user = :user " +
+    @Query("select t " +
+            "from Task t " +
+            "inner join User u on t.user = u and u.deleted = false " +
+            "where t.user = :user " +
             "and t.repeatState = :repeatState " +
             "and t.calenderState = :calenderState "+
             "and t.startTime >= :startOfDay " +
@@ -112,5 +128,15 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             @Param("endOfDay") LocalDateTime endOfDay
     );
 
+
+    /**
+     * 특정 유저의 태스크 정보를 모두 삭제한다.
+     * @param user 유저 정보
+     */
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("update Task t " +
+            "set  t.deleted = true " +
+            "where t.user = :user")
+    void deleteAllByUser(@Param("user") User user);
 
 }

@@ -60,8 +60,6 @@ public class TaskService {
             TaskDayOfWeek taskDayOfWeek = new TaskDayOfWeek(task, day);
             taskDayOfWeekRepository.save(taskDayOfWeek);
         }
-
-        User user = task.getUser();
         return taskRepository.save(task).getId();
     }
 
@@ -154,7 +152,7 @@ public class TaskService {
      * 유저의 [특정 시점 이후] 의 [모든] 루프 태스크를 찾아 모두 반환한다.
      * @param user 유저 정보
      * @return 루프 태스크 리스트
-     */
+     */ // startTime = 08-27 00:00
     public List<Task> findRepeatTaskByUser(User user, LocalDateTime startTime) {
         return taskRepository.findRepeatTaskByUser(user, RepeatState.YES, startTime);
     }
@@ -201,11 +199,22 @@ public class TaskService {
      */
     public void toggleCompleteState(Long taskId) {
         Task findTask = taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
-        User user = findTask.getUser();
         if(findTask.getCompleteState().equals(CompleteState.NO))
             findTask.updateCompleteState(CompleteState.YES);
         else
             findTask.updateCompleteState(CompleteState.NO);
+    }
+
+    /**
+     * 태스크의 CalenderState 를 TOGGLE 한다.
+     * @param taskId 태스크 아이디 값
+     */
+    public void toggleCalenderState(Long taskId) {
+        Task findTask = taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
+        if(findTask.getCalenderState().equals(CalenderState.NO))
+            findTask.updateCalendarState(CalenderState.YES);
+        else
+            findTask.updateCalendarState(CalenderState.NO);
     }
 
     /**
@@ -229,6 +238,7 @@ public class TaskService {
      */
     public boolean isTaskOfThisDay(String day, Task task) {
         List<String> dayOfWeekByTask = taskDayOfWeekRepository.findDayOfWeekByTask(task.getId());
+        System.out.println("dayOfWeekByTask = " + dayOfWeekByTask);
         return dayOfWeekByTask.contains(day);
     }
 

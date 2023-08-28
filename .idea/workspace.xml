@@ -4,13 +4,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d43ecfe-e773-45a3-9751-138048ef3119" name="Changes" comment="[feat] FollowController, Service, Repository 변경(Swagger)">
-      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/checksums/sha1-checksums.bin" afterDir="false" />
+    <list default="true" id="1ff6eeb0-45b9-4c48-b88b-5c7235f3edd5" name="Changes" comment="[fix] jwt secret key">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/oauth/controller/TokenController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/oauth/request/KakaoAuthRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-jwt.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-jwt.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/config/SecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/oauth/controller/OAuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/oauth/controller/OAuthController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/oauth/handler/OAuth2LoginSuccessHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/oauth/handler/OAuth2LoginSuccessHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/oauth/jwt/JwtService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/oauth/jwt/JwtService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/security/filter/JwtAuthenticationProcessingFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/security/filter/JwtAuthenticationProcessingFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/static/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/CommonExceptionHandler.class.uniqueId1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/SecurityConfig.class.uniqueId0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/initService.class.uniqueId0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/oauth/controller/OAuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/oauth/controller/OAuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/oauth/handler/OAuth2LoginSuccessHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/oauth/handler/OAuth2LoginSuccessHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/oauth/jwt/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/oauth/jwt/JwtService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/security/filter/JwtAuthenticationProcessingFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/security/filter/JwtAuthenticationProcessingFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,11 +45,40 @@
       <ProjectState />
     </projectState>
   </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="taskqueue" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="taskqueue" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="taskqueue" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
-        <option value="JUnit5 Test Class" />
         <option value="Enum" />
         <option value="Class" />
       </list>
@@ -40,84 +92,114 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;nimikgnoej&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="03aa4310-6929-4fae-8934-bb6d6af1bf64" />
+        <option name="url" value="https://github.com/TasQueue/Back-End.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2SxkcOGmOmaELMV1dlTYsWWtmHB" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="1" id="Add" />
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2TNKgFANtHxdQfA9KODbQPRbRcv" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+    <ConfirmationsSetting value="2" id="Remove" />
   </component>
   <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.editor.code.editing",
-    "spring.configuration.checksum": "7a73569bd954aab719e45a74d540948f",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/kimin&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/jeong-kimin/Desktop/project/Back-End/build.gradle&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;5193318a4faee5edfd59684241092bd5&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;h2&quot;
+    ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="com.example.taskqueue.follow.controller.dto" />
-    </key>
-    <key name="CreateTestDialog.Recents.Supers">
-      <recent name="" />
-    </key>
-    <key name="CreateTestDialog.RecentsKey">
-      <recent name="com.example.taskqueue.follow.repository" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/com/example/taskqueue/oauth" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/example/taskqueue/user/entity" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/example/taskqueue/config" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/example/taskqueue" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.TaskqueueApplication">
-    <configuration name="FollowRepositoryTest.followTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RunManager" selected="Gradle.taskqueue [bootJar]">
+    <configuration name="TaskqueueApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.taskqueue.TaskqueueApplication" />
+      <module name="Back-End.taskqueue.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.taskqueue.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="taskqueue [bootJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
+        <option name="scriptParameters" />
         <option name="taskDescriptions">
           <list />
         </option>
         <option name="taskNames">
           <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;com.example.taskqueue.follow.repository.FollowRepositoryTest.followTest&quot;" />
+            <option value="bootJar" />
           </list>
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="FollowRepositoryTest.followTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="taskqueue.test" />
+    <configuration name="TaskqueueApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="taskqueue.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.taskqueue.TaskqueueApplication" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.example.taskqueue.follow.repository.*" />
+          <option name="PATTERN" value="com.example.taskqueue.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.example.taskqueue.follow.repository" />
-      <option name="MAIN_CLASS_NAME" value="com.example.taskqueue.follow.repository.FollowRepositoryTest" />
-      <option name="METHOD_NAME" value="followTest" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -126,71 +208,284 @@
       <envs>
         <env name="JWT_TOKEN" value="2544ec6cb127724963dd908fd356bb5fd3fc9f1c19980015ffdbb2aea4833d79afbe405495db7608be94ba5b8d3e6fcaa71eefbb0a84f15943617e969e3afe3d" />
       </envs>
-      <module name="taskqueue.main" />
+      <module name="com.example.taskqueue.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.taskqueue.TaskqueueApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <list>
-      <item itemvalue="Gradle.FollowRepositoryTest.followTest" />
-      <item itemvalue="JUnit.FollowRepositoryTest.followTest" />
+      <item itemvalue="Application.TaskqueueApplication" />
+      <item itemvalue="Gradle.taskqueue [bootJar]" />
       <item itemvalue="Spring Boot.TaskqueueApplication" />
+      <item itemvalue="Spring Boot.TaskqueueApplication (1)" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.FollowRepositoryTest.followTest" />
-        <item itemvalue="Gradle.FollowRepositoryTest.followTest" />
+        <item itemvalue="Gradle.taskqueue [bootJar]" />
+        <item itemvalue="Spring Boot.TaskqueueApplication (1)" />
+        <item itemvalue="Application.TaskqueueApplication" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="8d43ecfe-e773-45a3-9751-138048ef3119" name="Changes" comment="" />
-      <created>1690095697786</created>
+      <changelist id="1ff6eeb0-45b9-4c48-b88b-5c7235f3edd5" name="Changes" comment="" />
+      <created>1690878208525</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1690095697786</updated>
-      <workItem from="1690095700086" duration="59210000" />
-      <workItem from="1691396970084" duration="48102000" />
+      <updated>1690878208525</updated>
+      <workItem from="1690958835900" duration="12925000" />
+      <workItem from="1690983920540" duration="2781000" />
+      <workItem from="1691044011934" duration="10791000" />
+      <workItem from="1691468547482" duration="110204000" />
     </task>
-    <task id="LOCAL-00001" summary="[feat] FollowService 기능 추가">
-      <created>1690112761231</created>
+    <task id="LOCAL-00001" summary="[feat] 카카오 로그인 기능 추가">
+      <option name="closed" value="true" />
+      <created>1691305477215</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1690112761231</updated>
+      <updated>1691305477215</updated>
     </task>
-    <task id="LOCAL-00002" summary="[feat] FollowService 추가">
-      <created>1690364732899</created>
+    <task id="LOCAL-00002" summary="[feat] .">
+      <option name="closed" value="true" />
+      <created>1691468703690</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1690364732899</updated>
+      <updated>1691468703690</updated>
     </task>
-    <task id="LOCAL-00003" summary="[feat] FollowController 기능 추가">
-      <created>1690439372225</created>
+    <task id="LOCAL-00003" summary="[feat] SecurityConfig 설정">
+      <option name="closed" value="true" />
+      <created>1691470644818</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1690439372225</updated>
+      <updated>1691470644818</updated>
     </task>
-    <task id="LOCAL-00004" summary="[feat] FollowController 기능 추가">
-      <created>1691397139683</created>
+    <task id="LOCAL-00004" summary="[feat] Redis 설정">
+      <option name="closed" value="true" />
+      <created>1692337718798</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1691397139683</updated>
+      <updated>1692337718798</updated>
     </task>
-    <task id="LOCAL-00005" summary="[feat] FollowController, Service, Repository 변경(Swagger)">
-      <created>1691831557414</created>
+    <task id="LOCAL-00005" summary="[Comment] 주석 변경">
+      <option name="closed" value="true" />
+      <created>1692337820350</created>
       <option name="number" value="00005" />
       <option name="presentableId" value="LOCAL-00005" />
       <option name="project" value="LOCAL" />
-      <updated>1691831557414</updated>
+      <updated>1692337820350</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary=".">
+      <option name="closed" value="true" />
+      <created>1692615276401</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1692615276401</updated>
+    </task>
+    <task id="LOCAL-00007" summary=".">
+      <option name="closed" value="true" />
+      <created>1692615386840</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1692615386840</updated>
+    </task>
+    <task id="LOCAL-00008" summary=".">
+      <option name="closed" value="true" />
+      <created>1692615410536</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1692615410536</updated>
+    </task>
+    <task id="LOCAL-00009" summary="..">
+      <option name="closed" value="true" />
+      <created>1692858345798</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1692858345798</updated>
+    </task>
+    <task id="LOCAL-00010" summary="[fix] gradle.yml 수정">
+      <option name="closed" value="true" />
+      <created>1692859429791</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1692859429791</updated>
+    </task>
+    <task id="LOCAL-00011" summary="[fix] User 수정">
+      <option name="closed" value="true" />
+      <created>1692859967027</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1692859967027</updated>
+    </task>
+    <task id="LOCAL-00012" summary="[fix] Test 수정">
+      <option name="closed" value="true" />
+      <created>1692863280110</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1692863280110</updated>
+    </task>
+    <task id="LOCAL-00013" summary="[fix] Test 수정">
+      <option name="closed" value="true" />
+      <created>1692863750068</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1692863750068</updated>
+    </task>
+    <task id="LOCAL-00014" summary="[fix] application.yml 수정">
+      <option name="closed" value="true" />
+      <created>1692864244774</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1692864244774</updated>
+    </task>
+    <task id="LOCAL-00015" summary="[fix] application.yml 수정">
+      <option name="closed" value="true" />
+      <created>1692864270090</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1692864270090</updated>
+    </task>
+    <task id="LOCAL-00016" summary="[fix] application.yml 수정">
+      <option name="closed" value="true" />
+      <created>1692864308570</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1692864308570</updated>
+    </task>
+    <task id="LOCAL-00017" summary="[fix] application.yml 수정">
+      <option name="closed" value="true" />
+      <created>1692864333078</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1692864333078</updated>
+    </task>
+    <task id="LOCAL-00018" summary="[fix] application.yml 수정">
+      <option name="closed" value="true" />
+      <created>1692864746380</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1692864746380</updated>
+    </task>
+    <task id="LOCAL-00019" summary="[fix] Test 수정">
+      <option name="closed" value="true" />
+      <created>1692865518545</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1692865518545</updated>
+    </task>
+    <task id="LOCAL-00020" summary="[fix] Test 수정">
+      <option name="closed" value="true" />
+      <created>1692865857077</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1692865857077</updated>
+    </task>
+    <task id="LOCAL-00021" summary="[fix] SecurityConfig 수정">
+      <option name="closed" value="true" />
+      <created>1692866407914</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1692866407914</updated>
+    </task>
+    <task id="LOCAL-00022" summary="[fix] application.yml 수정">
+      <option name="closed" value="true" />
+      <created>1692867723118</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1692867723118</updated>
+    </task>
+    <task id="LOCAL-00023" summary="[fix] Test수정">
+      <option name="closed" value="true" />
+      <created>1692868002914</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1692868002914</updated>
+    </task>
+    <task id="LOCAL-00024" summary="[fix] application.yml 수정">
+      <option name="closed" value="true" />
+      <created>1692869269275</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1692869269275</updated>
+    </task>
+    <task id="LOCAL-00025" summary="[fix] gradle.yml 수정">
+      <option name="closed" value="true" />
+      <created>1692869492555</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1692869492555</updated>
+    </task>
+    <task id="LOCAL-00026" summary="[fix] jwt secret key">
+      <option name="closed" value="true" />
+      <created>1692878119972</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1692878119972</updated>
+    </task>
+    <task id="LOCAL-00027" summary="[fix] jwt secret key">
+      <option name="closed" value="true" />
+      <created>1692878273282</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1692878273282</updated>
+    </task>
+    <task id="LOCAL-00028" summary="[feat] SOFT DELETE 리팩토링">
+      <created>1693041278616</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1693041278616</updated>
+    </task>
+    <task id="LOCAL-00029" summary="[feat] SOFT DELETE 리팩토링">
+      <created>1693041324556</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1693041324556</updated>
+    </task>
+    <task id="LOCAL-00030" summary="[feat] SOFT DELETE 리팩토링">
+      <created>1693041369229</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1693041369229</updated>
+    </task>
+    <task id="LOCAL-00031" summary="[feat] SOFT DELETE 리팩토링">
+      <created>1693048255012</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1693048255012</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -201,31 +496,28 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="feat/siyoung" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[feat] FollowService 기능 추가" />
-    <MESSAGE value="[feat] Follow 엔티티, FollowService 기능 추가" />
-    <MESSAGE value="[feat] FollowController 생성" />
-    <MESSAGE value="[feat] FollowService 추가" />
-    <MESSAGE value="[feat] FollowController 기능 추가" />
-    <MESSAGE value="[feat] FollowController, Service, Repository 변경(Swagger)" />
-    <option name="LAST_COMMIT_MESSAGE" value="[feat] FollowController, Service, Repository 변경(Swagger)" />
+    <MESSAGE value="[feat] 카카오 로그인 기능 추가" />
+    <MESSAGE value="[feat] ." />
+    <MESSAGE value="[feat] SecurityConfig 설정" />
+    <MESSAGE value="[feat] Redis 설정" />
+    <MESSAGE value="[Comment] 주석 변경" />
+    <MESSAGE value="." />
+    <MESSAGE value=".." />
+    <MESSAGE value="[fix] User 수정" />
+    <MESSAGE value="[fix] Test 수정" />
+    <MESSAGE value="[fix] SecurityConfig 수정" />
+    <MESSAGE value="[fix] Test수정" />
+    <MESSAGE value="[fix] application.yml 수정" />
+    <MESSAGE value="[fix] gradle.yml 수정" />
+    <MESSAGE value="[fix] jwt secret key" />
+    <MESSAGE value="[feat] SOFT DELETE 리팩토링" />
+    <option name="LAST_COMMIT_MESSAGE" value="[feat] SOFT DELETE 리팩토링" />
   </component>
 </project>

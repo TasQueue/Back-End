@@ -10,7 +10,7 @@ name: Java CI with Gradle
 on:
   push:
     branches:
-      - main
+      - develop
 
 permissions:
   contents: read
@@ -34,12 +34,12 @@ jobs:
         sudo apt-get install -y ntp
         sudo service ntp start
 
-    - name: make application-prod.yml
-      run: |
-        cd ./src/main/resources
-        touch ./application-db.yml
-        echo "${{ secrets.DB_PROPERTIES }}" > ./application-prod.yml
-      shell: bash
+    # - name: make application-prod.yml
+    #   run: |
+    #     cd ./src/main/resources
+    #     touch ./application-prod.yml
+    #     echo "${{ secrets.DB_PROPERTIES }}" > ./application-prod.yml
+    #   shell: bash
 
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
@@ -67,3 +67,4 @@ jobs:
           docker run -d --log-driver=syslog -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/taskqserver:latest
           docker rm $(docker ps --filter 'status=exited' -a -q)
           docker image prune -a -f
+          

@@ -78,25 +78,32 @@ public class UserController {
     ) {
 
         User findUser = userService.findById(userId);
-        if(!findUser.getDailyUpdate()) {
+
+        if(!findUser.getDailyUpdate())
+        {
             userService.updateDailyState(findUser, LocalDate.now());
         }
 
         int state = taskService.getStateOfCat(userId);
         CatState catState;
 
-        if(state == 0) {
-            catState = CatState.FOUR;
-        } else if (state == 1) {
-            catState = CatState.THREE;
-        } else if (state == 2) {
-            catState = CatState.TWO;
-        } else {
-            catState = CatState.ONE;
+        switch (state) {
+            case 0:
+                catState = CatState.FOUR;
+                break;
+            case 1:
+                catState = CatState.THREE;
+                break;
+            case 2:
+                catState = CatState.TWO;
+                break;
+            default:
+                catState = CatState.ONE;
+                break;
         }
 
         findUser.updateCatState(catState);
-        return ResponseEntity.ok(new GetUserDto(findUser.getName(), findUser.getIntro(), findUser.getCatState()));
+        return ResponseEntity.ok(new GetUserDto(findUser));
     }
 
 
@@ -110,9 +117,10 @@ public class UserController {
     })
     @DeleteMapping(value = "/users/delete")
     public ResponseEntity<Void> deleteUserInfo(
-            @CurrentUser User user
+            @ApiIgnore @CurrentUser User user
     ) {
-        return null;
+        userService.deleteUser(user);
+        return ResponseEntity.noContent().build();
     }
 
 
@@ -136,6 +144,23 @@ public class UserController {
         return ResponseEntity.ok(new GetSearchUserListDto(dtoList));
     }
 
+
+    @ApiOperation(
+            value = "자신의 로그인 정보 조회",
+            notes = "자신의 로그인 정보 조회."
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = GetUserDto.class),
+            @ApiResponse(code = 400, message = "BAD REQUEST", response = ErrorResponse.class),
+            @ApiResponse(code = 401, message = "UNAUTHORIZED", response = ErrorResponse.class),
+            @ApiResponse(code = 404, message = "NOT FOUND", response = ErrorResponse.class)
+    })
+    @GetMapping(value = "/users/my-info")
+    public ResponseEntity<GetUserDto> getMyUserInfo(
+            @ApiIgnore @CurrentUser User user
+    ) {
+        return ResponseEntity.ok(new GetUserDto(user));
+    }
 
 
 

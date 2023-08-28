@@ -4,6 +4,7 @@ import com.example.taskqueue.common.annotation.CurrentUser;
 import com.example.taskqueue.oauth.CustomOAuth2User;
 import com.example.taskqueue.oauth.OAuthAttributes;
 import com.example.taskqueue.user.entity.User;
+import com.example.taskqueue.user.entity.state.CatState;
 import com.example.taskqueue.user.repository.UserRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.Map;
@@ -22,6 +24,7 @@ import java.util.Map;
 @Slf4j
 @Getter
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
@@ -37,6 +40,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
          * 카카오에서 제공해주는 access token은 아래와 같이 확인 가능함.
          * */
         accessToken = userRequest.getAccessToken().getTokenValue();
+        System.out.println("카카오에서 제공한 accessToken = " + accessToken);
         /**
          * DefaultOAuth2UserService 객체를 생성하여, loadUser(userRequest)를 통해 DefaultOAuth2User 객체를 생성 후 반환
          * DefaultOAuth2UserService의 loadUser()는 소셜 로그인 API의 사용자 정보 제공 URI로 요청을 보내서
@@ -55,7 +59,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         // socialType에 따라 유저 정보를 통해 OAuthAttributes 객체 생성
         OAuthAttributes extractAttributes = OAuthAttributes.ofKakao(userNameAttributeName, attributes);
-
         createdUser = getUser(extractAttributes); // getUser() 메소드로 User 객체 생성 후 반환
         System.out.println("extractAttributes ID = " + extractAttributes.getOauth2UserInfo().getId());
         // DefaultOAuth2User를 구현한 CustomOAuth2User 객체를 생성해서 반환
@@ -89,6 +92,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
      */
     private User saveUser(OAuthAttributes attributes) {
         User createdUser = attributes.toEntity(attributes.getOauth2UserInfo());
+        createdUser.updateRunStreak(0);
+        createdUser.updateThemeColor("#C2D9FA");
+        createdUser.updateDailyUpdate(false);
+        createdUser.updateIntro("");
+        createdUser.updateCatState(CatState.FOUR);
         return userRepository.save(createdUser);
     }
 }

@@ -3,7 +3,8 @@ package com.example.taskqueue.config;
 
 import com.example.taskqueue.oauth.handler.OAuth2LoginFailureHandler;
 import com.example.taskqueue.oauth.handler.OAuth2LoginSuccessHandler;
-import com.example.taskqueue.oauth.jwt.JwtAuthenticationProcessingFilter;
+import com.example.taskqueue.security.ResponseUtils;
+import com.example.taskqueue.security.filter.JwtAuthenticationProcessingFilter;
 import com.example.taskqueue.oauth.jwt.JwtService;
 import com.example.taskqueue.oauth.login.filter.CustomJsonUsernamePasswordAuthenticationFilter;
 import com.example.taskqueue.oauth.login.handler.LoginFailureHandler;
@@ -23,7 +24,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  * 인증은 CustomJsonUsernamePasswordAuthenticationFilter에서 authenticate()로 인증된 사용자로 처리
@@ -34,9 +38,9 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    //private final LoginService loginService;
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final ResponseUtils responseUtils;
     private final ObjectMapper objectMapper;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
@@ -70,7 +74,9 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .csrf().disable()
-                .headers().frameOptions().disable()
+                .headers()
+                .frameOptions()
+                    .disable()
                 .and()
 
                 // 세션 사용하지 않으므로 STATELESS로 설정
@@ -86,9 +92,12 @@ public class SecurityConfig {
                 .antMatchers(BASIC_URL).permitAll()
                 .antMatchers(SWAGGER_URL).permitAll()
                 .antMatchers(API_URL).permitAll()
-                .antMatchers("/sign-up").permitAll() // 회원가입 접근 가능
                 .antMatchers("/kakao-logout").permitAll()
+                .antMatchers("/kakao-login").permitAll()
+                .antMatchers("/login/oauth2/code/kakao").permitAll()
                 .antMatchers("/user-info").permitAll()
+                .antMatchers("/oauth/get").permitAll()
+                .antMatchers("/refreshtoken/get").permitAll()
                 .anyRequest().authenticated() // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
                 .and()
                 //== 소셜 로그인 설정 ==//
@@ -160,7 +169,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
-        JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, userRepository);
+        JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, userRepository,responseUtils);
         return jwtAuthenticationFilter;
     }
 }
