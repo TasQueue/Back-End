@@ -8,7 +8,7 @@ spring:
       matching-strategy: ant_path_matcher
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
     properties:
       hibernate:
