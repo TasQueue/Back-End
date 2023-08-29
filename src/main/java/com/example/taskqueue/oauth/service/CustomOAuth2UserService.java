@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Getter
@@ -97,6 +98,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         createdUser.updateDailyUpdate(false);
         createdUser.updateIntro("");
         createdUser.updateCatState(CatState.FOUR);
+
+        if (attributes.getOauth2UserInfo().getEmail() == null) {
+            createdUser.updateEmail(UUID.randomUUID()+"@social.com");
+            System.out.println("createdUser.getEmail() = " + createdUser.getEmail());
+        }
+
         return userRepository.save(createdUser);
     }
 }
