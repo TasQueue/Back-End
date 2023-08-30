@@ -33,7 +33,7 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println("authentication = " + authentication.getPrincipal());
         Optional<User> findUser = userRepository.findByEmail(authentication.getName());
-        System.out.println("findUser = " + findUser.get().toString());
+        //System.out.println("findUser = " + findUser.get().toString());
         if (findUser.isPresent() && findUser.get().getRefreshToken()!=null) {
             //DB에 사용자가 있고 refresh token이 있다면(로그인 된 상태)
             return findUser.get();
