@@ -8,15 +8,17 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
     private final UserRepository userRepository;
+    private final HttpSession httpSession;
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(new CurrentUserArgumentResolver(userRepository));
+        argumentResolvers.add(new CurrentUserArgumentResolver(userRepository,httpSession));
     }
     @Override
     public void addCorsMappings(CorsRegistry registry) {
