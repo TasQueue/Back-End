@@ -108,6 +108,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         if (attributes.getOauth2UserInfo().getEmail() == null) {
             createdUser.updateEmail(UUID.randomUUID()+"@social.com");
             System.out.println("createdUser.getEmail() = " + createdUser.getEmail());
+        } else{
+            createdUser.updateEmail(attributes.getOauth2UserInfo().getEmail());
         }
 
         return userRepository.save(createdUser);
