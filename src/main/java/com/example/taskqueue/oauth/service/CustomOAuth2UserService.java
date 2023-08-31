@@ -60,8 +60,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         // socialType에 따라 유저 정보를 통해 OAuthAttributes 객체 생성
         OAuthAttributes extractAttributes = OAuthAttributes.ofKakao(userNameAttributeName, attributes);
+        System.out.println("extractAttributes.getOauth2UserInfo().getEmail() = " + extractAttributes.getOauth2UserInfo().getEmail());
         createdUser = getUser(extractAttributes); // getUser() 메소드로 User 객체 생성 후 반환
-        System.out.println("extractAttributes ID = " + extractAttributes.getOauth2UserInfo().getId());
         // DefaultOAuth2User를 구현한 CustomOAuth2User 객체를 생성해서 반환
         return new CustomOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(createdUser.getRole().getKey())),
