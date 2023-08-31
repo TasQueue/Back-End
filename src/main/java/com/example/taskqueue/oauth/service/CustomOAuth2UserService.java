@@ -60,7 +60,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         // socialType에 따라 유저 정보를 통해 OAuthAttributes 객체 생성
         OAuthAttributes extractAttributes = OAuthAttributes.ofKakao(userNameAttributeName, attributes);
-        System.out.println("extractAttributes.getOauth2UserInfo().getEmail() = " + extractAttributes.getOauth2UserInfo().getEmail());
+        log.info("로그인 한 사용자의 이메일: " + extractAttributes.getOauth2UserInfo().getEmail());
         createdUser = getUser(extractAttributes); // getUser() 메소드로 User 객체 생성 후 반환
         // DefaultOAuth2User를 구현한 CustomOAuth2User 객체를 생성해서 반환
         return new CustomOAuth2User(
@@ -84,7 +84,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             if (attributes.getOauth2UserInfo().getEmail() == null) {
                 String re = UUID.randomUUID()+"@social.com";
                 findUser.updateEmail(re);
-                System.out.println("존재하는 사용자에 대한 랜덤 이메일 = " + re);
+                log.info("존재하는 사용자에 대한 랜덤 이메일 = " + re);
             }else{
                 findUser.updateEmail(attributes.getOauth2UserInfo().getEmail());
             }
