@@ -26,7 +26,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 //.allowedOrigins("*")
                 .allowedMethods("*")
                 .allowCredentials(true)
-                .allowedOriginPatterns("*")
+                .allowedOriginPatterns("http://localhost:3000") //원래는 * 이었음
                 .exposedHeaders("Authorization")
                 .maxAge(3000);
         //첫줄 주석처리 후 true로 바꿈
