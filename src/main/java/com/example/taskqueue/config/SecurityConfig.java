@@ -4,6 +4,7 @@ package com.example.taskqueue.config;
 import com.example.taskqueue.oauth.handler.OAuth2LoginFailureHandler;
 import com.example.taskqueue.oauth.handler.OAuth2LoginSuccessHandler;
 import com.example.taskqueue.security.ResponseUtils;
+import com.example.taskqueue.security.filter.CorsFilter;
 import com.example.taskqueue.security.filter.JwtAuthenticationProcessingFilter;
 import com.example.taskqueue.oauth.jwt.JwtService;
 import com.example.taskqueue.oauth.login.filter.CustomJsonUsernamePasswordAuthenticationFilter;
@@ -171,5 +172,10 @@ public class SecurityConfig {
     public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
         JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, userRepository,responseUtils);
         return jwtAuthenticationFilter;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        return new CorsFilter();
     }
 }
