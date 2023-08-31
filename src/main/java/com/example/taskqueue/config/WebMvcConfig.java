@@ -25,8 +25,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 //.allowedOrigins("*")
                 .allowedMethods("*")
+                .allowedOrigins("http://localhost:3000","http://localhost:8080") //원래는 * 이었음
                 .allowCredentials(true)
-                .allowedOriginPatterns("http://localhost:3000") //원래는 * 이었음
                 .exposedHeaders("Authorization")
                 .maxAge(3000);
         //첫줄 주석처리 후 true로 바꿈
