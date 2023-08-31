@@ -82,7 +82,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             return saveUser(attributes);
         }else{
             if (attributes.getOauth2UserInfo().getEmail() == null) {
-                findUser.updateEmail(UUID.randomUUID()+"@social.com");
+                String re = UUID.randomUUID()+"@social.com";
+                findUser.updateEmail(re);
+                System.out.println("존재하는 사용자에 대한 랜덤 이메일 = " + re);
             }else{
                 findUser.updateEmail(attributes.getOauth2UserInfo().getEmail());
             }
