@@ -93,6 +93,7 @@ public class SecurityConfig {
                 .antMatchers(BASIC_URL).permitAll()
                 .antMatchers(SWAGGER_URL).permitAll()
                 .antMatchers(API_URL).permitAll()
+                .antMatchers("/ex").permitAll() //삭제해야댐
                 .antMatchers("/kakao-logout").permitAll()
                 .antMatchers("/kakao-login").permitAll()
                 .antMatchers("/login/oauth2/code/kakao").permitAll()
