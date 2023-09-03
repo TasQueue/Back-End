@@ -4,6 +4,7 @@ package com.example.taskqueue.config;
 import com.example.taskqueue.oauth.handler.OAuth2LoginFailureHandler;
 import com.example.taskqueue.oauth.handler.OAuth2LoginSuccessHandler;
 import com.example.taskqueue.security.ResponseUtils;
+import com.example.taskqueue.security.filter.CustomCorsFilter;
 import com.example.taskqueue.security.filter.JwtAuthenticationProcessingFilter;
 import com.example.taskqueue.oauth.jwt.JwtService;
 import com.example.taskqueue.oauth.login.filter.CustomJsonUsernamePasswordAuthenticationFilter;
@@ -24,10 +25,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  * 인증은 CustomJsonUsernamePasswordAuthenticationFilter에서 authenticate()로 인증된 사용자로 처리
@@ -92,6 +89,7 @@ public class SecurityConfig {
                 .antMatchers(BASIC_URL).permitAll()
                 .antMatchers(SWAGGER_URL).permitAll()
                 .antMatchers(API_URL).permitAll()
+                .antMatchers("/ex").permitAll() //삭제해야댐
                 .antMatchers("/kakao-logout").permitAll()
                 .antMatchers("/kakao-login").permitAll()
                 .antMatchers("/login/oauth2/code/kakao").permitAll()
@@ -171,5 +169,10 @@ public class SecurityConfig {
     public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
         JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, userRepository,responseUtils);
         return jwtAuthenticationFilter;
+    }
+
+    @Bean
+    public CustomCorsFilter corsFilter() {
+        return new CustomCorsFilter();
     }
 }
