@@ -1,42 +1,42 @@
-# spring:
-#   config:
-#     activate:
-#       on-profile: prod
+spring:
+  config:
+    activate:
+      on-profile: prod
 
-#   datasource:
-#     url: jdbc:mysql://taskqdb.ctyqxxk6djja.ap-northeast-2.rds.amazonaws.com:3306/taksq
-#     username: taskq
-#     password: taskqdb2023!
-#     driver-class-name: com.mysql.cj.jdbc.Driver
+  datasource:
+    url: jdbc:mysql://taskqdb.ctyqxxk6djja.ap-northeast-2.rds.amazonaws.com:3306/taksq
+    username: taskq
+    password: taskqdb2023!
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
-#   jpa:
-#     hibernate:
-#       ddl-auto: update
+  jpa:
+    hibernate:
+      ddl-auto: update
 
-#     properties:
-#       hibernate:
-#         format_sql: true
+    properties:
+      hibernate:
+        format_sql: true
 
-#   security:
-#     oauth2:
-#       client:
-#         registration:
-#           kakao:
-#             client-id: bbd5a321139ff1ccbba722fab1b40b0f
-#             redirect-uri: http://ec2-13-124-52-172.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/kakao
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: bbd5a321139ff1ccbba722fab1b40b0f
+            redirect-uri: https://taskq.co.kr/login/oauth2/code/kakao
 
-#             authorization-grant-type: authorization_code
-#             client-authentication-method: POST
-#             client-name: Kakao
-#             scope:
-#               - profile_nickname
-#               - account_email
-#         provider:
-#           kakao:
-#             authorization-uri: https://kauth.kakao.com/oauth/authorize?prompt=login
-#             token-uri: https://kauth.kakao.com/oauth/token
-#             user-info-uri: https://kapi.kakao.com/v2/user/me
-#             # logout-uri: https://kauth.kakao.com/oauth/logout
-#             user-name-attribute: id
-# domain:
-#   name: http://ec2-13-124-52-172.ap-northeast-2.compute.amazonaws.com:8080
+            authorization-grant-type: authorization_code
+            client-authentication-method: POST
+            client-name: Kakao
+            scope:
+              - profile_nickname
+              - account_email
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize?prompt=login
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            # logout-uri: https://kauth.kakao.com/oauth/logout
+            user-name-attribute: id
+domain:
+  name: https://taskq.co.kr
