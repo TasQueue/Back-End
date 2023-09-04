@@ -15,10 +15,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
     private final UserRepository userRepository;
-    private final HttpSession httpSession;
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(new CurrentUserArgumentResolver(userRepository,httpSession));
+        argumentResolvers.add(new CurrentUserArgumentResolver(userRepository));
     }
     @Override
     public void addCorsMappings(CorsRegistry registry) {

@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -183,11 +184,15 @@ public class JwtService {
      * RefreshToken 헤더 설정
      */
     public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
-        //response.setHeader(refreshHeader, refreshToken);
-        Cookie jwtRefreshCookie = new Cookie("refreshToken", refreshToken);
-        jwtRefreshCookie.setMaxAge(3600); // 쿠키 만료 시간 설정 (초 단위)
-        jwtRefreshCookie.setHttpOnly(true); // JavaScript에서 쿠키에 접근하지 못하도록 설정
-        response.addCookie(jwtRefreshCookie);
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .maxAge(3600) // 쿠키 만료 시간 설정 (초 단위)
+                .httpOnly(true) // JavaScript에서 쿠키에 접근하지 못하도록 설정
+                // SameSite 설정
+                .sameSite("None")
+                // Secure 설정 (HTTPS 연결일 때만 전송)
+                .secure(true)
+                .build();
+        response.addHeader("Set-Cookie", refreshTokenCookie.toString());
     }
 
     /**

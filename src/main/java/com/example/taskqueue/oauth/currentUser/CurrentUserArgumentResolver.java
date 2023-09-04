@@ -1,7 +1,6 @@
 package com.example.taskqueue.oauth.currentUser;
 
 import com.example.taskqueue.common.annotation.CurrentUser;
-import com.example.taskqueue.oauth.dto.SessionUser;
 import com.example.taskqueue.user.entity.User;
 import com.example.taskqueue.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import java.util.Optional;
 @Slf4j
 public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolver {
     private final UserRepository userRepository;
-    private final HttpSession httpSession;
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.getParameterAnnotation(CurrentUser.class) != null;// &&
@@ -33,9 +31,12 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
                                   ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) throws Exception {
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
-        Optional<User> findUser = userRepository.findByEmail(user.getEmail());
-        //System.out.println("findUser = " + findUser.get().toString());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("authentication = " + authentication.getPrincipal());
+        Optional<User> findUser = userRepository.findByEmail(authentication.getName());
+//        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+//        System.out.println("user.getName() = " + user.getName());
+        System.out.println("findUser = " + findUser.get().toString());
         if (findUser.isPresent() && findUser.get().getRefreshToken()!=null) {
             //DB에 사용자가 있고 refresh token이 있다면(로그인 된 상태)
             return findUser.get();
