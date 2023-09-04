@@ -9,6 +9,7 @@ import com.example.taskqueue.oauth.jwt.JwtService;
 import com.example.taskqueue.oauth.request.KakaoAuthRequest;
 import com.example.taskqueue.oauth.service.CustomOAuth2UserService;
 import com.example.taskqueue.oauth.service.LogoutService;
+import com.example.taskqueue.redis.RedisUtil;
 import com.example.taskqueue.security.ResponseUtils;
 import com.example.taskqueue.user.controller.dto.response.GetUserDto;
 import com.example.taskqueue.user.entity.User;
@@ -42,6 +43,7 @@ public class OAuthController {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final JwtService jwtService;
     private final ResponseUtils responseUtils;
+    private final RedisUtil redisUtil;
 
 
     @ApiOperation(
@@ -52,18 +54,22 @@ public class OAuthController {
             @ApiResponse(code = 204, message = "NO CONTENT")
     })
     @PostMapping("/kakao-logout")
-    public String logout() {
+    public ResponseEntity<String> logout() {
         String accessToken = customOAuth2UserService.getAccessToken();
         User createdUser = customOAuth2UserService.getCreatedUser();
         String JWTAccessToken = jwtService.getJWTAccessToken();
         System.out.println("accessToken 받아왔겠지?? = " + accessToken);
         System.out.println("JWTAccessToken = " + JWTAccessToken);
-        //System.out.println("createdUser.getEmail() = " + createdUser.getEmail());
-        if (accessToken == null && JWTAccessToken == null) {
-            return "로그인을 먼저 해주세요";
+
+        if (accessToken == null && JWTAccessToken == null && createdUser==null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인부터 진행해주세요.");
         } else {
-            logoutService.logoutUser(accessToken, JWTAccessToken, createdUser);
-            return "로그아웃 되었음";
+            if(redisUtil.hasKeyBlackList(JWTAccessToken)){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("중복된 로그아웃 요청입니다.");
+            } else{
+                logoutService.logoutUser(accessToken, JWTAccessToken, createdUser);
+                return ResponseEntity.ok("로그아웃 되었습니다.");
+            }
         }
     }
 
