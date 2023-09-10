@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Getter
@@ -59,8 +60,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         // socialType에 따라 유저 정보를 통해 OAuthAttributes 객체 생성
         OAuthAttributes extractAttributes = OAuthAttributes.ofKakao(userNameAttributeName, attributes);
+        log.info("로그인 한 사용자의 이메일: " + extractAttributes.getOauth2UserInfo().getEmail());
         createdUser = getUser(extractAttributes); // getUser() 메소드로 User 객체 생성 후 반환
-        System.out.println("extractAttributes ID = " + extractAttributes.getOauth2UserInfo().getId());
         // DefaultOAuth2User를 구현한 CustomOAuth2User 객체를 생성해서 반환
         return new CustomOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(createdUser.getRole().getKey())),
@@ -80,7 +81,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         if (findUser == null) {
             return saveUser(attributes);
         }else{
-            findUser.updateEmail(attributes.getOauth2UserInfo().getEmail());
+            if (attributes.getOauth2UserInfo().getEmail() == null) {
+                String re = UUID.randomUUID()+"@social.com";
+                findUser.updateEmail(re);
+                log.info("존재하는 사용자에 대한 랜덤 이메일 = " + re);
+            }else{
+                findUser.updateEmail(attributes.getOauth2UserInfo().getEmail());
+            }
             userRepository.save(findUser);
             return findUser;
         }
@@ -97,6 +104,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         createdUser.updateDailyUpdate(false);
         createdUser.updateIntro("");
         createdUser.updateCatState(CatState.FOUR);
+
+        if (attributes.getOauth2UserInfo().getEmail() == null) {
+            createdUser.updateEmail(UUID.randomUUID()+"@social.com");
+            System.out.println("createdUser.getEmail() = " + createdUser.getEmail());
+        } else{
+            createdUser.updateEmail(attributes.getOauth2UserInfo().getEmail());
+        }
+
         return userRepository.save(createdUser);
     }
 }

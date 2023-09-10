@@ -37,6 +37,7 @@ public class LogoutService {
             System.out.println("accessToken으로 로그아웃 성공 " + accessToken);
             System.out.println("로그아웃된 사용자 social ID = " + responseLogout.getBody());
             jwtService.expireAccessToken(JWTAccessToken);
+            SecurityContextHolder.clearContext();
 
             User deleteUser = userRepository.findByEmail(createdUser.getEmail()).orElse(null);
             System.out.println("deleteUser = " + deleteUser.getEmail());

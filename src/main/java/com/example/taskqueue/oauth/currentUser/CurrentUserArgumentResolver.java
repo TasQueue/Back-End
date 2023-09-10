@@ -13,6 +13,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -33,6 +34,8 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println("authentication = " + authentication.getPrincipal());
         Optional<User> findUser = userRepository.findByEmail(authentication.getName());
+//        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+//        System.out.println("user.getName() = " + user.getName());
         System.out.println("findUser = " + findUser.get().toString());
         if (findUser.isPresent() && findUser.get().getRefreshToken()!=null) {
             //DB에 사용자가 있고 refresh token이 있다면(로그인 된 상태)

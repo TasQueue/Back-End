@@ -8,6 +8,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Configuration
@@ -21,10 +22,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*")
                 .allowedMethods("*")
+                .allowedOriginPatterns("http://localhost:3000") //원래는 * 이었음
                 .allowCredentials(true)
                 .exposedHeaders("Authorization")
                 .maxAge(3000);
+        //첫줄 주석처리 후 true로 바꿈
     }
 }
+
