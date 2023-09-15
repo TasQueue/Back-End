@@ -5,6 +5,7 @@ import com.example.taskqueue.common.dto.SimpleCategoryDto;
 import com.example.taskqueue.common.dto.SimpleUserDto;
 import com.example.taskqueue.task.entity.Task;
 import com.example.taskqueue.task.entity.state.CalenderState;
+import com.example.taskqueue.task.entity.state.CompleteState;
 import com.example.taskqueue.task.entity.state.RepeatState;
 import com.example.taskqueue.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -54,6 +55,9 @@ public class GetTaskDto {
     @ApiModelProperty(value = "달력 표기 여부", example = "YES/NO")
     private String calenderState;
 
+    @ApiModelProperty(value = "완료 여부", example = "YES/NO")
+    private String completeState;
+
     public GetTaskDto(Task task, User user, List<String> dayOfWeek, Category category) {
         this.id = task.getId();
         this.name = task.getName();
@@ -74,6 +78,12 @@ public class GetTaskDto {
             this.calenderState = "NO";
         } else {
             this.calenderState = "YES";
+        }
+
+        if(task.getCompleteState().equals(CompleteState.NO)) {
+            this.completeState = "NO";
+        } else {
+            this.completeState = "YES";
         }
 
     }
