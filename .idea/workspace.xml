@@ -231,6 +231,7 @@
       <workItem from="1691468547482" duration="110204000" />
       <workItem from="1693485102531" duration="503000" />
       <workItem from="1693498331621" duration="757000" />
+      <workItem from="1694757527022" duration="303000" />
     </task>
     <task id="LOCAL-00001" summary="[feat] 카카오 로그인 기능 추가">
       <option name="closed" value="true" />
@@ -497,7 +498,14 @@
       <option name="project" value="LOCAL" />
       <updated>1693498360230</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="[fix] User API 수정">
+      <created>1694757823139</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1694757823139</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -530,6 +538,7 @@
     <MESSAGE value="[fix] gradle.yml 수정" />
     <MESSAGE value="[fix] jwt secret key" />
     <MESSAGE value="[feat] SOFT DELETE 리팩토링" />
-    <option name="LAST_COMMIT_MESSAGE" value="[feat] SOFT DELETE 리팩토링" />
+    <MESSAGE value="[fix] User API 수정" />
+    <option name="LAST_COMMIT_MESSAGE" value="[fix] User API 수정" />
   </component>
 </project>

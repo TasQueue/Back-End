@@ -22,14 +22,14 @@ public class GetUserDto {
     private CatState catState;
 
     @ApiModelProperty(value = "유저 테마 색상", example = "ABC123")
-    private String color;
+    private String themeColor;
 
     public GetUserDto(User user) {
         this.id = user.getId();
         this.name = user.getName();
         this.intro = user.getIntro();
         this.catState = user.getCatState();
-        this.color = user.getThemeColor();
+        this.themeColor = user.getThemeColor();
     }
 
 }
