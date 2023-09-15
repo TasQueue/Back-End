@@ -352,7 +352,16 @@ public class TaskController {
 
             //note 일반 태스크
             if(task.getRepeatState().equals(RepeatState.NO)) {
+
                 localDateList.add(task.getStartTime().toLocalDate());
+
+                String completeState = "";
+                if(task.getCompleteState().equals(CompleteState.NO)){
+                    completeState = "NO";
+                } else {
+                    completeState = "YES";
+                }
+
                 dtoList.add(new GetTaskOfMonthDto(
                         task.getId(),
                         task.getName(),
@@ -360,7 +369,8 @@ public class TaskController {
                         task.getRequiredTime(),
                         task.getStartTime().toLocalTime(),
                         task.getEndTime().toLocalTime(),
-                        "NO")
+                        "NO",
+                        completeState)
                 );
                 continue;
             }
@@ -426,6 +436,13 @@ public class TaskController {
             LocalTime startTime = task.getStartTime().toLocalTime();
             LocalTime endTime = task.getEndTime().toLocalTime();
 
+            String completeState = "";
+            if(task.getCompleteState().equals(CompleteState.NO)){
+                completeState = "NO";
+            } else {
+                completeState = "YES";
+            }
+
             dtoList.add(new GetTaskOfMonthDto(
                     task.getId(),
                     task.getName(),
@@ -433,7 +450,8 @@ public class TaskController {
                     task.getRequiredTime(),
                     startTime,
                     endTime,
-                    "YES"
+                    "YES",
+                    completeState
             ));
         }
 
@@ -480,7 +498,16 @@ public class TaskController {
 
             //note 일반 태스크
             if(task.getRepeatState().equals(RepeatState.NO)) {
+
                 localDateList.add(task.getStartTime().toLocalDate());
+
+                String completeState = "";
+                if(task.getCompleteState().equals(CompleteState.NO)){
+                    completeState = "NO";
+                } else {
+                    completeState = "YES";
+                }
+
                 dtoList.add(new GetTaskOfMonthDto(
                         task.getId(),
                         task.getName(),
@@ -488,7 +515,8 @@ public class TaskController {
                         task.getRequiredTime(),
                         task.getStartTime().toLocalTime(),
                         task.getEndTime().toLocalTime(),
-                        "NO")
+                        "NO",
+                        completeState)
                 );
                 continue;
             }
@@ -547,6 +575,13 @@ public class TaskController {
             LocalTime startTime = task.getStartTime().toLocalTime();
             LocalTime endTime = task.getEndTime().toLocalTime();
 
+            String completeState = "";
+            if(task.getCompleteState().equals(CompleteState.NO)){
+                completeState = "NO";
+            } else {
+                completeState = "YES";
+            }
+
             dtoList.add(new GetTaskOfMonthDto(
                     task.getId(),
                     task.getName(),
@@ -554,7 +589,8 @@ public class TaskController {
                     task.getRequiredTime(),
                     startTime,
                     endTime,
-                    "YES"
+                    "YES",
+                    completeState
             ));
         }
 
