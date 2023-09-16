@@ -17,5 +17,5 @@ public class FollowingListDto {
 
     @ApiModelProperty(value = "팔로잉 유저 리스트")
     @JsonProperty("followingList")
-    private List<SimpleUserDto> simpleUserDtos = new ArrayList<>();
+    private List<FollowingUserDto> followingUserDtos = new ArrayList<>();
 }

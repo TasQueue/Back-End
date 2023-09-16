@@ -3,10 +3,7 @@ package com.example.taskqueue.follow.controller;
 import com.example.taskqueue.common.annotation.CurrentUser;
 import com.example.taskqueue.common.dto.SimpleUserDto;
 import com.example.taskqueue.exceptionhandler.ErrorResponse;
-import com.example.taskqueue.follow.controller.dto.response.GetFollowDto;
-import com.example.taskqueue.follow.controller.dto.response.FollowerListDto;
-import com.example.taskqueue.follow.controller.dto.response.FollowingListDto;
-import com.example.taskqueue.follow.controller.dto.response.RequestFollowListDto;
+import com.example.taskqueue.follow.controller.dto.response.*;
 import com.example.taskqueue.follow.entity.Follow;
 import com.example.taskqueue.follow.entity.state.FollowState;
 import com.example.taskqueue.follow.service.FollowService;
@@ -56,11 +53,12 @@ public class FollowController {
             @ApiIgnore @CurrentUser User user) {
 
         List<Long> following = followService.findFollowing(user.getId());
-        List<SimpleUserDto> dtoList = new ArrayList<>();
+        List<FollowingUserDto> dtoList = new ArrayList<>();
 
         for (Long followingId : following) {
-            SimpleUserDto userDto = new SimpleUserDto(userService.findById(followingId));
-            dtoList.add(userDto);
+            User followingUser = userService.findById(followingId);
+            FollowingUserDto followingUserDto = new FollowingUserDto(new SimpleUserDto(followingUser), followingUser.getCatState(), followingUser.getThemeColor());
+            dtoList.add(followingUserDto);
         }
 
         return ResponseEntity.ok(new FollowingListDto(dtoList));
