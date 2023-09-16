@@ -8,7 +8,7 @@ spring:
     password: kiminjeong
 
   profiles:
-    default: dev
+    default: prod
 
   mvc:
     pathmatch:
