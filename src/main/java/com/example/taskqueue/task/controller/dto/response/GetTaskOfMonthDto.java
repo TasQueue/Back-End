@@ -38,4 +38,7 @@ public class GetTaskOfMonthDto {
     @ApiModelProperty(value = "루프 태스크 여부", example = "YES/NO")
     private String repeatState;
 
+    @ApiModelProperty(value = "완료 여부", example = "YES/NO")
+    private String completeState;
+
 }
