@@ -4,17 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ff6eeb0-45b9-4c48-b88b-5c7235f3edd5" name="Changes" comment="[fix] 로그아웃 관련 수정">
+    <list default="true" id="8b2c44e7-b34e-4135-af1d-3b5c5af1f648" name="Changes" comment=".">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/follow/controller/dto/response/FollowingUserDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/resources/main/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/application-dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/follow/controller/FollowController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/follow/controller/FollowController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/oauth/currentUser/CurrentUserArgumentResolver.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/oauth/currentUser/CurrentUserArgumentResolver.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/oauth/jwt/JwtService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/oauth/jwt/JwtService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/task/controller/TaskController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/task/controller/TaskController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/task/controller/dto/response/GetTaskDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/task/controller/dto/response/GetTaskDto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/user/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/user/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/user/controller/dto/response/GetUserDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/user/controller/dto/response/GetUserDto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/taskqueue-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/taskqueue-0.0.1-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/bootJar/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/bootJar/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/follow/controller/FollowController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/follow/controller/FollowController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/follow/controller/dto/response/FollowingListDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/follow/controller/dto/response/FollowingListDto.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,33 +99,38 @@
     <option name="autoscrollToSource" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "feat/kimin",
-    "last_opened_file_path": "/Users/jeong-kimin/Desktop/project/Back-End/build.gradle",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
-    "spring.configuration.checksum": "5193318a4faee5edfd59684241092bd5",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/kimin&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/jeong-kimin/Desktop/project/Back-End/build.gradle&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;7a73569bd954aab719e45a74d540948f&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "h2"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;h2&quot;
+    ],
+    &quot;GitStage.ChangesTree.GroupingKeys&quot;: [
+      &quot;directory&quot;,
+      &quot;module&quot;,
+      &quot;repository&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/java/com/example/taskqueue/oauth" />
@@ -154,7 +172,6 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="TaskqueueApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
@@ -188,8 +205,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.taskqueue [bootJar]" />
         <item itemvalue="Spring Boot.TaskqueueApplication (1)" />
+        <item itemvalue="Gradle.taskqueue [bootJar]" />
         <item itemvalue="Application.TaskqueueApplication" />
       </list>
     </recent_temporary>
@@ -207,7 +224,8 @@
       <workItem from="1691044011934" duration="10791000" />
       <workItem from="1691468547482" duration="110204000" />
       <workItem from="1693485102531" duration="503000" />
-      <workItem from="1694506780770" duration="60000" />
+      <workItem from="1693498331621" duration="757000" />
+      <workItem from="1694757527022" duration="303000" />
     </task>
     <task id="LOCAL-00001" summary="[feat] 카카오 로그인 기능 추가">
       <option name="closed" value="true" />
@@ -467,23 +485,28 @@
       <option name="project" value="LOCAL" />
       <updated>1693049436230</updated>
     </task>
-    <task id="LOCAL-00034" summary="[fix] 내 정보 조회시 에러 수 + 쿠키 수정">
-      <option name="closed" value="true" />
-      <created>1693805972272</created>
+    <task id="LOCAL-00034" summary="[feat] SOFT DELETE 리팩토링">
+      <created>1693498360230</created>
       <option name="number" value="00034" />
       <option name="presentableId" value="LOCAL-00034" />
       <option name="project" value="LOCAL" />
-      <updated>1693805972272</updated>
+      <updated>1693498360230</updated>
     </task>
-    <task id="LOCAL-00035" summary="[fix] 로그아웃 관련 수정">
-      <option name="closed" value="true" />
-      <created>1693824372370</created>
+    <task id="LOCAL-00035" summary="[fix] User API 수정">
+      <created>1694757823139</created>
       <option name="number" value="00035" />
       <option name="presentableId" value="LOCAL-00035" />
       <option name="project" value="LOCAL" />
-      <updated>1693824372370</updated>
+      <updated>1694757823139</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary=".">
+      <created>1694847656618</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1694847656618</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -506,7 +529,6 @@
     <MESSAGE value="[feat] SecurityConfig 설정" />
     <MESSAGE value="[feat] Redis 설정" />
     <MESSAGE value="[Comment] 주석 변경" />
-    <MESSAGE value="." />
     <MESSAGE value=".." />
     <MESSAGE value="[fix] User 수정" />
     <MESSAGE value="[fix] Test 수정" />
@@ -516,8 +538,8 @@
     <MESSAGE value="[fix] gradle.yml 수정" />
     <MESSAGE value="[fix] jwt secret key" />
     <MESSAGE value="[feat] SOFT DELETE 리팩토링" />
-    <MESSAGE value="[fix] 내 정보 조회시 에러 수 + 쿠키 수정" />
-    <MESSAGE value="[fix] 로그아웃 관련 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="[fix] 로그아웃 관련 수정" />
+    <MESSAGE value="[fix] User API 수정" />
+    <MESSAGE value="." />
+    <option name="LAST_COMMIT_MESSAGE" value="." />
   </component>
 </project>
