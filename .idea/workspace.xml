@@ -4,30 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8b2c44e7-b34e-4135-af1d-3b5c5af1f648" name="Changes" comment=".">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/follow/controller/dto/response/FollowingUserDto.java" afterDir="false" />
+    <list default="true" id="8b2c44e7-b34e-4135-af1d-3b5c5af1f648" name="Changes" comment="[fix] 로그인 scope 수정">
       <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.1.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/follow/controller/FollowController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/follow/controller/FollowController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/oauth/currentUser/CurrentUserArgumentResolver.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/oauth/currentUser/CurrentUserArgumentResolver.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/oauth/jwt/JwtService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/oauth/jwt/JwtService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/task/controller/TaskController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/task/controller/TaskController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/task/controller/dto/response/GetTaskDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/task/controller/dto/response/GetTaskDto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/user/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/user/controller/UserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/user/controller/dto/response/GetUserDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/com/example/taskqueue/user/controller/dto/response/GetUserDto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/taskqueue-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/taskqueue-0.0.1-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/application-dev.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/resources/main/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/bootJar/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/bootJar/MANIFEST.MF" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/follow/controller/FollowController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/follow/controller/FollowController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/follow/controller/dto/response/FollowingListDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/taskqueue/follow/controller/dto/response/FollowingListDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-prod.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,7 +128,7 @@
       <recent name="$PROJECT_DIR$/src/main/java/com/example/taskqueue" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.taskqueue [bootJar]">
+  <component name="RunManager" selected="Spring Boot.TaskqueueApplication">
     <configuration name="TaskqueueApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.taskqueue.TaskqueueApplication" />
       <module name="Back-End.taskqueue.main" />
@@ -172,6 +161,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="TaskqueueApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
@@ -540,6 +530,7 @@
     <MESSAGE value="[feat] SOFT DELETE 리팩토링" />
     <MESSAGE value="[fix] User API 수정" />
     <MESSAGE value="." />
-    <option name="LAST_COMMIT_MESSAGE" value="." />
+    <MESSAGE value="[fix] 로그인 scope 수정" />
+    <option name="LAST_COMMIT_MESSAGE" value="[fix] 로그인 scope 수정" />
   </component>
 </project>
